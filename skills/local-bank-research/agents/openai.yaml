@@ -1,0 +1,7 @@
+interface:
+  display_name: "地方商业银行投研"
+  short_description: "地方银行利润桥、资产质量、区域beta与预期差研究"
+  default_prompt: "Use $local-bank-research to analyze a local commercial bank’s profit bridge, asset quality, regional beta, and valuation gap."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,4 @@
+interface:
+  display_name: "问财查询"
+  short_description: "通过同花顺问财执行自然语言选股与结果汇总"
+  default_prompt: "Use $wencai-query to run a Tonghuashun Wencai query and summarize the results."

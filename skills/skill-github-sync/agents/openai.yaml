@@ -1,0 +1,7 @@
+interface:
+  display_name: "Skill GitHub Sync"
+  short_description: "Sync local Codex skills to a GitHub repository"
+  default_prompt: "Use $skill-github-sync to sync my local Codex skills into my GitHub skills repository."
+
+policy:
+  allow_implicit_invocation: true

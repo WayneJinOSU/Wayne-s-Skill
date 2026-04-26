@@ -11,6 +11,7 @@ Personal Codex skills maintained as versioned assets.
 - `pipecat-deploy`: Deploy Pipecat agents.
 - `pipecat-init`: Scaffold Pipecat projects.
 - `pipecat-talk`: Start Pipecat voice conversations.
+- `skill-github-sync`: Sync local Codex skills into this GitHub repository.
 - `wencai-query`: 同花顺问财查询与 A 股筛选分析。
 
 ## Local install

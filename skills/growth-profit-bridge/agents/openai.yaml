@@ -1,0 +1,7 @@
+interface:
+  display_name: "成长股利润桥"
+  short_description: "拆分存量利润新业务利润与扩张成本"
+  default_prompt: "Use $growth-profit-bridge to build a base-profit plus new-profit minus expansion-cost bridge for this company."
+
+policy:
+  allow_implicit_invocation: true

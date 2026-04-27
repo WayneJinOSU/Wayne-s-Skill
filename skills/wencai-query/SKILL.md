@@ -10,11 +10,10 @@ Use this skill to turn a Chinese natural-language stock screener prompt into a r
 ## Quick Start
 
 1. Ensure the runtime has `pywencai` installed.
-2. Export a valid cookie before querying.
+2. Run anonymously first for lightweight queries. If anonymous access fails or returns incomplete data, export a valid cookie before retrying.
 3. Run the bundled script for deterministic execution.
 
 ```bash
-export WENCAI_COOKIE='your-cookie-from-iwencai.com'
 python3 /Users/a/.codex/skills/wencai-query/scripts/query_wencai.py "近20日涨停次数大于等于2次，按成交额从高到低排序"
 ```
 
@@ -69,7 +68,14 @@ If the query fails:
 
 ## Cookie Guidance
 
-Use either `--cookie` or the `WENCAI_COOKIE` environment variable.
+Cookie is optional. The script omits the cookie parameter when neither `--cookie` nor `WENCAI_COOKIE` is provided, allowing `pywencai` to try anonymous access. This often works for lightweight single-stock and small screening queries, but may fail, rate-limit, or return less complete data.
+
+Use either `--cookie` or the `WENCAI_COOKIE` environment variable when:
+
+- anonymous access fails
+- the endpoint rate-limits
+- the result is incomplete
+- the query needs login-only fields or larger pagination
 
 To refresh the cookie:
 

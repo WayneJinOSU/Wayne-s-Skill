@@ -1,7 +1,7 @@
 interface:
   display_name: "底盘型成长股研究"
-  short_description: "制造业旧业务托底与第二成长曲线分析"
-  default_prompt: "Use $chassis-growth-research to analyze whether this manufacturing company has a durable base business, a second growth curve, a profit bridge, and attractive forward valuation."
+  short_description: "制造业旧业务托底、第二曲线与数据证据链分析"
+  default_prompt: "Use $chassis-growth-research to analyze whether this A-share manufacturing company has a durable base business, a second growth curve, a profit bridge, and valuation support. Route evidence through filings, $tushare skill, and $wencai-query skill when useful."
 
 policy:
   allow_implicit_invocation: true

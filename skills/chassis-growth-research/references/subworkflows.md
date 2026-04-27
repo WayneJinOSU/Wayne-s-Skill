@@ -43,7 +43,23 @@
 
 如果不适用，停止完整框架，改为说明为什么不适用。
 
-### Step 3：选择子 skill
+### Step 3：选择 skill 路径
+
+先根据任务类型选择证据链和外部 skill，再进入成长股子 skill。详见 [data-path.md](data-path.md)。
+
+- 单公司深度研究：公告原文 + `$tushare` + `$wencai-query`。
+- 快速判断：`$tushare` 为主，公告原文核验最近重大事项，`$wencai-query` 补市场位置。
+- 横向比较或选股：`$wencai-query` 先筛选，`$tushare` 补结构化指标，公告只读重点公司。
+- 重大事项驱动：公告原文优先，`$tushare` 补估值和财务承受能力，`$wencai-query` 补市场反应。
+
+调度要求：
+
+- 财务、估值、行情、市值优先调用 `$tushare` skill，并注明日期。
+- 题材、概念、市场排名、同行快速筛选优先调用 `$wencai-query` skill，保留原始 `$wencai-query` 查询句子。
+- 本 skill 不直接 `import tushare` 或直接调用 pywencai；只有在对应 skill 不可用、用户明确要求代码、或做兜底排障时才考虑底层包。
+- 公告原文与结构化数据冲突时，以公告原文为准，并说明口径差异。
+
+### Step 4：选择子 skill
 
 默认最小调用：
 
@@ -57,7 +73,7 @@
 - `$growth-execution-signals`：当市场主要争议是订单、扩产、量产、客户验证时调用
 - `$growth-profit-bridge`：当估值能否消化是核心问题时调用
 
-### Step 4：权重排序
+### Step 5：权重排序
 
 把子工作流分成三类：
 
@@ -67,7 +83,7 @@
 
 最终报告必须说明为什么某些子工作流权重更高。
 
-### Step 5：合成最终判断
+### Step 6：合成最终判断
 
 最终判断回答：
 

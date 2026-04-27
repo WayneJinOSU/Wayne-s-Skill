@@ -116,12 +116,29 @@ def is_table(value) -> bool:
     return hasattr(value, "to_dict") and hasattr(value, "columns")
 
 
+def make_jsonable(value):
+    if is_table(value):
+        return value.to_dict(orient="records")
+    if isinstance(value, dict):
+        return {str(key): make_jsonable(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [make_jsonable(item) for item in value]
+    if hasattr(value, "item"):
+        try:
+            return value.item()
+        except Exception:
+            pass
+    if value != value:
+        return None
+    return value
+
+
 def normalize_result(result):
     if result is None:
         return {"kind": "empty", "row_count": 0, "columns": [], "records": []}
 
     if is_table(result):
-        records = result.to_dict(orient="records")
+        records = make_jsonable(result.to_dict(orient="records"))
         columns = [str(column) for column in list(result.columns)]
         return {
             "kind": "table",
@@ -138,11 +155,12 @@ def normalize_result(result):
             "kind": "list",
             "row_count": len(result),
             "columns": columns,
-            "records": result,
+            "records": make_jsonable(result),
         }
 
     if isinstance(result, dict):
-        return {"kind": "dict", "row_count": 1, "columns": list(result.keys()), "records": [result]}
+        normalized = make_jsonable(result)
+        return {"kind": "dict", "row_count": 1, "columns": list(normalized.keys()), "records": [normalized]}
 
     return {"kind": type(result).__name__, "row_count": 1, "columns": [], "records": [str(result)]}
 
@@ -233,9 +251,6 @@ def main() -> int:
         return fail("--page must be greater than 0")
     if args.rows <= 0:
         return fail("--rows must be greater than 0")
-    if not args.cookie:
-        return fail("Missing cookie. Pass --cookie or export WENCAI_COOKIE.")
-
     pywencai = import_pywencai()
     find_columns = normalize_find(args.find)
 

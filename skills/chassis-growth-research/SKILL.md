@@ -80,6 +80,6 @@ skill 路径和证据优先级见 [references/data-path.md](references/data-path
 
 ## Reference
 
-详细框架、适用范围、阶段划分、利润桥和输出模板见 [references/framework.md](references/framework.md)。
+判断框架、适用范围、阶段分类、常见误判和报告必须回答的问题见 [references/framework.md](references/framework.md)。
 
-主工作流和子工作流的逐步执行要求见 [references/subworkflows.md](references/subworkflows.md)。
+主工作流、子 skill 调度、字段级输出模板和最终报告组装顺序见 [references/subworkflows.md](references/subworkflows.md)。

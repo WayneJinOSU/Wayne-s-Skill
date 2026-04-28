@@ -1,0 +1,7 @@
+interface:
+  display_name: "金融研报小红书"
+  short_description: "把投研内容改写成高密度小红书长文"
+  default_prompt: "Use $finance-research-xhs to turn this financial research note into a dense, non-promotional Xiaohongshu longform post."
+
+policy:
+  allow_implicit_invocation: true

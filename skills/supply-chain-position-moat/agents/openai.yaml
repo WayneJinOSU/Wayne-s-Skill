@@ -1,0 +1,4 @@
+interface:
+  display_name: "供应链地位壁垒"
+  short_description: "Analyze supply-chain position and moat"
+  default_prompt: "Use -chain-position-moat to analyze a company's supply-chain role, moat, substitutability, and bargaining power."

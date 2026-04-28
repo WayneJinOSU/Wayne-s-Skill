@@ -1,0 +1,4 @@
+interface:
+  display_name: "供应链平台成长"
+  short_description: "用于产业周期供应链平台重估研究"
+  default_prompt: "Use $supply-chain-platform-growth to analyze whether this company is undergoing a supply-chain platform revaluation."

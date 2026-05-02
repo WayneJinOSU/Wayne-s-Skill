@@ -4,6 +4,7 @@ Personal Codex skills maintained as versioned assets.
 
 ## Skills
 
+- `chassis-growth-agentic-research`: 用多角色研究、中间产物、反方审查和投资人写作重构底盘型成长股研究；保留旧业务底盘、第二曲线、平台复用、承接动作、利润桥和远期估值框架。
 - `chassis-growth-research`: 研究A股制造业底盘型成长股，识别旧业务托底、新周期第二成长曲线、平台复用、承接动作、利润桥与远期估值；可调度 `$tushare` skill、`$wencai-query` skill 和公告 PDF 形成证据链。
 - `doc`: Professional document creation, editing, and analysis for Office formats (docx, pdf, pptx, xlsx). Use when working with Word documents, PDFs, PowerPoint presentations, or Excel spreadsheets.
 - `finance-research-xhs`: 将金融研报、股票研究、行业分析、财报解读、投资复盘和估值框架改写成小红书长文本笔记。适用于非种草、非带货、非标题党风格，强调信息密度、证据链、事实/推断/假设分层、风险和证伪点保留。Use when the user asks for 金融研报小红书、投研小红书长文、股票分析笔记、行业研究改写、财报解读小红书、非种草风格XHS长文本。

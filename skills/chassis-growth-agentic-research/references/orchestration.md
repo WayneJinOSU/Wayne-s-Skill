@@ -17,15 +17,17 @@
 
 ```text
 research_artifacts/<股票代码或公司简称>/
-  00_question.md
-  01_evidence_index.md
-  02_business_industry.md
-  03_financial_profit_bridge.md
-  04_valuation_asset.md
-  05_skeptic_review.md
-  06_report_outline.md
-  07_final_report.md
+  <标的简称或代码>_question.md
+  <标的简称或代码>_evidence_index.md
+  <标的简称或代码>_business_industry.md
+  <标的简称或代码>_financial_profit_bridge.md
+  <标的简称或代码>_valuation_asset.md
+  <标的简称或代码>_skeptic_review.md
+  <标的简称或代码>_report_outline.md
+  <标的简称或代码>_final_report.md
 ```
+
+同一轮研究必须使用同一个文件名前缀，格式为 `<标的简称或代码>_`。例如：`中孚实业_evidence_index.md` 或 `600595_evidence_index.md`。
 
 ## 角色分工与原子 Skill 映射
 
@@ -58,7 +60,7 @@ research_artifacts/<股票代码或公司简称>/
 - 不要给最终投资结论。
 - 不要用估值结论反推业务合理性。
 
-输出文件：`02_business_industry.md`
+输出文件：`<标的简称或代码>_business_industry.md`
 
 输出结构：
 
@@ -82,7 +84,7 @@ research_artifacts/<股票代码或公司简称>/
 - 存量利润、新业务利润、扩张成本。
 - 经营利润和投资收益拆分。
 
-输出文件：`03_financial_profit_bridge.md`
+输出文件：`<标的简称或代码>_financial_profit_bridge.md`
 
 输出结构：
 
@@ -107,7 +109,7 @@ research_artifacts/<股票代码或公司简称>/
 - 同行估值和市场排名。
 - 重要股权资产、资产折价、母公司折价、流动性折价。
 
-输出文件：`04_valuation_asset.md`
+输出文件：`<标的简称或代码>_valuation_asset.md`
 
 输出结构：
 
@@ -130,7 +132,7 @@ research_artifacts/<股票代码或公司简称>/
 - 检查证据链跳步、估值误导、数据口径混用、风险遗漏。
 - 检查普通投资人是否能理解。
 
-输出文件：`05_skeptic_review.md`
+输出文件：`<标的简称或代码>_skeptic_review.md`
 
 输出结构：
 
@@ -148,10 +150,10 @@ research_artifacts/<股票代码或公司简称>/
 
 如果当前环境不能启动 subagent，不要退回一次性写作。必须按以下方式模拟：
 
-1. 先写 `02_business_industry.md`，只处理业务。
-2. 再读取该文件，写 `03_financial_profit_bridge.md`，只处理财务。
-3. 再读取前两个文件，写 `04_valuation_asset.md`，只处理估值。
-4. 再读取前三个文件，写 `05_skeptic_review.md`，只挑错。
+1. 先写 `<标的简称或代码>_business_industry.md`，只处理业务。
+2. 再读取该文件，写 `<标的简称或代码>_financial_profit_bridge.md`，只处理财务。
+3. 再读取前两个文件，写 `<标的简称或代码>_valuation_asset.md`，只处理估值。
+4. 再读取前三个文件，写 `<标的简称或代码>_skeptic_review.md`，只挑错。
 5. 最后读取所有文件，写提纲和终稿。
 
 关键是每一轮都有独立文件，而不是把所有思考留在上下文里。

@@ -1,7 +1,7 @@
 interface:
   display_name: "Agentic 底盘型成长股研究"
-  short_description: "用多角色研究、中间产物、反方审查和投资人写作重构底盘型成长股报告"
-  default_prompt: "Use $chassis-growth-agentic-research for a formal A-share chassis growth stock report. Preserve the original six-part framework: base business, second growth curve, platform reuse, execution signals, profit bridge, and forward valuation. Formal research must trigger four roles: business/industry, financial/profit bridge, valuation/asset, and skeptic review. Use real subagents when the current environment permits and supports them; otherwise simulate the same roles through staged intermediate artifacts. Always write intermediate artifacts before the final investor-readable report."
+  short_description: "用多角色研究、中间产物、反方审查和投资人写作完成底盘型成长股报告"
+  default_prompt: "Use $chassis-growth-agentic-research for a formal A-share chassis growth stock report. Apply the integrated six-part framework: base business, second growth curve, platform reuse, execution signals, profit bridge, and forward valuation. Formal research must trigger four roles: business/industry, financial/profit bridge, valuation/asset, and skeptic review. Use real subagents when the current environment permits and supports them; otherwise simulate the same roles through staged intermediate artifacts. Always write intermediate artifacts before the final investor-readable report."
 
 policy:
   allow_implicit_invocation: true

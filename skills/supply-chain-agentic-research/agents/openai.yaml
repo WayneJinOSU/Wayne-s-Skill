@@ -1,0 +1,7 @@
+interface:
+  display_name: "Agentic 供应链平台成长股研究"
+  short_description: "用多角色研究、中间产物、反方审查和投资人写作重构供应链平台型成长股报告"
+  default_prompt: "Use $supply-chain-agentic-research for a formal A-share supply-chain platform growth stock report. Preserve the original six-part framework: industry cycle, supply-chain position, orders/shipments, execution signals, profit bridge, and forward valuation. Formal research must trigger five roles: cycle/capex, position/moat, orders/shipments quality, profit/valuation, and skeptic review. Real subagents are the preferred execution carrier when the host rules, current environment, and tools permit them; otherwise simulate the same roles through staged intermediate artifacts. Always write intermediate artifacts before the final investor-readable report."
+
+policy:
+  allow_implicit_invocation: true

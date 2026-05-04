@@ -4,6 +4,7 @@ Personal Codex skills maintained as versioned assets.
 
 ## Skills
 
+- `akshare`: Chinese financial data access using AkShare library. Fetch real-time and historical data for A-shares, Hong Kong stocks, US stocks, futures, funds, and macroeconomic indicators. Use when user requests Chinese market data, stock prices, market analysis, or financial information from Chinese exchanges. Supports stock quotes, historical data, futures market data, fund information, macroeconomic indicators, and real-time market updates.
 - `chassis-growth-agentic-research`: 用多角色研究、中间产物、反方审查和投资人写作重构底盘型成长股研究；保留旧业务底盘、第二曲线、平台复用、承接动作、利润桥和远期估值框架。
 - `chassis-growth-research`: 研究A股制造业底盘型成长股，识别旧业务托底、新周期第二成长曲线、平台复用、承接动作、利润桥与远期估值；可调度 `$tushare` skill、`$wencai-query` skill 和公告 PDF 形成证据链。
 - `doc`: Professional document creation, editing, and analysis for Office formats (docx, pdf, pptx, xlsx). Use when working with Word documents, PDFs, PowerPoint presentations, or Excel spreadsheets.
@@ -16,11 +17,13 @@ Personal Codex skills maintained as versioned assets.
 - `growth-platform-reuse`: 分析底盘型成长股的平台复用能力，包括技术、客户、工艺、产能、供应链、认证体系和跨界可信度。
 - `growth-profit-bridge`: 为底盘型成长股建立利润桥，拆分存量利润、新业务利润、扩张成本，并做保守中性乐观情景。
 - `growth-second-curve`: 分析底盘型成长股的第二成长曲线，包括新赛道空间、增速、产业链位置、价值量提升和天花板重估。
+- `industry-chain-agentic-research`: 用多角色研究、中间产物、产业链利润池、需求供给价格、竞争格局、财务映射、反方审查和投资人写作，完成行业产业链研究报告。适用于 A 股/港股/美股行业研究、产业链研究、赛道研究、行业对公司财务影响研究，以及用户要求 subagent/agentic/多角色行业研究时。
 - `local-bank-research`: 研究城商行、农商行等地方商业银行股的利润桥、资产质量、区域beta、债券投资、分红与预期差。
 - `pipecat-deploy`: Deploy an agent to Pipecat Cloud
 - `pipecat-init`: Scaffold a new Pipecat project with guided setup
 - `pipecat-talk`: Start a voice conversation using the Pipecat MCP server
 - `skill-github-sync`: Sync local Codex skills from ~/.codex/skills into a GitHub skills repository, update README, commit, and optionally push.
+- `supply-chain-agentic-research`: 用多角色研究、中间产物、反方审查和投资人写作重构供应链平台型成长股研究；保留产业周期、供应链地位、订单出货、承接动作、利润桥和远期估值框架。
 - `supply-chain-cycle-capex`: 分析供应链平台型成长股所处的产业周期、客户资本开支、下游需求持续性、产品平台迭代和周期见顶风险。Use when researching AI 算力、云厂商 capex、AI服务器、高速PCB、液冷、电源、连接器、光模块、先进封装设备/材料等供应链公司，判断下游周期是否足以支撑订单和利润中枢上移。
 - `supply-chain-orders-shipments`: 分析供应链平台型成长股的订单、排产、出货、海关数据、库存、应收、合同负债、收入确认、利润释放和经营现金流质量。Use when researching AI服务器、高速PCB、液冷、电源、连接器、光模块、先进封装设备/材料等公司，判断订单出货是否领先财报、是否能支撑利润中枢上移。
 - `supply-chain-platform-growth`: 研究处在 AI 算力、数据中心、先进制造、新能源、机器人等大产业周期中的供应链平台型成长股，判断公司是否发生身份切换、订单出货放量、利润中枢上移和远期估值重估。Use when analyzing companies like 工业富联、AI服务器制造、高速PCB、液冷散热、电源、连接器、光模块供应链、先进封装设备/材料等，不适合银行、纯消费、纯资源周期或无收入利润底盘的概念股。

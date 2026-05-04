@@ -27,8 +27,6 @@ research_artifacts/<股票代码或公司简称>/
   <标的简称或代码>_final_report.md
 ```
 
-同一轮研究必须使用同一个文件名前缀，格式为 `<标的简称或代码>_`。例如：`中孚实业_evidence_index.md` 或 `600595_evidence_index.md`。
-
 ## 角色分工与原子 Skill 映射
 
 本 skill 是总控增强版，不废弃原有子 skill。正式研究中，优先让对应角色调用或吸收这些原子 skill 的问题清单：

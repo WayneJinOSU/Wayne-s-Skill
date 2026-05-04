@@ -17,9 +17,6 @@ Personal Codex skills maintained as versioned assets.
 - `pipecat-talk`: Start a voice conversation using the Pipecat MCP server
 - `skill-github-sync`: Sync local Codex skills from ~/.codex/skills into a GitHub skills repository, update README, commit, and optionally push.
 - `supply-chain-agentic-research`: 用多角色研究、中间产物、反方审查和投资人写作重构供应链平台型成长股研究；保留产业周期、供应链地位、订单出货、承接动作、利润桥和远期估值框架。
-- `supply-chain-cycle-capex`: 分析供应链平台型成长股所处的产业周期、客户资本开支、下游需求持续性、产品平台迭代和周期见顶风险。Use when researching AI 算力、云厂商 capex、AI服务器、高速PCB、液冷、电源、连接器、光模块、先进封装设备/材料等供应链公司，判断下游周期是否足以支撑订单和利润中枢上移。
-- `supply-chain-orders-shipments`: 分析供应链平台型成长股的订单、排产、出货、海关数据、库存、应收、合同负债、收入确认、利润释放和经营现金流质量。Use when researching AI服务器、高速PCB、液冷、电源、连接器、光模块、先进封装设备/材料等公司，判断订单出货是否领先财报、是否能支撑利润中枢上移。
-- `supply-chain-position-moat`: 分析供应链平台型成长股在产业链中的位置、客户认证、规模交付、复杂产品量产、全球产能、供应链组织、可替代性和议价权。Use when researching 工业富联、AI服务器制造、高速PCB、液冷、电源、连接器、光模块、先进封装材料/设备等公司是否具备关键供应链平台地位，而不是普通代工或可替代供应商。
 - `tushare`: 面向中文自然语言的 Tushare 数据研究技能。用于把“看看这只股票最近怎么样”“帮我查财报趋势”“最近哪个板块最强”“北向资金在买什么”“给我导出一份行情数据”这类请求，转成可执行的数据获取、清洗、对比、筛选、导出与简要分析流程。适用于 A 股、指数、ETF/基金、财务、估值、资金流、公告新闻、板块概念与宏观数据等研究场景。
 - `wencai-query`: Query Tonghuashun Wencai with the `pywencai` Python package for Chinese-market screening, ranking, and tabular result retrieval. Use when Codex needs to execute or explain a natural-language Wencai request such as A-share stock screening, concept or industry ranking, valuation or financial-factor filtering, limit-up or turnover queries, export Wencai results, or summarize the returned table. Trigger when the user mentions "问财", "同花顺问财", or `pywencai`, or asks to turn a Chinese stock screener prompt into executable code or structured output.
 

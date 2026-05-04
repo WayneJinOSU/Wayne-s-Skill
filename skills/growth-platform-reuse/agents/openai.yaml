@@ -1,7 +1,0 @@
-interface:
-  display_name: "成长股平台复用"
-  short_description: "分析技术客户工艺产能复用与跨界可信度"
-  default_prompt: "Use $growth-platform-reuse to test whether the new growth business naturally reuses the company's existing platform capabilities."
-
-policy:
-  allow_implicit_invocation: true

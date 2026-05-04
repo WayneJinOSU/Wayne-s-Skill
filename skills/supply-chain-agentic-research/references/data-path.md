@@ -32,7 +32,7 @@
 
 ## 快速判断
 
-当用户只要快速看一只股票，可以使用本 skill 的轻量模式，也可以改用原 `$supply-chain-platform-growth`。若使用本 skill，必须说明未启用完整 agentic 流程。
+当用户只要快速看一只股票，可以使用本 skill 的轻量模式，但必须说明未启用完整 agentic 流程。
 
 轻量模式至少覆盖：
 

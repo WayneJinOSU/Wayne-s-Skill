@@ -1,7 +1,0 @@
-interface:
-  display_name: "成长股远期估值"
-  short_description: "反推远期PE、估值透支与证伪点"
-  default_prompt: "Use $growth-forward-valuation to reverse-calculate forward PE and identify valuation disconfirmation risks."
-
-policy:
-  allow_implicit_invocation: true

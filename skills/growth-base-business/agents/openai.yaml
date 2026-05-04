@@ -1,7 +1,0 @@
-interface:
-  display_name: "成长股旧业务底盘"
-  short_description: "分析旧业务收入利润、现金流与下限支撑"
-  default_prompt: "Use $growth-base-business to analyze whether this company has a durable base business and downside support."
-
-policy:
-  allow_implicit_invocation: true

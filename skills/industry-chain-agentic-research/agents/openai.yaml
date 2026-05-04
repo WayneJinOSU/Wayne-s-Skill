@@ -1,7 +1,7 @@
 interface:
   display_name: "Agentic 行业产业链研究"
-  short_description: "多角色产业链、利润池、财务映射和证伪研究"
-  default_prompt: "Use $industry-chain-agentic-research to produce a formal industry-chain investment research report with intermediate artifacts, multi-role analysis, profit-pool reasoning, financial mapping, valuation expectations, and skeptic review."
+  short_description: "强约束多角色产业链、反查、利润池和财务映射研究"
+  default_prompt: "Use $industry-chain-agentic-research to produce a formal industry-chain investment research report with real subagents when allowed, agent briefs, module handbooks, intermediate artifacts, role-specific evidence collection, profit-pool reasoning, financial mapping, valuation expectations, negative checks, skeptic review, report synthesis, and a final investor-facing report."
 
 policy:
   allow_implicit_invocation: true

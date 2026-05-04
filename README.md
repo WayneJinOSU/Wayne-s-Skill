@@ -16,7 +16,7 @@ Personal Codex skills maintained as versioned assets.
 - `finance-research-xhs`: 将金融研报、股票研究、行业分析、财报解读、投资复盘和估值框架改写成小红书长文本笔记。适用于非种草、非带货、非标题党风格，强调信息密度、证据链、事实/推断/假设分层、风险和证伪点保留。Use when the user asks for 金融研报小红书、投研小红书长文、股票分析笔记、行业研究改写、财报解读小红书、非种草风格XHS长文本。
 - `find-skills`: Helps users discover and install agent skills when they ask questions like "how do I do X", "find a skill for X", "is there a skill that can...", or express interest in extending capabilities. This skill should be used when the user is looking for functionality that might exist as an installable skill.
 - `frontend-design`: Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, artifacts, posters, or applications (examples include websites, landing pages, dashboards, React components, HTML/CSS layouts, or when styling/beautifying any web UI). Generates creative, polished code and UI design that avoids generic AI aesthetics.
-- `industry-chain-agentic-research`: 用多角色研究、中间产物、产业链利润池、需求供给价格、竞争格局、财务映射、反方审查和投资人写作，完成行业产业链研究报告。适用于 A 股/港股/美股行业研究、产业链研究、赛道研究、行业对公司财务影响研究，以及用户要求 subagent/agentic/多角色行业研究时。
+- `industry-chain-agentic-research`: 强约束 Agentic 行业产业链研究；真实 subagent 优先，分角色证据收集、模块手册、反查反证、反方审查、报告汇总和投资人写作，用于 A 股/港股/美股行业、赛道、产业链或细分环节正式研究，防止摘要化和只说好话。
 - `local-bank-research`: 研究城商行、农商行等地方商业银行股的利润桥、资产质量、区域beta、债券投资、分红与预期差。
 - `pipecat-deploy`: Deploy an agent to Pipecat Cloud
 - `pipecat-init`: Scaffold a new Pipecat project with guided setup

@@ -1,194 +1,114 @@
 ---
 name: industry-chain-agentic-research
-description: 用多角色研究、中间产物、产业链利润池、需求供给价格、竞争格局、财务映射、反方审查和投资人写作，完成行业产业链研究报告。适用于 A 股/港股/美股行业研究、产业链研究、赛道研究、行业对公司财务影响研究，以及用户要求 subagent/agentic/多角色行业研究时。
+description: 强约束 Agentic 行业产业链研究；真实 subagent 优先，分角色证据收集、模块手册、反查反证、反方审查、报告汇总和投资人写作，用于 A 股/港股/美股行业、赛道、产业链或细分环节正式研究，防止摘要化和只说好话。
 ---
 
 # Agentic 行业产业链研究
 
 ## Overview
 
-本 skill 用于把“行业很大、信息很散”的研究任务，拆成多角色证据链，并最终重新组织成一篇有主线的投资研究报告。
+本 skill 是行业产业链研究的独立主控，不是摘要模板。它负责先建立主线假设，再优先启动真实 subagent 分角色查证；若宿主不允许真实 subagent，则用阶段文件模拟同样流程。最终报告必须由主控基于 `report_synthesis.md` 重写，不能拼接各角色摘要。
 
-核心判断句：
-
-```text
-需求是否增长 + 供给是否受约束 + 利润池是否留在该环节
-+ 公司是否有壁垒 + 财务是否兑现 + 估值是否已反映
-```
-
-研究的目标不是总结行业资料，而是回答：
+核心判断链：
 
 ```text
-这个行业怎么赚钱？
-利润留在哪个环节？
-这个环节为什么能守住利润？
-行业变量如何传导到上市公司收入、利润、现金流和估值？
-哪些信号会证明判断错了？
+需求增长 + 供给约束 + 价格机制 + 利润池留存
++ 财务兑现 + 估值预期 + 反面证据
 ```
 
-## When to use
+正式研究必须回答：
+
+```text
+行业怎么赚钱？
+利润留在哪个环节，为什么能守住？
+行业变量如何进入上市公司收入、利润、现金流和估值？
+当前市场预期已经反映到哪一步？
+哪些反面证据会证明判断错了？
+```
+
+## When To Use
 
 适合：
 
-- 研究一个行业、赛道、产业链或细分环节。
-- 判断某个行业是否值得配置，或某家公司所处环节是否有利润池和壁垒。
-- 需要从行业景气、产业链利润分配、供需价格、竞争格局、财务传导和估值预期形成正式报告。
-- 用户要求 subagent、agentic、多角色、多阶段行业研究。
+- 行业、赛道、产业链或细分环节研究。
+- 判断某行业是否值得配置，或某家公司所处环节是否有利润池和壁垒。
+- 用户要求 subagent、agentic、多角色、多阶段、完整流程、反查或反证研究。
 
 不适合：
 
-- 只要一句话行业观点。
-- 只做宏观政策摘要或新闻摘要。
-- 只做单公司财报点评；单公司底盘型成长研究优先用 `$chassis-growth-agentic-research`。
+- 只要一句话观点或宏观新闻摘要。
+- 单公司财报点评；底盘型成长股优先用 `$chassis-growth-agentic-research`，供应链平台型公司优先用 `$supply-chain-agentic-research`。
+- 用户只要求快速判断时，只能输出 preliminary draft，并明确未完成正式 agentic 流程。
 
-## Non-negotiables
+## Non-Negotiables
 
 正式研究必须满足：
 
-1. 不允许直接输出终稿，必须先形成中间研究产物。
-2. 必须覆盖七个核心模块：
-   - 行业定义与分诊
-   - 产业链结构与公司位置
-   - 需求、供给与价格机制
-   - 利润池与竞争格局
-   - 财务映射与重点公司
-   - 估值、预期与安全边际
-   - 风险、证伪点与跟踪指标
-3. 每个强判断必须写清楚：
+1. **真实 subagent 优先。** 若当前环境、宿主规则和工具能力允许，必须启动真实 subagent；阶段文件模拟只是在无法启动真实 subagent 时的降级执行载体，不是省时选项。
+2. **先中间产物，后终稿。** 必须生成 `question`、`agent_briefs`、`evidence_index`、各角色文件、`negative_check`、`skeptic_review`、`report_synthesis`、`report_outline`、`final_report`。
+3. **关键模块读手册。** 需求/供给/价格、利润池/竞争格局、财务映射、估值与预期、反查/反证执行前必须读取对应 `references/modules/*.md`。
+4. **九模块覆盖。** 必须按 `framework.md` 的九个模块覆盖，不得因为角色合并或报告压缩而省略。
+5. **估值与市场预期不拆分。** 二者统一由 `valuation_expectation.md` 处理；市场预期是估值判断的入口。
+6. **反查不是风险提示。** 没有 `negative_check.md` 的研究只能标记为 preliminary draft。
+7. **强判断必须有证据链。** 每个强判断都要写清楚 `证据 -> 推理 -> 反证/替代解释 -> 判断强度`。
+8. **事实、口径和假设分层。** 区分官方/协会数据、公司公告、订单排产库存、结构化市场数据、券商/媒体口径、合理推断和情景假设。
+9. **禁止跳步。** 不能把行业景气直接写成公司受益，不能把收入增长直接写成利润增长，不能把一般风险提示当成反查。
+
+## Execution Policy
+
+正式研究必须触发 8 个角色：
 
 ```text
-证据 -> 推理 -> 反证/替代解释 -> 判断强度
+产业链定义
+需求/供给/价格
+利润池/竞争格局
+财务映射/重点公司
+估值与预期
+反查/反证
+反方审查
+报告汇总
 ```
 
-4. 必须区分：
-   - 官方/协会/海关/价格等行业数据
-   - 公司公告或财报事实
-   - 结构化市场数据
-   - 券商或市场口径
-   - 合理推断
-   - 情景假设
-5. 终稿必须由主控重新写作，不能拼接各 subagent 摘要。
+执行顺序、文件结构、角色输出、冲突处理和无真实 subagent 时的阶段模拟方式见 [references/orchestration.md](references/orchestration.md)。主控执行时应优先读取该文件。
 
-## Agent Policy
+关键模块手册：
 
-正式研究采用多角色机制。若当前环境允许且用户显式要求 subagent、agentic、多角色或并行研究，应启动 subagent；否则必须用“分阶段文件化”模拟同样角色。
+| 模块 | 手册 |
+| --- | --- |
+| 需求/供给/价格 | [references/modules/demand_supply_price.md](references/modules/demand_supply_price.md) |
+| 利润池/竞争格局 | [references/modules/profit_pool_competition.md](references/modules/profit_pool_competition.md) |
+| 财务映射/重点公司 | [references/modules/financial_mapping_companies.md](references/modules/financial_mapping_companies.md) |
+| 估值与预期 | [references/modules/valuation_expectation.md](references/modules/valuation_expectation.md) |
+| 反查/反证 | [references/modules/negative_check.md](references/modules/negative_check.md) |
 
-推荐角色：
+## Acceptance Checklist
 
-- 产业链与行业定义 agent：行业边界、行业类型、产业链结构、公司所处位置。
-- 需求/供给/价格 agent：需求来源、渗透率或周期、供给扩张、库存、价格形成机制。
-- 利润池与竞争格局 agent：价值链利润分配、议价权、集中度、壁垒、替代风险、利润池迁移。
-- 财务映射与重点公司 agent：行业变量如何进入收入、毛利率、费用率、现金流、资本开支和估值；筛出重点公司差异。
-- 反方审查 agent：证据缺口、逻辑跳步、估值误导、技术路线/政策/供需反向风险、普通投资人理解断点。
+交付前必须自检：
 
-每个角色的中间稿都必须包含：
-
-```text
-对主线的贡献：
-可能推翻主线的证据：
-终稿中应该放在哪一章：
-```
-
-## Workflow
-
-### Step 1: 建立研究目录
-
-在当前任务目录下建立中间产物目录：
-
-```text
-research_artifacts/<行业或公司>/
-  <行业或公司>_question.md
-  <行业或公司>_evidence_index.md
-  <行业或公司>_industry_chain.md
-  <行业或公司>_demand_supply_price.md
-  <行业或公司>_profit_pool_competition.md
-  <行业或公司>_financial_mapping_companies.md
-  <行业或公司>_skeptic_review.md
-  <行业或公司>_report_outline.md
-  <行业或公司>_final_report.md
-```
-
-文件名必须带研究对象前缀，格式为 `<行业或公司>_<阶段英文名>.md`。同一轮研究内必须保持同一个前缀。
-
-### Step 2: 主线假设与行业分诊
-
-先写入 `<行业或公司>_question.md`：
-
-- 研究对象边界：大行业、子行业、产业链环节，还是某家公司所处行业。
-- 行业类型：资源周期、制造加工、资本开支链、消费品牌、平台渠道、监管行业、技术路线驱动行业等。
-- 市场当前在交易什么：景气上行、供给出清、利润池迁移、技术替代、国产替代、出海、估值修复或泡沫。
-- 需要验证的 3 到 5 个核心问题。
-- 本轮研究的主线假设和可能被推翻的条件。
-
-### Step 3: 证据收集
-
-写入 `<行业或公司>_evidence_index.md`，按优先级覆盖：
-
-- 行业官方数据、协会数据、海关数据、价格/库存/排产/招标/订单数据。
-- 公司公告、年报、季报、招股书、投资者关系和交易所互动。
-- `$tushare`、`$wencai-query` 或其他结构化数据：行情、估值、财务、概念、同行筛选。
-- 可靠新闻、产业数据库、券商或市场口径。
-
-证据路径和口径见 [references/data-path.md](references/data-path.md)。
-
-### Step 4: 多角色研究
-
-角色分工和中间产物要求见 [references/orchestration.md](references/orchestration.md)。
-
-主控必须在 `<行业或公司>_report_outline.md` 或终稿前保留覆盖表：
-
-| 模块 | 负责角色/阶段 | 结论强度 | 证据缺口 | 对主线影响 |
-| --- | --- | --- | --- | --- |
-| 行业定义与分诊 | 产业链与行业定义 |  |  |  |
-| 产业链结构与公司位置 | 产业链与行业定义 |  |  |  |
-| 需求、供给与价格机制 | 需求/供给/价格 |  |  |  |
-| 利润池与竞争格局 | 利润池与竞争格局 |  |  |  |
-| 财务映射与重点公司 | 财务映射与重点公司 |  |  |  |
-| 估值、预期与安全边际 | 财务映射/反方 |  |  |  |
-| 风险、证伪点与跟踪指标 | 反方审查 |  |  |  |
-
-### Step 5: 写作提纲
-
-写入 `<行业或公司>_report_outline.md`，不要直接写终稿。提纲必须回答：
-
-- 读者第一眼需要先理解什么。
-- 哪个判断是全文主线。
-- 哪些术语必须用人话解释。
-- 哪些表格必须保留，哪些内容应转成解释性段落。
-- 哪些 subagent 结论冲突，主控如何取舍。
-- 最终报告的 7 到 10 个一级章节。
-
-### Step 6: 连贯终稿
-
-读取全部中间文件后，再写 `<行业或公司>_final_report.md`。
-
-终稿推荐结构：
-
-1. 一句话结论：行业处在什么阶段，利润流向哪里。
-2. 先讲人话：这个行业到底卖什么，谁买单。
-3. 行业边界与产业链：上下游关系和公司所处环节。
-4. 需求：增长来自哪里，能持续多久。
-5. 供给与价格：会不会过剩，价格谁说了算。
-6. 利润池：哪个环节最赚钱，为什么能守住。
-7. 竞争格局：谁有壁垒，谁会被挤压。
-8. 财务映射与重点公司：行业变量如何进入财报。
-9. 估值和市场预期：现在定价到了哪一步。
-10. 风险和跟踪指标：哪些信号说明逻辑错了。
-
-写作规范见 [references/report-writing.md](references/report-writing.md)。
+- 是否优先尝试真实 subagent；若未启动，是否说明宿主不允许并采用阶段文件模拟。
+- `agent_briefs.md` 是否记录每个 agent 的任务、数据源、输出文件、模块手册和禁区。
+- `evidence_index.md` 是否记录来源、口径、可靠性、适用模块和数据缺口。
+- 关键模块 agent 是否读取并遵守对应模块手册。
+- 每个角色文件是否包含证据、推理、反证、判断强度和数据缺口。
+- `negative_check.md` 是否逐条反查看多主线，而不是只写一般风险。
+- `report_synthesis.md` 是否处理 agent 冲突、证据强弱和结论降级。
+- `final_report.md` 是否解释“行业怎么赚钱、利润留在哪、为什么能守住、如何进财报、估值是否反映、如何证伪”。
+- 任一项缺失时，不能声称完成正式研究，只能标记为 preliminary draft。
 
 ## Output Discipline
 
-最终回复用户时，除非用户要求只看终稿，否则要说明：
+最终回复用户时，除非用户只要求看终稿，否则说明：
 
-- 新生成了哪些中间文件。
-- 哪些 agent/阶段完成了哪些任务。
-- 七个核心模块如何被覆盖。
+- 真实 subagent 或阶段模拟的执行情况。
+- 新生成的中间文件。
+- 九个核心模块如何覆盖。
+- 反查发现了哪些反面证据，哪些结论被降级。
 - 最终报告路径。
 
 ## References
 
-- 行业研究框架：[references/framework.md](references/framework.md)
-- Agentic 编排细则：[references/orchestration.md](references/orchestration.md)
-- 数据路径与证据优先级：[references/data-path.md](references/data-path.md)
-- 连贯报告写作：[references/report-writing.md](references/report-writing.md)
+- 总框架：[references/framework.md](references/framework.md)
+- Agentic 编排：[references/orchestration.md](references/orchestration.md)
+- 数据路径：[references/data-path.md](references/data-path.md)
+- 模块手册：[references/modules/](references/modules/)
+- 报告写作：[references/report-writing.md](references/report-writing.md)

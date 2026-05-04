@@ -30,7 +30,7 @@ research_artifacts/<股票代码或公司简称>/
 
 ## 角色分工与内置模块映射
 
-本 skill 内置供应链平台型成长股六个模块的问题清单，不依赖独立子 skill。详细检查项见 [module-checklists.md](module-checklists.md)。
+本 skill 内置供应链平台型成长股六个模块的问题清单，不依赖独立子 skill。
 
 | 原框架模块 | 主要负责角色 | 作用 |
 | --- | --- | --- |

@@ -29,7 +29,7 @@ research_artifacts/<股票代码或公司简称>/
 
 ## 角色分工与内置模块映射
 
-本 skill 内置六个底盘型成长股模块的问题清单，不依赖独立子 skill。详细检查项见 [module-checklists.md](module-checklists.md)。正式研究中，由对应角色覆盖这些模块：
+本 skill 内置六个底盘型成长股模块的问题清单，不依赖独立 `growth-*` 子 skill。正式研究中，由对应角色覆盖这些模块：
 
 | 原框架模块 | 主要负责角色 | 作用 |
 | --- | --- | --- |

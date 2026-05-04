@@ -192,6 +192,7 @@ research_artifacts/<股票代码或公司简称>/
 ## References
 
 - 原框架保留说明：[references/framework-preserved.md](references/framework-preserved.md)
+- 内置模块问题清单：[references/module-checklists.md](references/module-checklists.md)
 - Agentic 编排细则：[references/orchestration.md](references/orchestration.md)
 - 数据路径与证据优先级：[references/data-path.md](references/data-path.md)
 - 投资人写作规范：[references/report-writing.md](references/report-writing.md)

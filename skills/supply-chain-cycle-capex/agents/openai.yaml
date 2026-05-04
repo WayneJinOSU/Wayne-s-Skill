@@ -1,0 +1,4 @@
+interface:
+  display_name: "供应链周期Capex"
+  short_description: "Analyze industry cycle and customer capex"
+  default_prompt: "Use $supply-chain-cycle-capex to analyze industry cycle strength and customer capex visibility."

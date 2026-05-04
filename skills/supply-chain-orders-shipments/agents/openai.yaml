@@ -1,4 +1,4 @@
 interface:
   display_name: "供应链订单出货"
   short_description: "Analyze orders shipments inventory cash flow"
-  default_prompt: "Use $supply-chain-orders-shipments to analyze orders, shipments, inventory, receivables, and cash-flow quality before financial confirmation."
+  default_prompt: "Use -chain-orders-shipments to analyze orders, shipments, inventory, receivables, and cash-flow quality before financial confirmation."

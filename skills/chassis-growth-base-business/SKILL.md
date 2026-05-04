@@ -1,6 +1,6 @@
 ---
-name: growth-base-business
-description: 分析底盘型成长股的旧业务底盘，包括收入利润、现金流、客户基础、行业地位、财务质量和下限支撑。
+name: chassis-growth-base-business
+description: 分析底盘型成长股的旧业务底盘，包括收入利润、现金流、客户基础、行业地位、财务质量和下限支撑。Use when 底盘型成长股研究需要判断旧业务是否能提供估值下限和风险缓冲。
 ---
 
 # 旧业务底盘研究

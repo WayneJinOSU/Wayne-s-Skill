@@ -6,16 +6,16 @@ Personal Codex skills maintained as versioned assets.
 
 - `akshare`: Chinese financial data access using AkShare library. Fetch real-time and historical data for A-shares, Hong Kong stocks, US stocks, futures, funds, and macroeconomic indicators. Use when user requests Chinese market data, stock prices, market analysis, or financial information from Chinese exchanges. Supports stock quotes, historical data, futures market data, fund information, macroeconomic indicators, and real-time market updates.
 - `chassis-growth-agentic-research`: 独立主控底盘型成长股正式研究；用多角色/subagent、中间产物、反方审查和投资人写作，完整覆盖旧业务底盘、第二成长曲线、平台复用能力、承接动作、利润桥和远期估值。Use when 用户需要深度分析 A 股制造业、AI算力、数据中心、新能源、机器人、先进制造、半导体设备/材料等底盘型成长公司，判断旧业务托底、新业务抬天花板、平台能力复用、利润中枢上移和估值透支，并优先调度对应子 skill。
+- `chassis-growth-base-business`: 分析底盘型成长股的旧业务底盘，包括收入利润、现金流、客户基础、行业地位、财务质量和下限支撑。Use when 底盘型成长股研究需要判断旧业务是否能提供估值下限和风险缓冲。
+- `chassis-growth-platform-reuse`: 分析底盘型成长股的平台复用能力，包括技术、客户、工艺、产能、供应链、认证体系和跨界可信度。Use when 底盘型成长股研究需要判断新业务是否复用旧业务能力、是否存在硬跨界或概念包装。
+- `chassis-growth-second-curve`: 分析底盘型成长股的第二成长曲线，包括新赛道空间、增速、产业链位置、价值量提升和天花板重估。Use when 底盘型成长股研究需要判断新业务是否抬高收入、利润率或估值身份。
+- `common-growth-execution-signals`: 公共成长股承接动作模块，分析扩产、融资、设备、客户验证、订单、量产、海外基地和研发投入。Use when 底盘型成长股或供应链平台型成长股研究需要判断预期是否被经营动作、产能、客户和订单承接。
+- `common-growth-forward-valuation`: 公共成长股远期估值模块，分析当前市值反推PE、估值透支、隐含利润情景与关键证伪点。Use when 底盘型成长股或供应链平台型成长股研究需要判断当前估值反映到哪一年利润、是否已经透支。
+- `common-growth-profit-bridge`: 公共成长股利润桥模块，拆分存量/旧平台利润、新业务或新周期新增利润、扩张成本，并做保守中性乐观情景。Use when 底盘型成长股或供应链平台型成长股研究需要判断利润中枢是否上移、远期利润能否消化估值。
 - `doc`: Professional document creation, editing, and analysis for Office formats (docx, pdf, pptx, xlsx). Use when working with Word documents, PDFs, PowerPoint presentations, or Excel spreadsheets.
 - `finance-research-xhs`: 将金融研报、股票研究、行业分析、财报解读、投资复盘和估值框架改写成小红书长文本笔记。适用于非种草、非带货、非标题党风格，强调信息密度、证据链、事实/推断/假设分层、风险和证伪点保留。Use when the user asks for 金融研报小红书、投研小红书长文、股票分析笔记、行业研究改写、财报解读小红书、非种草风格XHS长文本。
 - `find-skills`: Helps users discover and install agent skills when they ask questions like "how do I do X", "find a skill for X", "is there a skill that can...", or express interest in extending capabilities. This skill should be used when the user is looking for functionality that might exist as an installable skill.
 - `frontend-design`: Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, artifacts, posters, or applications (examples include websites, landing pages, dashboards, React components, HTML/CSS layouts, or when styling/beautifying any web UI). Generates creative, polished code and UI design that avoids generic AI aesthetics.
-- `growth-base-business`: 分析底盘型成长股的旧业务底盘，包括收入利润、现金流、客户基础、行业地位、财务质量和下限支撑。
-- `growth-execution-signals`: 分析底盘型成长股的新业务承接动作，包括扩产、融资、设备、客户验证、订单、量产、海外基地和研发投入。
-- `growth-forward-valuation`: 分析底盘型成长股远期估值、当前市值反推PE、估值透支与关键证伪点。
-- `growth-platform-reuse`: 分析底盘型成长股的平台复用能力，包括技术、客户、工艺、产能、供应链、认证体系和跨界可信度。
-- `growth-profit-bridge`: 为底盘型成长股建立利润桥，拆分存量利润、新业务利润、扩张成本，并做保守中性乐观情景。
-- `growth-second-curve`: 分析底盘型成长股的第二成长曲线，包括新赛道空间、增速、产业链位置、价值量提升和天花板重估。
 - `industry-chain-agentic-research`: 用多角色研究、中间产物、产业链利润池、需求供给价格、竞争格局、财务映射、反方审查和投资人写作，完成行业产业链研究报告。适用于 A 股/港股/美股行业研究、产业链研究、赛道研究、行业对公司财务影响研究，以及用户要求 subagent/agentic/多角色行业研究时。
 - `local-bank-research`: 研究城商行、农商行等地方商业银行股的利润桥、资产质量、区域beta、债券投资、分红与预期差。
 - `pipecat-deploy`: Deploy an agent to Pipecat Cloud

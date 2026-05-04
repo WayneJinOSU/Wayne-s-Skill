@@ -1,6 +1,6 @@
 ---
-name: growth-second-curve
-description: 分析底盘型成长股的第二成长曲线，包括新赛道空间、增速、产业链位置、价值量提升和天花板重估。
+name: chassis-growth-second-curve
+description: 分析底盘型成长股的第二成长曲线，包括新赛道空间、增速、产业链位置、价值量提升和天花板重估。Use when 底盘型成长股研究需要判断新业务是否抬高收入、利润率或估值身份。
 ---
 
 # 第二成长曲线研究

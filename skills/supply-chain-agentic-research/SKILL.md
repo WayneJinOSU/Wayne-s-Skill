@@ -43,7 +43,7 @@ description: 独立主控供应链平台型成长股正式研究；用多角色/
    - 承接动作
    - 利润桥
    - 远期估值
-   对应子 skill 分别是 `$supply-chain-cycle-capex`、`$supply-chain-position-moat`、`$supply-chain-orders-shipments`、`$growth-execution-signals`、`$growth-profit-bridge`、`$growth-forward-valuation`。能通过 skill 机制调用时，应优先调用；不能直接调用时，必须复用这些子 skill 的问题清单并完整覆盖同名问题。
+   对应子 skill 分别是 `$supply-chain-cycle-capex`、`$supply-chain-position-moat`、`$supply-chain-orders-shipments`、`$common-growth-execution-signals`、`$common-growth-profit-bridge`、`$common-growth-forward-valuation`。能通过 skill 机制调用时，应优先调用；不能直接调用时，必须复用这些子 skill 的问题清单并完整覆盖同名问题。
 2. 不允许直接输出终稿。必须先形成中间研究产物。
 3. 每个强判断必须写清楚：
 
@@ -127,9 +127,9 @@ research_artifacts/<股票代码或公司简称>/
 | 产业周期 | `$supply-chain-cycle-capex` | 周期 |  |  |
 | 供应链地位 | `$supply-chain-position-moat` | 地位 |  |  |
 | 订单出货 | `$supply-chain-orders-shipments` | 订单/经营质量 |  |  |
-| 承接动作 | `$growth-execution-signals` | 订单/经营质量 |  |  |
-| 利润桥 | `$growth-profit-bridge` | 利润/估值 |  |  |
-| 远期估值 | `$growth-forward-valuation` | 利润/估值/反方 |  |  |
+| 承接动作 | `$common-growth-execution-signals` | 订单/经营质量 |  |  |
+| 利润桥 | `$common-growth-profit-bridge` | 利润/估值 |  |  |
+| 远期估值 | `$common-growth-forward-valuation` | 利润/估值/反方 |  |  |
 
 产业周期研究写入 `<标的简称或代码>_cycle_capex.md`：
 

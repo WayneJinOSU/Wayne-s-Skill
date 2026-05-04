@@ -1,9 +1,9 @@
 ---
-name: growth-profit-bridge
-description: 为底盘型成长股建立利润桥，拆分存量利润、新业务利润、扩张成本，并做保守中性乐观情景。
+name: common-growth-profit-bridge
+description: 公共成长股利润桥模块，拆分存量/旧平台利润、新业务或新周期新增利润、扩张成本，并做保守中性乐观情景。Use when 底盘型成长股或供应链平台型成长股研究需要判断利润中枢是否上移、远期利润能否消化估值。
 ---
 
-# 利润桥研究
+# 公共利润桥研究
 
 ## Purpose
 

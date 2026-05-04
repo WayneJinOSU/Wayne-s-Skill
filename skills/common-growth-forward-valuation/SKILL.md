@@ -1,9 +1,9 @@
 ---
-name: growth-forward-valuation
-description: 分析底盘型成长股远期估值、当前市值反推PE、估值透支与关键证伪点。
+name: common-growth-forward-valuation
+description: 公共成长股远期估值模块，分析当前市值反推PE、估值透支、隐含利润情景与关键证伪点。Use when 底盘型成长股或供应链平台型成长股研究需要判断当前估值反映到哪一年利润、是否已经透支。
 ---
 
-# 远期估值与证伪研究
+# 公共远期估值与证伪研究
 
 ## Purpose
 

@@ -1,9 +1,9 @@
 ---
-name: growth-execution-signals
-description: 分析底盘型成长股的新业务承接动作，包括扩产、融资、设备、客户验证、订单、量产、海外基地和研发投入。
+name: common-growth-execution-signals
+description: 公共成长股承接动作模块，分析扩产、融资、设备、客户验证、订单、量产、海外基地和研发投入。Use when 底盘型成长股或供应链平台型成长股研究需要判断预期是否被经营动作、产能、客户和订单承接。
 ---
 
-# 承接动作研究
+# 公共承接动作研究
 
 ## Purpose
 

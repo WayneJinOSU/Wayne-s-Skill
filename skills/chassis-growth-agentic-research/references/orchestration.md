@@ -33,12 +33,12 @@ research_artifacts/<股票代码或公司简称>/
 
 | 核心模块 | 子 skill | 主要负责角色 | 作用 |
 | --- | --- | --- | --- |
-| 旧业务底盘 | `$growth-base-business` | 业务与产业 agent、财务与利润桥 agent | 判断下限、现金流、客户和财务质量 |
-| 第二成长曲线 | `$growth-second-curve` | 业务与产业 agent | 判断上限、产业空间、价值量和身份重估 |
-| 平台复用能力 | `$growth-platform-reuse` | 业务与产业 agent | 判断新业务可信度，防止硬跨界 |
-| 承接动作 | `$growth-execution-signals` | 业务与产业 agent、财务与利润桥 agent | 判断扩产、融资、订单、量产是否支撑预期 |
-| 利润桥 | `$growth-profit-bridge` | 财务与利润桥 agent | 把故事转成未来利润中枢 |
-| 远期估值与证伪 | `$growth-forward-valuation` | 估值与资产 agent、反方审查 agent | 判断当前市值是否透支，并输出证伪点 |
+| 旧业务底盘 | `$chassis-growth-base-business` | 业务与产业 agent、财务与利润桥 agent | 判断下限、现金流、客户和财务质量 |
+| 第二成长曲线 | `$chassis-growth-second-curve` | 业务与产业 agent | 判断上限、产业空间、价值量和身份重估 |
+| 平台复用能力 | `$chassis-growth-platform-reuse` | 业务与产业 agent | 判断新业务可信度，防止硬跨界 |
+| 承接动作 | `$common-growth-execution-signals` | 业务与产业 agent、财务与利润桥 agent | 判断扩产、融资、订单、量产是否支撑预期 |
+| 利润桥 | `$common-growth-profit-bridge` | 财务与利润桥 agent | 把故事转成未来利润中枢 |
+| 远期估值与证伪 | `$common-growth-forward-valuation` | 估值与资产 agent、反方审查 agent | 判断当前市值是否透支，并输出证伪点 |
 
 主控可以把多个子 skill 合并给同一个 agent，但不能省略任何模块。若某个模块证据不足，应写“证据不足”，而不是从报告中消失。
 

@@ -1,6 +1,6 @@
 ---
-name: growth-platform-reuse
-description: 分析底盘型成长股的平台复用能力，包括技术、客户、工艺、产能、供应链、认证体系和跨界可信度。
+name: chassis-growth-platform-reuse
+description: 分析底盘型成长股的平台复用能力，包括技术、客户、工艺、产能、供应链、认证体系和跨界可信度。Use when 底盘型成长股研究需要判断新业务是否复用旧业务能力、是否存在硬跨界或概念包装。
 ---
 
 # 平台复用能力研究

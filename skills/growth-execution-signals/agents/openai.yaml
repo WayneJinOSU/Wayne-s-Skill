@@ -1,7 +1,0 @@
-interface:
-  display_name: "成长股承接动作"
-  short_description: "分析扩产融资客户验证订单与量产信号"
-  default_prompt: "Use $growth-execution-signals to analyze whether the company has concrete execution signals behind the new growth story."
-
-policy:
-  allow_implicit_invocation: true

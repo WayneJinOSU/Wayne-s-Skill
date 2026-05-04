@@ -37,9 +37,9 @@ research_artifacts/<股票代码或公司简称>/
 | 产业周期 | `$supply-chain-cycle-capex` | 产业周期与客户 Capex agent | 判断下游需求、客户 capex、平台迭代和周期持续性 |
 | 供应链地位 | `$supply-chain-position-moat` | 供应链地位与壁垒 agent | 判断位置、认证、交付壁垒、替代性和议价权 |
 | 订单出货 | `$supply-chain-orders-shipments` | 订单出货与经营质量 agent | 判断订单、排产、出货、财报确认和增长质量 |
-| 承接动作 | `$growth-execution-signals` | 订单出货与经营质量 agent | 判断扩产、融资、设备、量产、海外基地和研发投入 |
-| 利润桥 | `$growth-profit-bridge` | 利润中枢与估值 agent | 把订单和故事转成未来利润中枢 |
-| 远期估值 | `$growth-forward-valuation` | 利润中枢与估值 agent、反方审查 agent | 判断当前市值是否透支未来利润 |
+| 承接动作 | `$common-growth-execution-signals` | 订单出货与经营质量 agent | 判断扩产、融资、设备、量产、海外基地和研发投入 |
+| 利润桥 | `$common-growth-profit-bridge` | 利润中枢与估值 agent | 把订单和故事转成未来利润中枢 |
+| 远期估值 | `$common-growth-forward-valuation` | 利润中枢与估值 agent、反方审查 agent | 判断当前市值是否透支未来利润 |
 
 主控可以把多个子 skill 合并给同一个 agent，但不能省略任何模块。若某个模块证据不足，应写“证据不足”，而不是从报告中消失。
 

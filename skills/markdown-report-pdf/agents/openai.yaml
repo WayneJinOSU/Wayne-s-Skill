@@ -1,0 +1,4 @@
+display_name: Markdown Report PDF
+short_description: Convert Markdown reports to styled HTML and PDF.
+default_prompt: Convert Markdown report files into a polished HTML/CSS PDF and verify the PDF output.
+

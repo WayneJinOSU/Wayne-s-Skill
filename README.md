@@ -6,12 +6,7 @@ Personal Codex skills maintained as versioned assets.
 
 - `akshare`: Chinese financial data access using AkShare library. Fetch real-time and historical data for A-shares, Hong Kong stocks, US stocks, futures, funds, and macroeconomic indicators. Use when user requests Chinese market data, stock prices, market analysis, or financial information from Chinese exchanges. Supports stock quotes, historical data, futures market data, fund information, macroeconomic indicators, and real-time market updates.
 - `chassis-growth-agentic-research`: 独立主控底盘型成长股正式研究；用私有 modules、多角色/subagent、中间产物、市场重定价主线、竞争/客户验证链、中期结构 QA、反方审查和投资人写作，完整覆盖旧业务底盘、第二成长曲线、平台复用、承接动作、利润桥、跟踪体系和估值接力输入。Use when 用户需要深度分析 A 股制造业、AI算力、数据中心、新能源、机器人、先进制造、半导体设备/材料等底盘型成长公司，判断旧业务托底、新业务抬天花板、平台能力复用、竞争客户验证、利润中枢上移、预期差和证伪路径，并产出正式深度报告而非摘要。
-- `chassis-growth-base-business`: 分析底盘型成长股的旧业务底盘，包括收入利润、现金流、客户基础、行业地位、财务质量和下限支撑。Use when 底盘型成长股研究需要判断旧业务是否能提供估值下限和风险缓冲。
-- `chassis-growth-platform-reuse`: 分析底盘型成长股的平台复用能力，包括技术、客户、工艺、产能、供应链、认证体系和跨界可信度。Use when 底盘型成长股研究需要判断新业务是否复用旧业务能力、是否存在硬跨界或概念包装。
-- `chassis-growth-second-curve`: 分析底盘型成长股的第二成长曲线，包括新赛道空间、增速、产业链位置、价值量提升和天花板重估。Use when 底盘型成长股研究需要判断新业务是否抬高收入、利润率或估值身份。
-- `common-growth-execution-signals`: 公共成长股承接动作模块，分析扩产、融资、设备、客户验证、订单、量产、海外基地和研发投入。Use when 底盘型成长股或供应链平台型成长股研究需要判断预期是否被经营动作、产能、客户和订单承接。
 - `common-growth-forward-valuation`: 公共成长股远期估值模块，分析当前市值反推PE、估值透支、隐含利润情景与关键证伪点。Use when 底盘型成长股或供应链平台型成长股研究需要判断当前估值反映到哪一年利润、是否已经透支。
-- `common-growth-profit-bridge`: 公共成长股利润桥模块，拆分存量/旧平台利润、新业务或新周期新增利润、扩张成本，并做保守中性乐观情景。Use when 底盘型成长股或供应链平台型成长股研究需要判断利润中枢是否上移、远期利润能否消化估值。
 - `doc`: Professional document creation, editing, and analysis for Office formats (docx, pdf, pptx, xlsx). Use when working with Word documents, PDFs, PowerPoint presentations, or Excel spreadsheets.
 - `equity-catalyst-tracker`: 个股持续研究与爆点追踪；在已有产业链、成长股或供应链平台研究基础上，跟踪客户、订单、财报、同行、技术路线和市场行为等增量证据，判断逻辑升级、右侧确认、高位二次起爆、高潮退潮或证伪。Use when 用户要求持续研究股票、跟踪爆点、审核某条新闻/公告/财报是否强化逻辑、判断主线是否被强证据验证、涨幅较大后是否仍有新势能、是否进入高潮或退潮，尤其适用于 A股/港股/美股成长股、AI算力、数据中心、新能源、机器人、半导体、先进制造供应链公司。
 - `finance-research-xhs`: 将金融研报、股票研究、行业分析、财报解读、投资复盘和估值框架改写成小红书长文本笔记。适用于非种草、非带货、非标题党风格，强调信息密度、证据链、事实/推断/假设分层、风险和证伪点保留。Use when the user asks for 金融研报小红书、投研小红书长文、股票分析笔记、行业研究改写、财报解读小红书、非种草风格XHS长文本。
@@ -26,9 +21,6 @@ Personal Codex skills maintained as versioned assets.
 - `pipecat-talk`: Start a voice conversation using the Pipecat MCP server
 - `skill-github-sync`: Sync local Codex skills from ~/.codex/skills into a GitHub skills repository, update README, commit, and optionally push.
 - `supply-chain-agentic-research`: 独立主控供应链平台型成长股正式研究；用 6 个纵向主攻 agent + 3 个横向增强模块 + 两轮 QA，把研究从“覆盖模块”升级为“行业-技术-竞争-客户-产能-利润模型-跟踪体系全链条成稿”；重点覆盖市场交易变量、技术路线到价值量、竞争格局、客户认证链、原材料价格链、产能升级、订单经营验证、第二利润曲线、利润天花板、利润桥和跟踪日历；最终报告排除目标价、目标市值、PE/PEG/SOTP 等正式估值结论。Use when 用户需要深度分析 AI算力、数据中心、新能源、机器人、先进封装、半导体设备/材料等供应链公司，判断身份切换、订单放量、势能、利润中枢上移和天花板抬升，并产出正式深度报告而非摘要。
-- `supply-chain-cycle-capex`: 分析供应链平台型成长股所处的产业周期、客户资本开支、下游需求持续性、产品平台迭代和周期见顶风险。Use when researching AI 算力、云厂商 capex、AI服务器、高速PCB、液冷、电源、连接器、光模块、先进封装设备/材料等供应链公司，判断下游周期是否足以支撑订单和利润中枢上移。
-- `supply-chain-orders-shipments`: 分析供应链平台型成长股的订单、排产、出货、海关数据、库存、应收、合同负债、收入确认、利润释放和经营现金流质量。Use when researching AI服务器、高速PCB、液冷、电源、连接器、光模块、先进封装设备/材料等公司，判断订单出货是否领先财报、是否能支撑利润中枢上移。
-- `supply-chain-position-moat`: 分析供应链平台型成长股在产业链中的位置、客户认证、规模交付、复杂产品量产、全球产能、供应链组织、可替代性和议价权。Use when researching 工业富联、AI服务器制造、高速PCB、液冷、电源、连接器、光模块、先进封装材料/设备等公司是否具备关键供应链平台地位，而不是普通代工或可替代供应商。
 - `tushare`: 面向中文自然语言的 Tushare 数据研究技能。用于把“看看这只股票最近怎么样”“帮我查财报趋势”“最近哪个板块最强”“北向资金在买什么”“给我导出一份行情数据”这类请求，转成可执行的数据获取、清洗、对比、筛选、导出与简要分析流程。适用于 A 股、指数、ETF/基金、财务、估值、资金流、公告新闻、板块概念与宏观数据等研究场景。
 - `wencai-query`: Query Tonghuashun Wencai with the `pywencai` Python package for Chinese-market screening, ranking, and tabular result retrieval. Use when Codex needs to execute or explain a natural-language Wencai request such as A-share stock screening, concept or industry ranking, valuation or financial-factor filtering, limit-up or turnover queries, export Wencai results, or summarize the returned table. Trigger when the user mentions "问财", "同花顺问财", or `pywencai`, or asks to turn a Chinese stock screener prompt into executable code or structured output.
 

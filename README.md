@@ -6,7 +6,6 @@ Personal Codex skills maintained as versioned assets.
 
 - `akshare`: Chinese financial data access using AkShare library. Fetch real-time and historical data for A-shares, Hong Kong stocks, US stocks, futures, funds, and macroeconomic indicators. Use when user requests Chinese market data, stock prices, market analysis, or financial information from Chinese exchanges. Supports stock quotes, historical data, futures market data, fund information, macroeconomic indicators, and real-time market updates.
 - `chassis-growth-agentic-research`: 独立主控底盘型成长股正式研究；用私有 modules、多角色/subagent、中间产物、市场重定价主线、竞争/客户验证链、中期结构 QA、反方审查和投资人写作，完整覆盖旧业务底盘、第二成长曲线、平台复用、承接动作、利润桥、跟踪体系和估值接力输入。Use when 用户需要深度分析 A 股制造业、AI算力、数据中心、新能源、机器人、先进制造、半导体设备/材料等底盘型成长公司，判断旧业务托底、新业务抬天花板、平台能力复用、竞争客户验证、利润中枢上移、预期差和证伪路径，并产出正式深度报告而非摘要。
-- `common-growth-forward-valuation`: 公共成长股远期估值模块，分析当前市值反推PE、估值透支、隐含利润情景与关键证伪点。Use when 底盘型成长股或供应链平台型成长股研究需要判断当前估值反映到哪一年利润、是否已经透支。
 - `doc`: Professional document creation, editing, and analysis for Office formats (docx, pdf, pptx, xlsx). Use when working with Word documents, PDFs, PowerPoint presentations, or Excel spreadsheets.
 - `equity-catalyst-tracker`: 个股持续研究与爆点追踪；在已有产业链、成长股或供应链平台研究基础上，跟踪客户、订单、财报、同行、技术路线和市场行为等增量证据，判断逻辑升级、右侧确认、高位二次起爆、高潮退潮或证伪。Use when 用户要求持续研究股票、跟踪爆点、审核某条新闻/公告/财报是否强化逻辑、判断主线是否被强证据验证、涨幅较大后是否仍有新势能、是否进入高潮或退潮，尤其适用于 A股/港股/美股成长股、AI算力、数据中心、新能源、机器人、半导体、先进制造供应链公司。
 - `finance-research-xhs`: 将金融研报、股票研究、行业分析、财报解读、投资复盘和估值框架改写成小红书长文本笔记。适用于非种草、非带货、非标题党风格，强调信息密度、证据链、事实/推断/假设分层、风险和证伪点保留。Use when the user asks for 金融研报小红书、投研小红书长文、股票分析笔记、行业研究改写、财报解读小红书、非种草风格XHS长文本。

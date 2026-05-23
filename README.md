@@ -5,7 +5,7 @@ Personal Codex skills maintained as versioned assets.
 ## Skills
 
 - `akshare`: Chinese financial data access using AkShare library. Fetch real-time and historical data for A-shares, Hong Kong stocks, US stocks, futures, funds, and macroeconomic indicators. Use when user requests Chinese market data, stock prices, market analysis, or financial information from Chinese exchanges. Supports stock quotes, historical data, futures market data, fund information, macroeconomic indicators, and real-time market updates.
-- `chassis-growth-agentic-research`: 独立主控底盘型成长股正式研究；用多角色/subagent、中间产物、反方审查和投资人写作，完整覆盖旧业务底盘、第二成长曲线、平台复用能力、承接动作、利润桥和远期估值。Use when 用户需要深度分析 A 股制造业、AI算力、数据中心、新能源、机器人、先进制造、半导体设备/材料等底盘型成长公司，判断旧业务托底、新业务抬天花板、平台能力复用、利润中枢上移和估值透支，并优先调度对应子 skill。
+- `chassis-growth-agentic-research`: 独立主控底盘型成长股正式研究；用私有 modules、多角色/subagent、中间产物、市场重定价主线、竞争/客户验证链、中期结构 QA、反方审查和投资人写作，完整覆盖旧业务底盘、第二成长曲线、平台复用、承接动作、利润桥、跟踪体系和估值接力输入。Use when 用户需要深度分析 A 股制造业、AI算力、数据中心、新能源、机器人、先进制造、半导体设备/材料等底盘型成长公司，判断旧业务托底、新业务抬天花板、平台能力复用、竞争客户验证、利润中枢上移、预期差和证伪路径，并产出正式深度报告而非摘要。
 - `chassis-growth-base-business`: 分析底盘型成长股的旧业务底盘，包括收入利润、现金流、客户基础、行业地位、财务质量和下限支撑。Use when 底盘型成长股研究需要判断旧业务是否能提供估值下限和风险缓冲。
 - `chassis-growth-platform-reuse`: 分析底盘型成长股的平台复用能力，包括技术、客户、工艺、产能、供应链、认证体系和跨界可信度。Use when 底盘型成长股研究需要判断新业务是否复用旧业务能力、是否存在硬跨界或概念包装。
 - `chassis-growth-second-curve`: 分析底盘型成长股的第二成长曲线，包括新赛道空间、增速、产业链位置、价值量提升和天花板重估。Use when 底盘型成长股研究需要判断新业务是否抬高收入、利润率或估值身份。
@@ -44,25 +44,21 @@ Personal Codex skills maintained as versioned assets.
 
 - `equity-catalyst-tracker 调研东山精密，启动 subagent`
 - `industry-chain-agentic-research 研究AI服务器产业链，启动 subagent，拆分上游材料、PCB、连接器、电源、液冷和整机环节`
-- `chassis-growth-agentic-research 研究东山精密，重点看旧业务底盘、第二成长曲线和估值透支`
+- `chassis-growth-agentic-research 研究东山精密，重点看市场重定价、旧业务底盘、第二成长曲线、竞争客户验证和估值接力输入`
 - `supply-chain-agentic-research 调研工业富联，启动 subagent，输出正式深度报告`
 - `local-bank-research 研究江苏银行，重点拆利润桥、资产质量、区域beta、分红和估值预期差`
 
-底盘成长模块：
+底盘成长主控私有模块：
 
-- `chassis-growth-base-business 分析东山精密旧业务底盘，看收入利润、现金流、客户基础和估值下限`
-- `chassis-growth-second-curve 分析东山精密第二成长曲线，看AI算力PCB是否抬高收入、利润率和估值身份`
-- `chassis-growth-platform-reuse 分析东山精密平台复用能力，看客户、工艺、产能和认证体系是否能迁移到新业务`
-- `chassis-growth-execution-signals 跟踪东山精密承接动作，看扩产、设备、客户验证、订单和量产节点`
-- `chassis-growth-profit-bridge 拆东山精密利润桥，分旧业务底盘、第二曲线利润、平台复用和扩张成本`
+- `chassis-growth-agentic-research 研究东山精密，主控私有 modules 会覆盖市场重定价、旧业务底盘、第二曲线、平台复用、竞争客户验证、承接动作、利润桥和跟踪体系`
 
 供应链模块：
 
 - `supply-chain-agentic-research 调研沪电股份，主控私有模块会覆盖周期、地位、订单、承接动作和利润中枢`
 
-公共估值模块：
+成长股估值独立 skill：
 
-- `common-growth-forward-valuation 反推东山精密当前市值隐含利润，看估值反映到哪一年、是否透支`
+- `growth-stock-valuation 基于东山精密前置深研和估值接力输入，做目标市值、PEG、一致预期差和赔率判断`
 
 数据、写作和工具类：
 
@@ -81,15 +77,13 @@ Personal Codex skills maintained as versioned assets.
 
 - `调研东山精密，重点看4月9日前后是否有订单、客户、财报或市场行为催化；启动 subagent，输出证据链和后续跟踪清单`
 - `研究AI服务器产业链，启动 subagent，拆分上游材料、PCB、连接器、电源、液冷和整机环节，输出完整产业链深度报告`
-- `研究东山精密，启动 subagent，重点看旧业务底盘、第二成长曲线、平台复用能力、利润桥和估值是否透支`
-- `调研工业富联，启动 subagent，重点看AI服务器订单、客户结构、供应链地位、利润释放和远期估值`
+- `研究东山精密，启动 subagent，重点看市场重定价、旧业务底盘、第二成长曲线、平台复用能力、竞争客户验证、利润桥和估值接力输入`
+- `调研工业富联，启动 subagent，重点看AI服务器订单、客户结构、供应链地位、利润释放和估值接力输入`
 - `研究江苏银行，重点拆利润桥、资产质量、区域beta、债券投资、分红和估值预期差`
 
-底盘成长模块：
+底盘成长主控私有模块：
 
-- `分析东山精密旧业务底盘，看收入利润、现金流、客户基础、行业地位和估值下限`
-- `分析东山精密第二成长曲线，看AI算力PCB是否抬高收入、利润率、成长天花板和估值身份`
-- `分析东山精密平台复用能力，看客户、工艺、产能、供应链和认证体系是否能迁移到新业务`
+- `分析东山精密，主控私有 modules 覆盖旧业务底盘、第二成长曲线、平台复用、竞争客户验证、承接动作、利润桥和跟踪体系`
 
 供应链模块：
 
@@ -97,11 +91,9 @@ Personal Codex skills maintained as versioned assets.
 - `分析工业富联供应链地位，看客户认证、规模交付、复杂产品量产、全球产能和可替代性`
 - `分析沪电股份订单出货，看排产、库存、应收、合同负债、收入确认和经营现金流质量`
 
-公共成长模块：
+成长股估值独立 skill：
 
-- `跟踪东山精密承接动作，看扩产、融资、设备、客户验证、订单、量产和海外基地进展`
-- `拆东山精密利润桥，分存量利润、新业务新增利润和扩张成本，做保守、中性、乐观三种情景`
-- `反推东山精密当前市值隐含利润，看估值反映到哪一年、是否透支、关键证伪点是什么`
+- `growth-stock-valuation 基于东山精密前置深研和估值接力输入，做目标市值、PEG、一致预期差和赔率判断`
 
 数据、写作和工具类：
 

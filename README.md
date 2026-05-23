@@ -25,7 +25,7 @@ Personal Codex skills maintained as versioned assets.
 - `pipecat-init`: Scaffold a new Pipecat project with guided setup
 - `pipecat-talk`: Start a voice conversation using the Pipecat MCP server
 - `skill-github-sync`: Sync local Codex skills from ~/.codex/skills into a GitHub skills repository, update README, commit, and optionally push.
-- `supply-chain-agentic-research`: 独立主控供应链平台型成长股正式研究；用多角色/subagent、中间产物、反方审查和投资人写作，完整覆盖产业周期、供应链地位、订单出货、承接动作、利润桥和远期估值。Use when 用户需要深度分析 AI算力、数据中心、新能源、机器人、先进封装、半导体设备/材料等供应链公司，判断身份切换、订单放量、利润中枢上移和估值透支，并优先调度对应子 skill。
+- `supply-chain-agentic-research`: 独立主控供应链平台型成长股正式研究；用 6 个主攻 agent + 1 个终审 QA、中间产物和投资人写作，重点覆盖市场交易变量、技术路线到价值量、原材料价格链、产能升级、订单经营验证、第二利润曲线、利润天花板和利润桥；产业周期、供应链地位和承接动作嵌入主攻模块，不再平权抢主线；最终报告排除目标价、目标市值、PE/PEG/SOTP 等正式估值结论。Use when 用户需要深度分析 AI算力、数据中心、新能源、机器人、先进封装、半导体设备/材料等供应链公司，判断身份切换、订单放量、势能、利润中枢上移和天花板抬升。
 - `supply-chain-cycle-capex`: 分析供应链平台型成长股所处的产业周期、客户资本开支、下游需求持续性、产品平台迭代和周期见顶风险。Use when researching AI 算力、云厂商 capex、AI服务器、高速PCB、液冷、电源、连接器、光模块、先进封装设备/材料等供应链公司，判断下游周期是否足以支撑订单和利润中枢上移。
 - `supply-chain-orders-shipments`: 分析供应链平台型成长股的订单、排产、出货、海关数据、库存、应收、合同负债、收入确认、利润释放和经营现金流质量。Use when researching AI服务器、高速PCB、液冷、电源、连接器、光模块、先进封装设备/材料等公司，判断订单出货是否领先财报、是否能支撑利润中枢上移。
 - `supply-chain-position-moat`: 分析供应链平台型成长股在产业链中的位置、客户认证、规模交付、复杂产品量产、全球产能、供应链组织、可替代性和议价权。Use when researching 工业富联、AI服务器制造、高速PCB、液冷、电源、连接器、光模块、先进封装材料/设备等公司是否具备关键供应链平台地位，而不是普通代工或可替代供应商。
@@ -53,17 +53,15 @@ Personal Codex skills maintained as versioned assets.
 - `chassis-growth-base-business 分析东山精密旧业务底盘，看收入利润、现金流、客户基础和估值下限`
 - `chassis-growth-second-curve 分析东山精密第二成长曲线，看AI算力PCB是否抬高收入、利润率和估值身份`
 - `chassis-growth-platform-reuse 分析东山精密平台复用能力，看客户、工艺、产能和认证体系是否能迁移到新业务`
+- `chassis-growth-execution-signals 跟踪东山精密承接动作，看扩产、设备、客户验证、订单和量产节点`
+- `chassis-growth-profit-bridge 拆东山精密利润桥，分旧业务底盘、第二曲线利润、平台复用和扩张成本`
 
 供应链模块：
 
-- `supply-chain-cycle-capex 分析AI服务器产业周期，重点看云厂商capex、产品迭代和周期见顶风险`
-- `supply-chain-position-moat 分析工业富联供应链地位，看客户认证、规模交付、全球产能和可替代性`
-- `supply-chain-orders-shipments 分析沪电股份订单出货，看排产、库存、应收、合同负债和收入确认`
+- `supply-chain-agentic-research 调研沪电股份，主控私有模块会覆盖周期、地位、订单、承接动作和利润中枢`
 
-公共成长模块：
+公共估值模块：
 
-- `common-growth-execution-signals 跟踪东山精密承接动作，看扩产、设备、客户验证、订单和量产节点`
-- `common-growth-profit-bridge 拆东山精密利润桥，分存量利润、新业务新增利润和扩张成本，做三种情景`
 - `common-growth-forward-valuation 反推东山精密当前市值隐含利润，看估值反映到哪一年、是否透支`
 
 数据、写作和工具类：

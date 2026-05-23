@@ -25,7 +25,7 @@ Personal Codex skills maintained as versioned assets.
 - `pipecat-init`: Scaffold a new Pipecat project with guided setup
 - `pipecat-talk`: Start a voice conversation using the Pipecat MCP server
 - `skill-github-sync`: Sync local Codex skills from ~/.codex/skills into a GitHub skills repository, update README, commit, and optionally push.
-- `supply-chain-agentic-research`: 独立主控供应链平台型成长股正式研究；用 6 个主攻 agent + 1 个终审 QA、中间产物和投资人写作，重点覆盖市场交易变量、技术路线到价值量、原材料价格链、产能升级、订单经营验证、第二利润曲线、利润天花板和利润桥；产业周期、供应链地位和承接动作嵌入主攻模块，不再平权抢主线；最终报告排除目标价、目标市值、PE/PEG/SOTP 等正式估值结论。Use when 用户需要深度分析 AI算力、数据中心、新能源、机器人、先进封装、半导体设备/材料等供应链公司，判断身份切换、订单放量、势能、利润中枢上移和天花板抬升。
+- `supply-chain-agentic-research`: 独立主控供应链平台型成长股正式研究；用 6 个纵向主攻 agent + 3 个横向增强模块 + 两轮 QA，把研究从“覆盖模块”升级为“行业-技术-竞争-客户-产能-利润模型-跟踪体系全链条成稿”；重点覆盖市场交易变量、技术路线到价值量、竞争格局、客户认证链、原材料价格链、产能升级、订单经营验证、第二利润曲线、利润天花板、利润桥和跟踪日历；最终报告排除目标价、目标市值、PE/PEG/SOTP 等正式估值结论。Use when 用户需要深度分析 AI算力、数据中心、新能源、机器人、先进封装、半导体设备/材料等供应链公司，判断身份切换、订单放量、势能、利润中枢上移和天花板抬升，并产出正式深度报告而非摘要。
 - `supply-chain-cycle-capex`: 分析供应链平台型成长股所处的产业周期、客户资本开支、下游需求持续性、产品平台迭代和周期见顶风险。Use when researching AI 算力、云厂商 capex、AI服务器、高速PCB、液冷、电源、连接器、光模块、先进封装设备/材料等供应链公司，判断下游周期是否足以支撑订单和利润中枢上移。
 - `supply-chain-orders-shipments`: 分析供应链平台型成长股的订单、排产、出货、海关数据、库存、应收、合同负债、收入确认、利润释放和经营现金流质量。Use when researching AI服务器、高速PCB、液冷、电源、连接器、光模块、先进封装设备/材料等公司，判断订单出货是否领先财报、是否能支撑利润中枢上移。
 - `supply-chain-position-moat`: 分析供应链平台型成长股在产业链中的位置、客户认证、规模交付、复杂产品量产、全球产能、供应链组织、可替代性和议价权。Use when researching 工业富联、AI服务器制造、高速PCB、液冷、电源、连接器、光模块、先进封装材料/设备等公司是否具备关键供应链平台地位，而不是普通代工或可替代供应商。

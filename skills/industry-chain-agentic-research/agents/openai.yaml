@@ -1,7 +1,7 @@
 interface:
   display_name: "Agentic 行业产业链研究"
-  short_description: "多角色产业链深度研究，含传导图谱、数据表、反查、主笔重构、普通投资者导读和完整报告"
-  default_prompt: "Use $industry-chain-agentic-research to produce a formal full industry-chain investment research report with real subagents when allowed, subsegment mapping, agent briefs, module handbooks, intermediate artifacts, role-specific evidence cards, chapter drafts, data tables, a transmission map that fully expands downstream demand to procurement, product specs, orders, revenue, profit, cash flow, and valuation, profit-pool reasoning, financial mapping, valuation expectations, negative checks, skeptic review, report synthesis, editorial thesis, a thesis-driven full report with a plain-language investor logic bridge and fully expanded judgment basis, a plain investor guide, and an executive summary."
+  short_description: "多角色产业链深度研究，含扩写蓝图、传导图谱、数据表、反查、主笔重构、反摘要闸门和完整报告"
+  default_prompt: "Use $industry-chain-agentic-research to produce a formal full industry-chain investment research report with real subagents when allowed, subsegment mapping, agent briefs, module handbooks, intermediate artifacts, role-specific evidence cards, chapter drafts, data tables, a transmission map that fully expands downstream demand to procurement, product specs, orders, revenue, profit, cash flow, and valuation, profit-pool reasoning, financial mapping, valuation expectations, negative checks, skeptic review, report synthesis, editorial thesis, report outline with complexity profile, final report expansion plan, anti-summary gate validation, a thesis-driven full report with a plain-language investor logic bridge and fully expanded judgment basis, a plain investor guide, and an executive summary."
 
 policy:
   allow_implicit_invocation: true

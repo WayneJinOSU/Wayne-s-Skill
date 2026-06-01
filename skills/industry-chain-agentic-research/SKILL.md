@@ -60,7 +60,7 @@ description: 强约束 Agentic 行业产业链深度研究；真实 subagent 优
 正式研究必须满足：
 
 1. **真实 subagent 优先。** 若当前环境、宿主规则和工具能力允许，必须启动真实 subagent；阶段文件模拟只是在无法启动真实 subagent 时的降级执行载体，不是省时选项。
-2. **先中间产物，后终稿。** 必须生成 `question`、`subsegment_map`、`agent_briefs`、`evidence_index`、`data_tables`、`transmission_map`、各角色文件、`negative_check`、`skeptic_review`、`report_synthesis`、`editorial_thesis`、`report_outline`、`final_report_full`、`plain_investor_guide` 和 `executive_summary`。
+2. **先中间产物，后终稿。** 必须生成 `question`、`subsegment_map`、`agent_briefs`、`evidence_index`、`data_tables`、`transmission_map`、各角色文件、`negative_check`、`skeptic_review`、`report_synthesis`、`editorial_thesis`、`report_outline`、`final_report_expansion_plan`、`final_report_full`、`plain_investor_guide` 和 `executive_summary`。
 3. **研究覆盖要全。** 关键模块执行前必须读取对应 `references/modules/*.md`；九模块必须覆盖，大行业必须拆 3-7 个子环节。
 4. **角色输出要可用。** 正向角色输出证据卡、研究稿和可入正文的章节草稿；`data_tables.md` 承担完整数据沉淀，不能用角色小结替代。
 5. **主笔重构是硬闸门。** `report_synthesis.md` 之后、`report_outline.md` 之前，主控必须写 `editorial_thesis.md`，明确第一屏答案、一句话总判断、最终排序、利润桥覆盖、正文/附录取舍和反拼接自检。
@@ -71,8 +71,9 @@ description: 强约束 Agentic 行业产业链深度研究；真实 subagent 优
 10. **终稿按主线写，不按模块拼。** `final_report_full.md` 默认采用 6-10 个一级章节或等价结构，由 `editorial_thesis.md` 决定；正文表格克制，默认每个核心章节只放 0-1 张真正推动叙事的表。
 11. **可读性是硬约束。** `final_report_full.md` 第一屏必须有“普通投资者导读”或等价段落，用非术语语言解释行业生意、资金流、利润留存、主要陷阱和读法；另写 `<prefix>_plain_investor_guide.md`，把完整报告压缩成普通投资者能读懂的逻辑链。
 12. **判断依据必须展开。** 每个核心判断都必须写清 `事实证据 -> 产业机制 -> 传导链条 -> 财务映射 -> 反证/替代解释 -> 判断强度`。不能只给结论表、排序表或一句“证据支持”；必须解释为什么该证据足以推出该判断，以及为什么不能推出更强判断。
-13. **不为篇幅牺牲逻辑。** 正式报告不设硬性篇幅上限；如果传导链、判断依据和反证需要展开，就完整展开。压缩版只能放在 `executive_summary.md` 或 `plain_investor_guide.md`，不能让 `final_report_full.md` 像摘要。
+13. **篇幅由复杂度决定。** 正式报告不设硬性篇幅上限，但必须先在 `final_report_expansion_plan.md` 判定 `compact`、`standard`、`complex` 或 `long-form` 档位。默认 `standard` 正式报告通常为 10,000-14,000 中文字；简单窄赛道或证据有限可用 8,000-10,000 中文字；复杂大行业、多子环节、多利润池默认 12,000-18,000 中文字；用户要求券商深度版或对标长篇报告时可扩展到 18,000-30,000 中文字。不得为凑字数重复铺陈，但也不得把应展开的传导链、判断依据和反证压缩成摘要。压缩版只能放在 `executive_summary.md` 或 `plain_investor_guide.md`。
 14. **正式报告不能过薄，也不能离散。** 若只输出摘要、只给结论清单、缺少关键表格、没有展开产业机制、没有最终排序、没有完整传导链、没有普通读者逻辑桥或呈现为模块拼贴，只能标记为 preliminary / executive summary，不能称为正式行业研究报告。
+15. **反摘要闸门必须执行。** 写完 `final_report_full.md` 后必须运行 `scripts/final_report_gate.py`；未通过时先把失败项写回 `final_report_expansion_plan.md` 的补写记录并补写正文，不能声称完成正式行业深度报告。
 
 ## Execution Policy
 
@@ -91,9 +92,35 @@ description: 强约束 Agentic 行业产业链深度研究；真实 subagent 优
 
 执行顺序、文件结构、角色输出、冲突处理和无真实 subagent 时的阶段模拟方式见 [references/orchestration.md](references/orchestration.md)。主控执行时应优先读取该文件。
 
-正式深度报告的交付标准、子环节拆分、数据表、章节密度和防过薄验收见 [references/full-report-contract.md](references/full-report-contract.md)。主控在写 `agent_briefs.md`、`report_synthesis.md`、`editorial_thesis.md`、`report_outline.md` 和终稿前必须读取该文件。
+正式深度报告的交付标准、子环节拆分、数据表、章节密度、复杂度档位、扩写蓝图和防过薄验收见 [references/full-report-contract.md](references/full-report-contract.md)。主控在写 `agent_briefs.md`、`report_synthesis.md`、`editorial_thesis.md`、`report_outline.md`、`final_report_expansion_plan.md` 和终稿前必须读取该文件。
+
+终稿写作的标题、段落、表格和传导链展开规则见 [references/report-writing.md](references/report-writing.md)。若正文标题只是栏目名、变量只在表格里出现、或段落没有回答“变量如何进入价格、份额、利润、现金流和估值”，必须重写。
 
 主笔重构不是第 9 个研究角色，也不能外包给单个正向 subagent。subagent 负责证据卡、机制拆解、章节素材和反证；主控负责在 `editorial_thesis.md` 中裁剪、排序、降级和重写终稿结构。
+
+## Output Directory
+
+正式行业产业链研究必须在当前任务目录下建立统一产物目录，所有中间文件、角色输出、数据表、反查、反方审查、主笔重构文件和终稿都必须写入该目录；不得把投研文件写到任务根目录、`artifacts/` 或其他临时目录。
+
+```text
+research_artifacts/<行业、产业链或主线简称>/
+  <prefix>_question.md
+  <prefix>_subsegment_map.md
+  <prefix>_agent_briefs.md
+  <prefix>_evidence_index.md
+  <prefix>_data_tables.md
+  <prefix>_transmission_map.md
+  <prefix>_valuation_expectation.md
+  <prefix>_negative_check.md
+  <prefix>_skeptic_review.md
+  <prefix>_report_synthesis.md
+  <prefix>_editorial_thesis.md
+  <prefix>_report_outline.md
+  <prefix>_final_report_expansion_plan.md
+  <prefix>_final_report_full.md
+  <prefix>_plain_investor_guide.md
+  <prefix>_executive_summary.md
+```
 
 关键模块手册：
 
@@ -121,6 +148,7 @@ description: 强约束 Agentic 行业产业链深度研究；真实 subagent 优
 - `negative_check.md` 是否逐条反查看多主线，而不是只写一般风险。
 - `report_synthesis.md` 是否处理 agent 冲突、证据强弱、结论降级，并列出终稿必须展开的细节、必须保留的表格和每章证据。
 - `editorial_thesis.md` 是否给出第一屏答案、一句话总判断、普通投资者逻辑桥、最终排序、利润桥覆盖、正文/附录取舍和反拼接自检。
+- `final_report_expansion_plan.md` 是否判定复杂度档位，逐章列出必须展开的机制、表格、传导链、证据、反证、财务映射和目标密度。
 - 强结论是否走通从下游需求/capex 到采购结构、技术路线、供应商份额、收入、利润、现金流和估值的完整传导链；走不通的内容是否被降级。
 - 每个核心判断是否展开了判断依据，而不是只给结论清单或摘要式表格。
 - `final_report_full.md` 开头是否用普通人语言解释“谁掏钱、钱买什么、谁留利润、哪里会断、估值反映什么”，而不是直接进入术语和表格。
@@ -128,6 +156,7 @@ description: 强约束 Agentic 行业产业链深度研究；真实 subagent 优
 - `final_report_full.md` 是否按主线重写，默认采用 6-10 个一级章节或等价结构，而不是按九模块、12 章或 agent 文件顺序拼接。
 - `final_report_full.md` 是否像完整行业深度报告，解释“行业怎么赚钱、利润留在哪、为什么能守住、如何进财报、估值是否反映、如何证伪”，而不是薄摘要或离散材料合集。
 - `executive_summary.md` 是否只作为摘要，不替代正式报告。
+- 是否运行 `scripts/final_report_gate.py`，若失败是否补写并复跑；最终回复必须说明闸门是否通过。
 - 任一项缺失时，不能声称完成正式研究，只能标记为 preliminary draft。
 
 ## Output Discipline

@@ -12,7 +12,7 @@
 - 处理角色冲突、证据缺口和结论降级。
 - 组织 `data_tables.md` 和章节草稿。
 - 基于 `report_synthesis.md` 写 `editorial_thesis.md`，完成主笔重构、排序、利润桥、普通读者逻辑桥和正文取舍。
-- 基于 `editorial_thesis.md` 重写 `final_report_full.md`，并另写 `plain_investor_guide.md` 和 `executive_summary.md`。
+- 基于 `editorial_thesis.md` 写 `report_outline.md` 和 `final_report_expansion_plan.md`，再重写 `final_report_full.md`，运行反摘要闸门，并另写 `plain_investor_guide.md` 和 `executive_summary.md`。
 
 ## 文件结构
 
@@ -34,6 +34,7 @@ research_artifacts/<行业或公司>/
   <行业或公司>_report_synthesis.md
   <行业或公司>_editorial_thesis.md
   <行业或公司>_report_outline.md
+  <行业或公司>_final_report_expansion_plan.md
   <行业或公司>_final_report_full.md
   <行业或公司>_plain_investor_guide.md
   <行业或公司>_executive_summary.md
@@ -150,7 +151,7 @@ agent 分工表：
 最终交付清单：
 ```
 
-最终交付清单必须包含 `data_tables.md`、`transmission_map.md`、`editorial_thesis.md`、`final_report_full.md`、`plain_investor_guide.md` 和 `executive_summary.md`。
+最终交付清单必须包含 `data_tables.md`、`transmission_map.md`、`editorial_thesis.md`、`final_report_expansion_plan.md`、`final_report_full.md`、`plain_investor_guide.md` 和 `executive_summary.md`。
 `plain_investor_guide.md` 不是摘要替代品，而是面向普通投资者的读法：用人话解释行业生意、资金流、利润留存、误区和跟踪指标。
 若需要保留大量背景资料、长表或公司细节，可增加 `research_dossier.md`，但它不能替代 `final_report_full.md`。
 
@@ -212,7 +213,7 @@ agent 分工表：
 5. 反查完成后，启动反方审查角色。
 6. 全部中间文件完成后，启动或模拟报告汇总角色写 `report_synthesis.md`。
 7. 主控读取 `report_synthesis.md`、章节草稿和 `data_tables.md`，亲自写 `editorial_thesis.md`。
-8. 主控基于 `editorial_thesis.md` 写 `report_outline.md`、`final_report_full.md`、`plain_investor_guide.md` 和 `executive_summary.md`。
+8. 主控基于 `editorial_thesis.md` 写 `report_outline.md` 和 `final_report_expansion_plan.md`，再写 `final_report_full.md`、运行反摘要闸门，最后写 `plain_investor_guide.md` 和 `executive_summary.md`。
 
 如果用户明确要求 subagent、agentic、多角色或并行研究，视为已授权启动真实 subagent；若宿主仍不允许，必须说明并使用阶段文件模拟。
 
@@ -235,7 +236,9 @@ agent 分工表：
 13. 读取全部研究和反查文件，写 `skeptic_review.md`。
 14. 读取全部中间文件和 `full-report-contract.md`，写 `report_synthesis.md`。
 15. 读取 `report_synthesis.md`、`data_tables.md`、`transmission_map.md`、章节草稿和 `report-writing.md`，写 `editorial_thesis.md`。
-16. 读取 `editorial_thesis.md`、`report_synthesis.md`、`data_tables.md`、`transmission_map.md` 和章节草稿，写 `report_outline.md`、`final_report_full.md`、`plain_investor_guide.md` 和 `executive_summary.md`。
+16. 读取 `editorial_thesis.md`、`report_synthesis.md`、`data_tables.md`、`transmission_map.md` 和章节草稿，写 `report_outline.md` 和 `final_report_expansion_plan.md`。
+17. 读取 `final_report_expansion_plan.md`，写 `final_report_full.md`，运行 `scripts/final_report_gate.py`；若失败，先把失败项写入扩写蓝图的补写记录，补写正文并复跑。
+18. 写 `plain_investor_guide.md` 和 `executive_summary.md`。
 
 每一阶段都必须留下独立文件。信息不足时仍要生成文件，并写明已查证据、缺少数据、降级判断和下一步需要补什么。
 
@@ -350,6 +353,12 @@ final_report_full 写作指令：
 摘要报告结构：
 ```
 
+`report_outline.md` 还必须给出复杂度初判：`compact`、`standard`、`complex` 或 `long-form`，并说明子环节数量、核心变量数量、利润池数量和公司映射数量。该判断用于后续 `final_report_expansion_plan.md` 和反摘要闸门。
+
+### 终稿扩写蓝图
+
+`final_report_expansion_plan.md` 必须基于 `report_outline.md`、`report_synthesis.md`、`data_tables.md` 和 `transmission_map.md`，逐章列出必须展开的证据、机制、表格、传导链、财务映射、反证和跟踪指标。没有这个文件，不得写 `final_report_full.md`。
+
 ## 冲突处理
 
 - 需求强但供给扩张更快：不能写行业景气，改写为“需求增长但利润被供给稀释”。
@@ -372,6 +381,7 @@ final_report_full 写作指令：
 - 再解释估值和预期已经反映到哪一步。
 - 最后嵌入反查结论、反方观点和证伪指标。
 - 另写 `executive_summary.md`，只做摘要，不替代 full report。
+- 运行 `scripts/final_report_gate.py`；未通过时补写并复跑，不能把失败终稿交付为正式报告。
 
 每个中间稿的“对主线的贡献”只能作为素材，不能原样堆进终稿。
 

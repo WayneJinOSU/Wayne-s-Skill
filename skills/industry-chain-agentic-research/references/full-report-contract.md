@@ -11,6 +11,7 @@
 <prefix>_plain_investor_guide.md   # 普通投资者导读，解释报告逻辑，不替代 full report
 <prefix>_executive_summary.md      # 给投资人的摘要，不替代 full report
 <prefix>_transmission_map.md       # 产业链传导图谱，解释需求如何进入利润和估值
+<prefix>_final_report_expansion_plan.md # 终稿扩写施工图和反摘要补写记录
 ```
 
 如需兼容旧流程，可额外输出 `<prefix>_final_report.md`，但它不能替代 `final_report_full.md`。
@@ -163,6 +164,41 @@
 
 没有 `editorial_thesis.md`，或该文件只是重复 `report_synthesis.md`，不得进入 `final_report_full.md`。
 
+## 终稿复杂度档位
+
+正式报告的长度和章节密度由行业复杂度决定，不由模型默认压缩决定。写 `report_outline.md` 时必须先判断研究对象属于哪一档，并在 `final_report_expansion_plan.md` 复核：
+
+| 档位 | 适用条件 | 正文密度 | 闸门 profile |
+| --- | --- | --- | --- |
+| `compact` | 窄赛道、子环节不超过 3 个、强主线集中、证据有限或用户明确要求简洁 | 8,000-10,000 中文字，8-10 个二级章节，至少 6 张关键表 | `--profile compact` |
+| `standard` | 多数行业研究默认档；需要完整覆盖需求、供给、价格、利润池、公司映射、估值预期和反证 | 10,000-14,000 中文字，10-12 个二级章节，至少 8 张关键表 | 默认或 `--profile standard` |
+| `complex` | 大行业、复合产业链、子环节不少于 5 个、利润池迁移复杂、公司兑现路径多 | 12,000-18,000 中文字，12-16 个二级章节，至少 10 张关键表 | `--profile complex` |
+| `long-form` | 用户要求长篇深度、券商深度版、对标 25-40 页报告，或研究对象有多技术路线/多地区/多商业模式 | 18,000-30,000 中文字，章节和表格按证据复杂度增加 | `--profile long-form` |
+
+不得为了满足字数重复铺陈；闸门失败时优先补机制、证据、传导链、财务映射、反证和跟踪指标。若内容确实简单，应在 `report_outline.md` 和 `final_report_expansion_plan.md` 说明为什么使用 `compact`，并运行对应 profile。
+
+## 终稿扩写蓝图
+
+写 `final_report_full.md` 前必须先写 `<prefix>_final_report_expansion_plan.md`。它不是读者交付物，而是防止摘要化的施工图，至少包含：
+
+```text
+复杂度档位与理由：
+子环节数量、核心变量数量、利润池数量、公司映射数量：
+终稿目标篇幅和章节密度：
+每章绑定的中间文件：
+每章必须展开的事实证据：
+每章必须解释的产业机制：
+每章必须保留或引用的表格：
+每章必须展开的传导链节点：
+每章必须写入的反证/替代解释：
+每章如何映射到收入、毛利率、费用、现金流、估值预期或证伪指标：
+正文 vs 附录/dossier 分配：
+可能变成摘要的薄弱章节：
+闸门补写记录：
+```
+
+每个核心章节至少绑定 1 个中间文件，不能凭上下文记忆写。凡 `data_tables.md`、`transmission_map.md` 或 `report_synthesis.md` 里的核心变量，如果没有进入正文，必须在扩写蓝图说明删除、合并或降级原因。
+
 ## 利润桥与最终排序
 
 强判断必须走通利润桥：
@@ -251,6 +287,7 @@ final_report_full 写作指令：
 以下任一情况出现，输出只能标记为 `executive_summary` 或 `preliminary draft`，不能称为正式行业深度报告：
 
 - 没有 `final_report_full.md`。
+- 没有 `<prefix>_final_report_expansion_plan.md`。
 - 没有 `<prefix>_plain_investor_guide.md`。
 - 没有 `<prefix>_transmission_map.md`。
 - 没有 `data_tables.md`。
@@ -267,6 +304,23 @@ final_report_full 写作指令：
 - `final_report_full.md` 没有普通读者逻辑桥，开篇直接堆专业术语、长表或公司名单。
 - 终稿结构明显复制模块顺序、agent 顺序或 12 章模板，且没有主线递进理由。
 - 正文堆了大量表格和公司清单，但没有说明它们改变了哪个投资判断。
+- 没有运行 `scripts/final_report_gate.py`，或闸门失败后没有补写并复跑。
+
+正式深度报告模式下，`final_report_full.md` 生成后必须运行反摘要闸门：
+
+```bash
+python3 /Users/a/.codex/skills/industry-chain-agentic-research/scripts/final_report_gate.py \
+  "/absolute/path/<prefix>_final_report_full.md"
+```
+
+若 `report_outline.md` 或 `final_report_expansion_plan.md` 已明确判定为 `compact`、`complex` 或 `long-form`，运行对应 profile：
+
+```bash
+python3 /Users/a/.codex/skills/industry-chain-agentic-research/scripts/final_report_gate.py \
+  "/absolute/path/<prefix>_final_report_full.md" --profile complex
+```
+
+默认 `standard` 闸门检查中文字符数、二级章节数、表格数、薄章节比例、深章节数量、行业研究核心概念覆盖和每章财务/验证信号。闸门只防止摘要化，不鼓励堆字数；失败时把失败项写入 `final_report_expansion_plan.md` 的“闸门补写记录”，补写机制和证据后复跑。
 
 ## 附录优先
 

@@ -46,7 +46,8 @@ const artifactFiles = walk(artifactsDir).map(rel).sort();
 const coreOutputs = artifactFiles.filter((file) => (
   /(_final_report|_final_report_full|_integrated_update|_valuation_deepdive|_valuation_scorecard|_valuation_handoff|_tracking_dashboard|_skeptic_review)\.md$/i.test(file)
 ));
-const pdfOutputs = artifactFiles.filter((file) => /\.pdf$/i.test(file));
+const sourceArtifactRe = /(?:^|\/)(sources?|source_pdfs?|source_texts?)(?:\/|$)/i;
+const pdfOutputs = artifactFiles.filter((file) => /\.pdf$/i.test(file) && !sourceArtifactRe.test(file));
 
 const manifest = {
   status,

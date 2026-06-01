@@ -64,18 +64,18 @@ core_outputs=""
 pdf_outputs=""
 if [[ -f "$MANIFEST_JSON" ]]; then
   core_outputs="$(json_value "$MANIFEST_JSON" "core_outputs" || true)"
-  pdf_outputs="$(json_value "$MANIFEST_JSON" "pdf_outputs" | grep -v '/sources/' || true)"
+  pdf_outputs="$(json_value "$MANIFEST_JSON" "pdf_outputs" | grep -Ev '/sources?/|/source_(pdfs?|texts?)/' || true)"
 fi
 
 notification_files=""
 if [[ "$status" == "done" && -f "$MANIFEST_JSON" && "${LARK_RESEARCH_SEND_FILES:-1}" != "0" ]]; then
   notification_files="$(
-    node - "$TASK_DIR" "$MANIFEST_JSON" "${LARK_RESEARCH_MAX_FILE_SENDS:-3}" <<'NODE'
+    node - "$TASK_DIR" "$MANIFEST_JSON" "${LARK_RESEARCH_MAX_FILE_SENDS:-1}" <<'NODE'
 const fs = require("node:fs");
 const path = require("node:path");
 
 const [taskDir, manifestFile, maxRaw] = process.argv.slice(2);
-const maxFiles = Math.max(1, Number(maxRaw || 3));
+const maxFiles = Math.max(1, Number(maxRaw || 1));
 const manifest = JSON.parse(fs.readFileSync(manifestFile, "utf8"));
 
 function safeRel(file) {
@@ -92,8 +92,12 @@ function uniq(files) {
   return [...new Set(files.filter(existsRel))];
 }
 
-const pdfOutputs = uniq(manifest.pdf_outputs || []).filter((file) => !/\/sources\//i.test(file));
+function isSourceArtifact(file) {
+  return /(?:^|\/)(sources?|source_pdfs?|source_texts?)(?:\/|$)/i.test(file);
+}
+
 const coreOutputs = uniq(manifest.core_outputs || []);
+const pdfOutputs = uniq(manifest.pdf_outputs || []).filter((file) => !isSourceArtifact(file));
 const selectedSkill = String(manifest.selected_skill || "");
 const primaryPatterns = {
   "growth-stock-valuation": [/(?:^|\/)[^/]+_valuation_deepdive\.md$/i],
@@ -109,10 +113,13 @@ const finalReports = coreOutputs.filter((file) => patterns.some((pattern) => pat
 const fallbackReports = coreOutputs.filter((file) => (
   /(?:^|\/)[^/]+_(executive_summary|plain_investor_guide|valuation_scorecard)\.md$/i.test(file)
 ));
+const reportPdfOutputs = pdfOutputs.filter((file) => (
+  /(?:^|\/)[^/]+_(final_report|final_report_full|integrated_update|valuation_deepdive|executive_summary|plain_investor_guide|valuation_scorecard)(?:_feishu)?\.pdf$/i.test(file)
+));
 
-const selected = pdfOutputs.length
-  ? pdfOutputs
-  : (finalReports.length ? finalReports : (fallbackReports.length ? fallbackReports : coreOutputs));
+const selected = finalReports.length
+  ? finalReports
+  : (reportPdfOutputs.length ? reportPdfOutputs : (fallbackReports.length ? fallbackReports : coreOutputs));
 
 for (const file of selected.slice(0, maxFiles)) {
   console.log(file);
@@ -122,45 +129,43 @@ NODE
 fi
 
 final_excerpt=""
-if [[ -f "$TASK_DIR/final_message.txt" ]]; then
-  final_excerpt="$(head -c 1200 "$TASK_DIR/final_message.txt")"
+if [[ "$status" != "done" && -f "$TASK_DIR/final_message.txt" ]]; then
+  final_excerpt="$(head -c "${LARK_RESEARCH_FINAL_EXCERPT_CHARS:-500}" "$TASK_DIR/final_message.txt")"
 fi
 
 message="$(
   cat <<EOF
-投研任务${status}：$task_name
+投研任务：$task_name
 状态：$status
 Skill：$selected_skill
 退出码：$exit_code
 完成时间：$finished_at
-任务目录：$TASK_DIR
 EOF
 )"
 
-if [[ -n "$core_outputs" ]]; then
+if [[ -n "$notification_files" ]]; then
+  message="$message
+
+将发送：
+$notification_files"
+  if grep -q '\.md$' <<< "$notification_files"; then
+    message="$message
+说明：终稿 Markdown 会自动转成 PDF 后发送。"
+  fi
+fi
+
+if [[ -n "$core_outputs" && "${LARK_RESEARCH_VERBOSE_NOTIFY:-0}" == "1" ]]; then
   message="$message
 
 核心文件：
 $core_outputs"
 fi
 
-if [[ -n "$pdf_outputs" ]]; then
+if [[ -n "$pdf_outputs" && "${LARK_RESEARCH_VERBOSE_NOTIFY:-0}" == "1" ]]; then
   message="$message
 
 PDF 文件：
 $pdf_outputs"
-fi
-
-if [[ -n "$notification_files" ]]; then
-  message="$message
-
-即将发送附件：
-$notification_files"
-  if grep -q '\.md$' <<< "$notification_files"; then
-    message="$message
-
-说明：Markdown 终稿会自动转成 PDF 后发送。"
-  fi
 fi
 
 if [[ -n "$final_excerpt" ]]; then

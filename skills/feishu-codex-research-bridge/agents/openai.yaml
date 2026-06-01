@@ -1,0 +1,3 @@
+display_name: 飞书 Codex 投研桥梁
+short_description: 飞书发起投研任务，Codex 队列执行并回传报告。
+default_prompt: 使用飞书 Codex 投研桥梁，检查、安装或迁移飞书到 Codex 的投研任务队列与报告回传链路。

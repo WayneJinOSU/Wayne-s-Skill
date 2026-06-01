@@ -71,6 +71,8 @@ research_artifacts/<股票代码或公司简称>/
   <标的>_integrated_update.md
 ```
 
+Formal Tracker 的全部跟踪文件必须写入上述目录；不得把投研文件写到任务根目录、`artifacts/` 或其他临时目录。
+
 若已有完整深研文件，先读取其结论、证据缺口和证伪点，再建立跟踪文件，避免重复深研。
 
 ### Recurring Monitor

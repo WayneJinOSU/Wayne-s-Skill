@@ -19,6 +19,7 @@ Personal Codex skills maintained as versioned assets.
 - `pipecat-deploy`: Deploy an agent to Pipecat Cloud
 - `pipecat-init`: Scaffold a new Pipecat project with guided setup
 - `pipecat-talk`: Start a voice conversation using the Pipecat MCP server
+- `research-report-publication-editor`: 投研报告出版审校与对外口径清理；用于正式 PDF/Markdown/HTML 报告导出前后，扫描并清除导出痕迹、skill/subagent/任务名/工具名、终稿自述、提示词残留、内部审稿语言和过度教学化表达；可只列问题，也可在不改变事实和结论的前提下润色为正式研报正文。
 - `skill-github-sync`: Sync local Codex skills from ~/.codex/skills into a GitHub skills repository, update README, commit, and optionally push.
 - `supply-chain-agentic-research`: 独立主控供应链平台型成长股正式研究；用 6 个纵向主攻 agent + 3 个横向增强模块 + 两轮 QA，把研究从“覆盖模块”升级为“行业-技术-竞争-客户-产能-利润模型-跟踪体系全链条成稿”；重点覆盖市场交易变量、技术路线到价值量、竞争格局、客户认证链、原材料价格链、产能升级、订单经营验证、第二利润曲线、利润天花板、利润桥和跟踪日历；最终报告排除目标价、目标市值、PE/PEG/SOTP 等正式估值结论。Use when 用户需要深度分析 AI算力、数据中心、新能源、机器人、先进封装、半导体设备/材料等供应链公司，判断身份切换、订单放量、势能、利润中枢上移和天花板抬升，并产出正式深度报告而非摘要。
 - `tushare`: 面向中文自然语言的 Tushare 数据研究技能。用于把“看看这只股票最近怎么样”“帮我查财报趋势”“最近哪个板块最强”“北向资金在买什么”“给我导出一份行情数据”这类请求，转成可执行的数据获取、清洗、对比、筛选、导出与简要分析流程。适用于 A 股、指数、ETF/基金、财务、估值、资金流、公告新闻、板块概念与宏观数据等研究场景。

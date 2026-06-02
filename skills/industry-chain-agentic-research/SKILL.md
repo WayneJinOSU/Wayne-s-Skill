@@ -74,6 +74,7 @@ description: 强约束 Agentic 行业产业链深度研究；真实 subagent 优
 13. **篇幅由复杂度决定。** 正式报告不设硬性篇幅上限，但必须先在 `final_report_expansion_plan.md` 判定 `compact`、`standard`、`complex` 或 `long-form` 档位。默认 `standard` 正式报告通常为 10,000-14,000 中文字；简单窄赛道或证据有限可用 8,000-10,000 中文字；复杂大行业、多子环节、多利润池默认 12,000-18,000 中文字；用户要求券商深度版或对标长篇报告时可扩展到 18,000-30,000 中文字。不得为凑字数重复铺陈，但也不得把应展开的传导链、判断依据和反证压缩成摘要。压缩版只能放在 `executive_summary.md` 或 `plain_investor_guide.md`。
 14. **正式报告不能过薄，也不能离散。** 若只输出摘要、只给结论清单、缺少关键表格、没有展开产业机制、没有最终排序、没有完整传导链、没有普通读者逻辑桥或呈现为模块拼贴，只能标记为 preliminary / executive summary，不能称为正式行业研究报告。
 15. **反摘要闸门必须执行。** 写完 `final_report_full.md` 后必须运行 `scripts/final_report_gate.py`；未通过时先把失败项写回 `final_report_expansion_plan.md` 的补写记录并补写正文，不能声称完成正式行业深度报告。
+16. **搜索层必须高召回。** 进入证据收集前必须检查 `GEMINI_API_KEY`。若可用，必须运行 [scripts/gemini_google_search.py](scripts/gemini_google_search.py) 调用 Google Search 作为行业资料线索发现器，至少覆盖行业定义/产业链结构、需求供给价格、利润池竞争格局、重点公司财务映射和估值预期中的 3 组查询；若不可用或脚本失败，必须在 `evidence_index.md` 记录 `Gemini未运行原因`、错误信息和替代搜索路径。Gemini/Google 搜索结果只能进入“券商/媒体/市场口径/线索”层，必须回到官方数据、协会资料、公司公告、研报 PDF、客户/竞品资料或结构化数据复核后，才能支撑正文判断。
 
 ## Execution Policy
 
@@ -142,6 +143,7 @@ research_artifacts/<行业、产业链或主线简称>/
 - 是否生成 `data_tables.md`，并沉淀行业规模、需求、供给、价格/成本、利润池、公司矩阵、估值和跟踪指标。
 - 是否生成 `transmission_map.md`，逐层写清下游需求如何传到产品规格、BOM、订单、收入、利润、现金流和估值。
 - `evidence_index.md` 是否记录来源、口径、可靠性、适用模块和数据缺口。
+- `evidence_index.md` 是否记录 Gemini Google Search 线索发现结果，或写明 `Gemini未运行原因`、错误信息和替代搜索路径。
 - 关键模块 agent 是否读取并遵守对应模块手册。
 - 每个角色文件是否包含证据、推理、反证、判断强度和数据缺口。
 - 每个关键角色是否提供可进入正文的章节草稿，而不仅是研究备忘录。
@@ -156,7 +158,7 @@ research_artifacts/<行业、产业链或主线简称>/
 - `final_report_full.md` 是否按主线重写，默认采用 6-10 个一级章节或等价结构，而不是按九模块、12 章或 agent 文件顺序拼接。
 - `final_report_full.md` 是否像完整行业深度报告，解释“行业怎么赚钱、利润留在哪、为什么能守住、如何进财报、估值是否反映、如何证伪”，而不是薄摘要或离散材料合集。
 - `executive_summary.md` 是否只作为摘要，不替代正式报告。
-- 是否运行 `scripts/final_report_gate.py`，若失败是否补写并复跑；最终回复必须说明闸门是否通过。
+- 是否运行 `scripts/final_report_gate.py`，若失败是否补写并复跑；正式导出 PDF/HTML 前是否运行 `$research-report-publication-editor` 的 publication hygiene gate，清除导出痕迹、skill/subagent/工具名、终稿自述和提示词式内部审稿语言；最终回复必须说明两个闸门是否通过。
 - 任一项缺失时，不能声称完成正式研究，只能标记为 preliminary draft。
 
 ## Output Discipline

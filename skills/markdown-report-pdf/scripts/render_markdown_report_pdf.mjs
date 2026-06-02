@@ -74,6 +74,19 @@ function escapeHtml(value) {
     .replaceAll('"', "&quot;");
 }
 
+function addSlashBreakHints(html) {
+  return html
+    .split(/(<[^>]+>)/g)
+    .map((part) => {
+      if (part.startsWith("<")) return part;
+      return part.replace(
+        /\b[A-Za-z0-9][A-Za-z0-9+._-]*(?:\/[A-Za-z0-9][A-Za-z0-9+._-]*)+\b/g,
+        (token) => token.replaceAll("/", "/<wbr>"),
+      );
+    })
+    .join("");
+}
+
 function renderInline(raw) {
   const codeSpans = [];
   let text = escapeHtml(raw).replace(/`([^`]+)`/g, (_, code) => {
@@ -90,7 +103,7 @@ function renderInline(raw) {
     text = text.replace(`@@CODE_${index}@@`, code);
   });
 
-  return text;
+  return addSlashBreakHints(text);
 }
 
 function isTableDivider(line) {
@@ -121,15 +134,21 @@ function parseTable(lines, startIndex) {
     return "left";
   });
   const rows = tableLines.slice(2).map(splitRow);
+  const cellClass = (align, cell) => {
+    const plain = cell.replace(/[`*_~]/g, "").trim();
+    const cjkLength = Array.from(plain).filter((char) => /[\u3400-\u9fff]/.test(char)).length;
+    const isShortCjk = cjkLength > 0 && Array.from(plain).length <= 6;
+    return `${align || "left"}${isShortCjk ? " nowrap-cell" : ""}`;
+  };
 
   const thead = `<thead><tr>${headers
-    .map((cell, i) => `<th class="${aligns[i] || "left"}">${renderInline(cell)}</th>`)
+    .map((cell, i) => `<th class="${cellClass(aligns[i], cell)}">${renderInline(cell)}</th>`)
     .join("")}</tr></thead>`;
   const tbody = `<tbody>${rows
     .map(
       (row) =>
         `<tr>${headers
-          .map((_, i) => `<td class="${aligns[i] || "left"}">${renderInline(row[i] ?? "")}</td>`)
+          .map((_, i) => `<td class="${cellClass(aligns[i], row[i] ?? "")}">${renderInline(row[i] ?? "")}</td>`)
           .join("")}</tr>`,
     )
     .join("")}</tbody>`;
@@ -234,12 +253,9 @@ ${parseMarkdown(markdown)}
     ? ""
     : `<section class="cover">
   <div class="cover-top">
-    <div class="kicker">Markdown Report PDF / ${escapeHtml(options.date)}</div>
+    <div class="kicker">研究报告 / ${escapeHtml(options.date)}</div>
     <h1>${renderInline(title)}</h1>
     <p class="subtitle">${renderInline(subtitle)}</p>
-  </div>
-  <div class="cover-bottom">
-    <p>Generated through Markdown -> HTML/CSS -> PDF. For research discussion only.</p>
   </div>
 </section>`;
 
@@ -270,9 +286,12 @@ ${parseMarkdown(markdown)}
       font-size: 13px;
       line-height: 1.72;
       letter-spacing: 0;
+      word-break: normal;
+      overflow-wrap: normal;
+      hyphens: none;
     }
     @page { size: A4; margin: 14mm 13mm 15mm; }
-    a { color: var(--blue); text-decoration: none; overflow-wrap: anywhere; }
+    a { color: var(--blue); text-decoration: none; overflow-wrap: break-word; }
     .cover {
       min-height: 257mm;
       display: grid;
@@ -381,7 +400,10 @@ ${parseMarkdown(markdown)}
       border: 1px solid var(--line);
       padding: 6px 7px;
       vertical-align: top;
-      overflow-wrap: anywhere;
+      word-break: normal;
+      overflow-wrap: normal;
+      hyphens: none;
+      line-break: strict;
     }
     th {
       background: #eaf1f7;
@@ -389,6 +411,10 @@ ${parseMarkdown(markdown)}
       font-weight: 800;
     }
     tbody tr:nth-child(even) td { background: #fafbfc; }
+    .nowrap-cell {
+      white-space: nowrap;
+      word-break: keep-all;
+    }
     td.right, th.right { text-align: right; white-space: nowrap; }
     td.center, th.center { text-align: center; }
     @media print {
@@ -467,4 +493,3 @@ function main() {
 }
 
 main();
-

@@ -236,6 +236,7 @@ research_artifacts/<股票代码或公司简称>/
   <标的简称或代码>_orders_business_validation.md
   <标的简称或代码>_profit_bridge.md
   <标的简称或代码>_tracking_dashboard.md
+  <标的简称或代码>_financial_model_handoff.md（三表/FCF 建模接力输入）
   <标的简称或代码>_valuation_handoff.md（估值接力输入；终稿仍不写正式估值）
   <标的简称或代码>_valuation_deepdive.md（若调用 `$growth-stock-valuation`）
   <标的简称或代码>_valuation_scorecard.md（若调用 `$growth-stock-valuation`）
@@ -439,6 +440,14 @@ research_artifacts/<股票代码或公司简称>/
 - 黄灯观察信号：哪些指标说明仍需等待，不足以升级也不足以证伪。
 - 每个信号必须给出阈值或方向：例如毛利率低于某区间、存货/应收快于收入、订单金额低于预期、客户认证延后、产能利用率不足等。
 
+三表建模接力输入写入 `<标的简称或代码>_financial_model_handoff.md`，用于先调用 `$financial-modeling` 建三表/FCF，再接力 `$dcf-valuation` 或 `$growth-stock-valuation` 校验；它不是估值结论，不进入 `final_report`：
+
+- 从市场变量、产品代际、客户订单、原材料价格、产能爬坡、利润桥和跟踪日历中抽取可建模驱动，分清公司事实、客户/竞品验证、券商/产业链口径和自有假设。
+- 至少覆盖收入拆分/出货/ASP、产品占比、毛利率、费用率、折旧/良率/爬坡损耗、capex/revenue、DSO/DIO/DPO、税率、利息/债务、少数股东/投资收益、经营现金流和 FCF 转换率。
+- 必须输出驱动项表：`驱动项 | 供应链变量来源 | 历史锚/来源 | 底线 | 基准 | 上行 | 证据等级 | 财报验证指标 | 降级路径`。
+- 必须输出 DCF-ready UFCF 桥所需字段：`EBIT*(1-Tax)+D&A-Capex-ΔNWC`；缺数据写“待 financial-modeling 补数/待财报补充”，不得硬编精确数字。
+- 订单、排产、扩产、认证、ASP 和毛利率若仍是市场口径，只能进入情景或敏感性，不能伪装成基准模型事实。
+
 估值接力输入写入 `<标的简称或代码>_valuation_handoff.md`，但 `final_report` 仍排除正式估值：
 
 - 当前股价、市值、PE/PB、日期和来源，只用于后续估值 skill，不进入 `final_report`。
@@ -475,7 +484,8 @@ research_artifacts/<股票代码或公司简称>/
 
 中期结构 QA 写入 `<标的简称或代码>_midterm_structure_review.md`，在写终稿提纲前执行：
 
-- 检查是否缺行业空间、周期位置、竞争格局、客户链、产品代际矩阵、可计算利润模型、跟踪日历。
+- 检查是否缺行业空间、周期位置、竞争格局、客户链、产品代际矩阵、可计算利润模型、跟踪日历和三表建模接力输入。
+- 检查利润桥中的量、价、产品占比、毛利率、费用、折旧、良率、capex 和营运资本是否已翻译成 `$financial-modeling` 可用驱动；若缺失，必须补写 `financial_model_handoff`。
 - 检查是否有章节只是摘要，没有数据表、正文推理、变量增强/减弱和验证指标。
 - 检查是否把核心变量只留在证据台账或 QA，没有进入正文提纲。
 - 检查是否需要对标报告校准；若用户给了参考报告，逐章对比差距。

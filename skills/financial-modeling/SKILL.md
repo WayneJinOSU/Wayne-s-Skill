@@ -98,6 +98,17 @@ Key drivers:
 - **Standard**: Income statement + balance sheet
 - **Full**: Complete 3-statement model with cash flow
 
+### Research Handoff Mode
+
+When the user provides a research handoff such as `<company>_financial_model_handoff.md`, use it as the bridge from investment research to modeling:
+
+- First parse the driver map, evidence grades, historical anchors, and scenario ranges. Do not re-write the investment thesis unless needed to explain a driver.
+- Separate company facts, consensus/market assumptions, and self-built assumptions. If a field is missing, show it in a data-gap checklist instead of inventing precision.
+- Build assumptions in this order: revenue drivers -> gross margin -> operating expenses -> D&A/capex -> working capital days -> tax/interest/debt -> minority interest/investment income -> dividends/financing.
+- For each driver, preserve source/evidence grade and state whether it belongs in base case, scenario case, or sensitivity only.
+- Output a DCF-ready UFCF bridge with `EBIT*(1-Tax)+D&A-Capex-ΔNWC`, plus model checks for balance sheet balance, revenue-profit-cash consistency, and working-capital reasonableness.
+- Do not output target price, target market cap, buy/sell advice, or final valuation conclusions unless the user explicitly asks to hand off to `dcf-valuation`.
+
 ---
 
 ## Model Architecture

@@ -1,7 +1,7 @@
 interface:
-  display_name: "成长股深度估值"
-  short_description: "结合一致预期、PEG、PE和SOTP判断成长股定价"
-  default_prompt: "Use $growth-stock-valuation to value a growth stock with consensus expectations, PEG, PE, SOTP, implied expectations, and valuation disconfirmation risks."
+  display_name: "成长股PEG估值"
+  short_description: "用一致预期、动态PEG和复合PEG判断成长股定价，不产出DCF"
+  default_prompt: "Use $growth-stock-valuation to value a growth stock with consensus expectations, dynamic PEG, forward PE, implied expectations, and valuation disconfirmation risks. Prefer the PEG-ready package and peg valuation handoff; read prior long research files only by targeted snippets for missing fields or conflicts. Mark the output as PEG-only unless a separate DCF model already exists."
 
 policy:
   allow_implicit_invocation: true

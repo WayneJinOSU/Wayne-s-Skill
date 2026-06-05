@@ -1,43 +1,19 @@
-# 编排兜底与冲突处理
+# Deprecated: Orchestration
 
-主流程、文件结构和角色分工以 `SKILL.md` 为准。本文件只保留执行中的兜底规则和冲突处理，避免重复主控说明。
+本文件保留为旧引用兼容入口。正式编排规则已经迁移到 [agent-orchestration.md](agent-orchestration.md)；终稿提纲、扩写蓝图、复杂度分档和反摘要闸门已经迁移到 [final-report.md](final-report.md)。
 
-## 无真实 Subagent 时
+执行供应链正式研究时，不要再以本文件作为主流程来源。主控必须读取：
 
-如果当前环境、宿主规则或工具能力不能启动真实 subagent，不要退回一次性写作。必须按阶段文件模拟：
+- [agent-orchestration.md](agent-orchestration.md)
+- [research-posture.md](research-posture.md)
+- [handoffs.md](handoffs.md)
+- [qa-gates.md](qa-gates.md)
+- [final-report.md](final-report.md)
 
-1. 先写 `<标的>_evidence_index.md` 和 `<标的>_market_variables_map.md`，把公告事实、市场口径、券商假设、产业链线索和交易热词拆成 5-12 个核心变量。
-2. 再写 `<标的>_architecture_value_ceiling.md`，处理终端平台、产品代际、价值量、ASP、毛利率、客户 capex 穿透和供应链地位对价值量获取的影响。
-3. 再写 `<标的>_raw_material_price_chain.md`，只处理关键原料、供需、涨跌价、转嫁、库存和毛利率留存。
-4. 再写 `<标的>_capacity_second_curve.md`，处理产能地图、高端产能、瓶颈产能、海外产能、第二曲线和扩产/设备/海外基地等承接动作。
-5. 再读取前述文件，写 `<标的>_orders_business_validation.md`，处理订单出货、经营质量、客户认证、供应链地位、承接动作验证和现金流。
-6. 再读取前述文件，写 `<标的>_profit_bridge.md` 和可选的 `<标的>_valuation_handoff.md`。`valuation_handoff` 只做估值接力输入，不进入终稿正式结论。
-7. 再读取前述文件，写 `<标的>_skeptic_review.md`，集中处理最可能被证伪的变量和替代解释。
-8. 最后读取全部中间文件，写 `<标的>_report_outline.md` 和 `<标的>_final_report.md`。
+若旧任务仍引用本文件，按以下兼容规则处理：
 
-周期、地位和承接动作不单独生成文件；默认嵌入市场变量、架构天花板、产能升级和订单经营验证。
-
-如果某阶段信息不足，也要生成对应文件，并写明已查证据、市场正在交易的假设、可用情景边界、验证路径和逻辑降级方式。
-
-## 冲突处理
-
-当不同角色结论冲突，总控必须显式降级或分情景处理：
-
-- 周期强、地位弱：写成“行业景气强，但公司重估弹性有限”，不能直接写平台股。
-- 地位强、订单弱：写成“地位可能成立，但利润兑现还取决于订单、排产、毛利率和现金流验证”。
-- 订单强、现金流/应收/存货弱：不能写高质量增长，要解释营运资本风险。
-- 扩产强、订单弱：扩产只能作为承接动作，不是锁单证据。
-- 市场变量重要但证据弱：作为情景变量进入天花板和利润斜率模型，同时说明验证指标和降级路径。
-- 利润桥上行、终审 QA 反证强：终稿结论必须体现条件性，不能只写乐观情景。
-
-## 终稿整合
-
-终稿不是拼接中间稿。总控必须重新排序：
-
-1. 先让普通投资人明白公司做什么。
-2. 再解释市场真正交易的变量。
-3. 再讲技术路线/平台迭代如何改变价值量和利润天花板。
-4. 再讲原材料传导、产能升级和第二曲线。
-5. 再讲订单经营验证、利润中枢和证伪点。周期、地位和承接动作作为嵌入信息出现，不默认单列章节。
-
-`final_report.md` 不放独立估值章节。估值输入只作为可选中间材料留在 `valuation_handoff.md`，除非用户明确要求正式估值。
+```text
+1. 先读取 agent-orchestration.md 获取 subagent / 文件化阶段分组。
+2. 再读取 final-report.md 获取 report_outline、final_report_expansion_plan、final_report 和 final_report_gate.py 的终点契约。
+3. 不得从中间研究文件直接跳到 final_report；必须先写扩写蓝图并运行闸门。
+```

@@ -15,6 +15,28 @@
 
 公告原文与结构化数据冲突时，以公告原文为准，并说明差异口径。行情和估值必须注明查询日期。
 
+## Token Budget And Single-Source Rules
+
+默认采用“单源取数，失败 fallback”，而不是多源并行交叉验证。
+
+| 数据类型 | 默认数据源 | fallback 条件 |
+| --- | --- | --- |
+| 三表/财务指标 | `$tushare` 或项目既定结构化源二选一 | 接口失败、权限不可访问、关键字段缺失、字段明显异常 |
+| 行情/市值/股本 | `$tushare` `daily_basic` 或等价最新市场快照 | 数据不可访问、停牌/复权口径异常、缺市值/股本 |
+| 公告/年报/投关 | 巨潮/CNINFO 或交易所原文 | 原文不可访问、PDF损坏、缺附件 |
+| 一致预期/研报预测 | 东方财富研报列表或项目既定一致预期源 | 近端预测缺失或字段不全 |
+| 题材/市场热词 | `$wencai-query` | 只在需要市场认知差、题材扩散或行情排名时使用 |
+| Gemini/Google Search | 缺口型二次线索发现 | 只在常规来源覆盖不了关键变量时运行；只进入 evidence_queue，永不直接进入 facts_core |
+
+同一字段只允许一个事实来源进入 `facts_core`。需要复核时只记录“口径冲突/待复核”，不要把多个来源的同一字段在多个中间稿里反复铺开。
+
+原始表读取限制：
+
+- 不要对 `*.csv`、问财 JSON/CSV、公告索引和研报列表做宽泛 `rg`。长行命中会造成上下文爆炸。
+- 读取原始 CSV 前，先用脚本、`head`、`cut`、`csvcut` 或小型解析代码抽取 10-30 行核心字段。
+- 中间稿只引用抽取后的窄表和 `Fact-ID`，不要粘贴完整三表、完整研报列表或完整公告列表。
+- 保存原始 CSV 可以，但默认不再读入上下文；只有字段缺失或异常排查时才打开原始表。
+
 ## 市场变量分层
 
 供应链成长股常先由产业链和券商口径交易，后由公告和财报验证。公告确定事实底座，市场口径识别弹性变量；关键变量要进入主线、天花板和利润斜率模型，同时标明证据等级。
@@ -45,16 +67,22 @@
 ```text
 1. 形成主线假设
 2. 读最新年报/季报/业绩预告/重大事项公告
-3. 调用 `$tushare` skill 拉财务、现金流、历史行情、市值和 PE/PB；估值数据只用于 handoff，不进入终稿正式结论
-4. 调用 `$wencai-query` skill 查概念、同行、阶段涨幅、市场排名和交易热词
-5. 抓取券商研报、产业链调研、专家纪要、客户/竞品资料、官网参数和原材料价格，建立市场变量索引
-6. 先写 `<标的>_market_variables_map.md`，用段落写清核心变量的影响逻辑
-7. 若存在技术路线或产品代际快速变化，读取 `technology-route-value-chain.md`，并写 `<标的>_architecture_value_ceiling.md`
-8. 对关键原料和产能升级，分别写 `<标的>_raw_material_price_chain.md` 和 `<标的>_capacity_second_curve.md`
-9. 分发给订单经营验证、利润桥、估值接力输入和终审 QA；周期、地位和承接动作默认嵌入主攻模块
-10. 做利润桥和估值接力输入；后续正式估值可交给 `$growth-stock-valuation`
-11. 写投资人可读报告，并在终稿前检查关键市场变量是否被无意删掉
+3. 选择一个结构化财务数据源拉财务、现金流、历史行情、市值和 PE/PB；仅在失败或缺字段时 fallback
+4. 写 `<标的>_facts_core.md`，把公告事实、财务字段、分业务数据、行情估值快照统一成 Fact-ID
+5. 调用 `$wencai-query` skill 查概念、同行、阶段涨幅、市场排名和交易热词；只保留窄表摘要
+6. 先用普通搜索抓取券商研报、产业链调研、专家纪要、客户/竞品资料、官网参数和原材料价格线索，写入 `<标的>_evidence_queue.md`；仅在关键变量仍有缺口时，用 Gemini 做 1-2 组二次线索搜索
+7. 核验关键线索后更新 `<标的>_facts_core.md` 和 `<标的>_evidence_index.md`
+8. 先写 `<标的>_market_variables_map.md`，用段落写清核心变量的影响逻辑
+9. 写 `<标的>_industry_cycle_supply_demand.md`，只保留能穿透到公司订单、ASP、毛利率、份额和现金流的行业变量
+10. 若存在技术路线或产品代际快速变化，读取 `technology-route-value-chain.md`，写 `<标的>_architecture_value_ceiling.md` 和 `<标的>_product_generation_matrix.md`
+11. 写 `<标的>_competition_customer_chain.md`，把供应链地位拆成客户链、认证阶段、份额、替代风险和竞品反证
+12. 对关键原料和产能升级，分别写 `<标的>_raw_material_price_chain.md` 和 `<标的>_capacity_second_curve.md`
+13. 写 `<标的>_orders_business_validation.md`，验证订单、排产、出货、收入确认、利润释放和现金回收
+14. 写 `<标的>_profit_bridge.md`、`<标的>_tracking_dashboard.md` 和两类估值接力候选输入；正式 `dcf_financial_model_handoff` 与 `peg_valuation_handoff` 只在终稿 gate PASS 后生成。后续正式估值再分别交给 `$growth-stock-valuation` 和 `dcf-model`，最后可由 `$integrated-growth-valuation` 聚合
+15. 写中期结构 QA、终审事实 QA、提纲、扩写蓝图和投资人可读报告，并在终稿前检查关键市场变量是否被无意删掉
 ```
+
+注意：上面序号代表逻辑顺序；角色数量和模块覆盖仍按 agent-orchestration 执行，不因 token 优化而减少。
 
 ## 快速判断
 
@@ -100,13 +128,16 @@
 | 模块 | 优先数据 | 辅助数据 |
 | --- | --- | --- |
 | 市场变量扩表 | 券商研报、产业链调研、交易热词、官网参数、竞品文件 | wencai 市场表现、专家纪要、可靠媒体 |
+| 行业周期与供需格局 | 行业协会、客户 capex、客户财报/电话会、终端平台出货、价格和库存数据 | 券商行业报告、同行公告、第三方出货数据 |
 | 架构/技术路线与天花板 | 客户路线图、产品规格、终端平台、竞品资料 | 券商模型、专家纪要、公司官网参数 |
+| 竞争格局与客户认证链 | 客户/竞品公告、供应商清单、客户认证、份额、竞品产能和产品代际 | 专家纪要、券商口径、产业链调研、招股书/募资书 |
 | 原材料价格链 | 铜、树脂、玻纤、化工品、金属、芯片等原料价格和供需 | 同行调价、库存、存货跌价、客户价格条款 |
 | 产能升级与第二曲线 | 基地产能、募投、在建工程、海外基地、控股/参股公司 | 客户导入、设备采购、人员研发、产能利用率 |
 | 订单出货与经营验证 | 订单公告、量产、出货、海关、排产、客户认证、份额、替代周期 | 财报收入、毛利率、存货、应收、合同负债、现金流 |
-| 周期/地位/承接嵌入检查 | 客户 capex、客户财报、行业出货、客户认证、份额、替代周期、扩产、设备、海外基地、研发投入 | 默认回填到市场变量、架构/天花板、产能升级和订单经营验证，不单列模块 |
 | 利润桥 | 财报分产品、毛利率、订单、产能和成本 | 行业毛利率、同行净利率、募投效益 |
-| 估值接力输入 | `$tushare` 市值/估值/行情、利润桥、PEG-ready 利润锚 | 一致预期、同行估值、历史估值、市场阶段、主线强度、兑现阶段、利润质量、订单可见度、第二曲线、竞争壁垒、证伪压力；正式估值用 `$growth-stock-valuation` |
+| 跟踪体系与警报信号 | 财报日历、订单/认证/投产事件、客户 capex、原材料价格、竞品认证 | 利润桥敏感变量、市场变量覆盖 QA、终审事实 QA |
+| PEG 边界候选输入 | `$tushare` 市值/估值/行情、利润桥、tracking dashboard、evidence grading 中的候选利润字段 | 一致预期、历史估值、市场阶段、主线强度、兑现阶段、利润质量、订单可见度、第二曲线、竞争壁垒、现金流质量、证伪压力；正式 `peg_valuation_handoff` 在终稿 gate PASS 后输出，后续 `$growth-stock-valuation` 必须同时读取 `$financial-modeling` 生成的 PEG-ready 数据包 |
+| DCF-ready 建模候选输入 | 财报现金流、利润桥、tracking dashboard、evidence grading 中的三表/FCF 候选字段 | Revenue、EBIT、Tax、D&A、Capex、ΔNWC、UFCF、WACC 参数、终值、现金、债务、股本、现金流质量和 validation 要求；正式 `dcf_financial_model_handoff` 在终稿 gate PASS 后输出，后续 `$financial-modeling` 拆成 DCF-ready，`dcf-model` 估值 |
 
 ## 关键数据口径
 
@@ -142,3 +173,16 @@
 ## 兜底原则
 
 如果客户 capex、订单或海关数据缺失，不要直接写成强兑现。应把结论改成情景判断：若后续出现订单、排产、毛利率和现金流验证，主线升级；若长期缺失，逻辑降级为周期修复、补库涨价、普通放量或主题映射，并列出需要跟踪的数据。
+
+## Valuation Handoff Order Override
+
+When this file conflicts with the post-report handoff rule, the post-report rule wins.
+
+Do not generate formal `dcf_financial_model_handoff` or `peg_valuation_handoff` during the research-writing path. After `final_report` exists, `skeptic_review` exists, and `final_report_gate.py` returns PASS, generate the formal handoff pair:
+
+```text
+<prefix>_dcf_financial_model_handoff.md
+<prefix>_peg_valuation_handoff.md
+```
+
+The DCF/financial handoff contains financial-modeling / DCF-ready inputs. The PEG handoff contains PEG factor treatment and must explain how each factor affects the PEG coefficient, not merely list positive or negative factors.

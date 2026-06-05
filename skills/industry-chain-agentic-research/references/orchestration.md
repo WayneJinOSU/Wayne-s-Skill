@@ -12,7 +12,7 @@
 - 处理角色冲突、证据缺口和结论降级。
 - 组织 `data_tables.md` 和章节草稿。
 - 基于 `report_synthesis.md` 写 `editorial_thesis.md`，完成主笔重构、排序、利润桥、普通读者逻辑桥和正文取舍。
-- 基于 `editorial_thesis.md` 写 `report_outline.md` 和 `final_report_expansion_plan.md`，再重写 `final_report_full.md`，运行反摘要闸门，并另写 `plain_investor_guide.md` 和 `executive_summary.md`。
+- 基于 `editorial_thesis.md` 写 `report_outline.md` 和 `final_report_expansion_plan.md`，再重写 `final_report.md`，运行反摘要闸门，并另写 `plain_investor_guide.md` 和 `executive_summary.md`。
 
 ## 文件结构
 
@@ -35,7 +35,7 @@ research_artifacts/<行业或公司>/
   <行业或公司>_editorial_thesis.md
   <行业或公司>_report_outline.md
   <行业或公司>_final_report_expansion_plan.md
-  <行业或公司>_final_report_full.md
+  <行业或公司>_final_report.md
   <行业或公司>_plain_investor_guide.md
   <行业或公司>_executive_summary.md
   chapter_drafts/
@@ -151,9 +151,9 @@ agent 分工表：
 最终交付清单：
 ```
 
-最终交付清单必须包含 `data_tables.md`、`transmission_map.md`、`editorial_thesis.md`、`final_report_expansion_plan.md`、`final_report_full.md`、`plain_investor_guide.md` 和 `executive_summary.md`。
+最终交付清单必须包含 `data_tables.md`、`transmission_map.md`、`editorial_thesis.md`、`final_report_expansion_plan.md`、`final_report.md`、`plain_investor_guide.md` 和 `executive_summary.md`。
 `plain_investor_guide.md` 不是摘要替代品，而是面向普通投资者的读法：用人话解释行业生意、资金流、利润留存、误区和跟踪指标。
-若需要保留大量背景资料、长表或公司细节，可增加 `research_dossier.md`，但它不能替代 `final_report_full.md`。
+若需要保留大量背景资料、长表或公司细节，可增加 `research_dossier.md`，但它不能替代 `final_report.md`。
 
 ## Data Tables
 
@@ -200,7 +200,7 @@ agent 分工表：
 数据缺口：
 ```
 
-在写初版 `evidence_index.md` 前，主控必须检查 `GEMINI_API_KEY`。若可用，运行 `scripts/gemini_google_search.py` 作为高召回线索发现器，至少覆盖 3 组与本行业最相关的查询，例如行业定义/产业链结构、需求供给价格、利润池竞争格局、重点公司财务映射、估值预期或反证线索。输出只作为线索索引，必须记录查询词、模型、日期、返回来源和待复核问题；若不可用或脚本失败，必须记录 `Gemini未运行原因`、错误信息和替代搜索路径。
+在写初版 `evidence_index.md` 前，主控先用官方/协会数据、公司公告、结构化数据、券商研报摘要、行业机构和普通 web search 建立证据底座。只有这些来源仍无法覆盖关键缺口时，才检查 `GEMINI_API_KEY` 并运行 `scripts/gemini_google_search.py` 作为二次线索发现器；默认最多 1-2 组与本行业最相关的缺口型查询，例如行业定义/产业链结构、需求供给价格、利润池竞争格局、重点公司财务映射、估值预期或反证线索。输出只作为线索索引，必须记录查询词、模型、日期、返回来源和待复核问题；若未运行、不可用或脚本失败，必须记录 `Gemini未运行原因`、错误信息和替代搜索路径。
 
 ## 真实 Subagent 模式
 
@@ -208,14 +208,14 @@ agent 分工表：
 
 推荐调度：
 
-1. 主控先写 `question.md`、`subsegment_map.md`、`agent_briefs.md` 和初版 `evidence_index.md`；初版证据台账必须包含 Gemini Google Search 线索发现结果，或写明 `Gemini未运行原因`。
+1. 主控先写 `question.md`、`subsegment_map.md`、`agent_briefs.md` 和初版 `evidence_index.md`；初版证据台账若运行 Gemini，必须包含 Gemini Google Search 线索发现结果；若未运行，写明 `Gemini未运行原因`。
 2. 并行启动正向研究角色：产业链定义、需求/供给/价格、利润池/竞争格局、财务映射、估值与预期。每个正向角色必须输出证据卡、研究稿和可入正文的章节草稿，但不得把自己的输出写成完整终稿。
 3. 主控把各角色新增证据汇入 `evidence_index.md`，并生成/更新 `data_tables.md`。
 4. 正向研究文件和 `data_tables.md` 完成后，启动反查/反证角色。
 5. 反查完成后，启动反方审查角色。
 6. 全部中间文件完成后，启动或模拟报告汇总角色写 `report_synthesis.md`。
 7. 主控读取 `report_synthesis.md`、章节草稿和 `data_tables.md`，亲自写 `editorial_thesis.md`。
-8. 主控基于 `editorial_thesis.md` 写 `report_outline.md` 和 `final_report_expansion_plan.md`，再写 `final_report_full.md`、运行反摘要闸门，最后写 `plain_investor_guide.md` 和 `executive_summary.md`。
+8. 主控基于 `editorial_thesis.md` 写 `report_outline.md` 和 `final_report_expansion_plan.md`，再写 `final_report.md`、运行反摘要闸门，最后写 `plain_investor_guide.md` 和 `executive_summary.md`。
 
 如果用户明确要求 subagent、agentic、多角色或并行研究，视为已授权启动真实 subagent；若宿主仍不允许，必须说明并使用阶段文件模拟。
 
@@ -226,7 +226,7 @@ agent 分工表：
 1. 写 `question.md`。
 2. 写 `subsegment_map.md`。
 3. 写 `agent_briefs.md`。
-4. 写初版 `evidence_index.md`；必须包含 Gemini Google Search 线索发现结果，或写明 `Gemini未运行原因`。
+4. 写初版 `evidence_index.md`；若运行 Gemini，必须包含 Gemini Google Search 线索发现结果；若未运行，写明 `Gemini未运行原因`。
 5. 写 `industry_chain.md`，并包含可入正文的章节草稿。
 6. 读取前文和 `modules/demand_supply_price.md`，写 `demand_supply_price.md`，并包含可入正文的章节草稿。
 7. 读取前文和 `modules/profit_pool_competition.md`，写 `profit_pool_competition.md`，并包含可入正文的章节草稿。
@@ -239,7 +239,7 @@ agent 分工表：
 14. 读取全部中间文件和 `full-report-contract.md`，写 `report_synthesis.md`。
 15. 读取 `report_synthesis.md`、`data_tables.md`、`transmission_map.md`、章节草稿和 `report-writing.md`，写 `editorial_thesis.md`。
 16. 读取 `editorial_thesis.md`、`report_synthesis.md`、`data_tables.md`、`transmission_map.md` 和章节草稿，写 `report_outline.md` 和 `final_report_expansion_plan.md`。
-17. 读取 `final_report_expansion_plan.md`，写 `final_report_full.md`，运行 `scripts/final_report_gate.py`；若失败，先把失败项写入扩写蓝图的补写记录，补写正文并复跑。
+17. 读取 `final_report_expansion_plan.md`，写 `final_report.md`，运行 `scripts/final_report_gate.py`；若失败，先把失败项写入扩写蓝图的补写记录，补写正文并复跑。
 18. 写 `plain_investor_guide.md` 和 `executive_summary.md`。
 
 每一阶段都必须留下独立文件。信息不足时仍要生成文件，并写明已查证据、缺少数据、降级判断和下一步需要补什么。
@@ -302,7 +302,7 @@ agent 结论冲突：
 不应写入强结论的内容：
 覆盖表：
 executive_summary 写作指令：
-final_report_full 写作指令：
+final_report 写作指令：
 ```
 
 ### 主笔重构
@@ -359,7 +359,7 @@ final_report_full 写作指令：
 
 ### 终稿扩写蓝图
 
-`final_report_expansion_plan.md` 必须基于 `report_outline.md`、`report_synthesis.md`、`data_tables.md` 和 `transmission_map.md`，逐章列出必须展开的证据、机制、表格、传导链、财务映射、反证和跟踪指标。没有这个文件，不得写 `final_report_full.md`。
+`final_report_expansion_plan.md` 必须基于 `report_outline.md`、`report_synthesis.md`、`data_tables.md` 和 `transmission_map.md`，逐章列出必须展开的证据、机制、表格、传导链、财务映射、反证和跟踪指标。没有这个文件，不得写 `final_report.md`。
 
 ## 冲突处理
 

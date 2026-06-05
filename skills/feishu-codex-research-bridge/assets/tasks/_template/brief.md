@@ -26,7 +26,7 @@
 - `supply-chain-agentic-research`：供应链平台型成长股正式深研
 - `chassis-growth-agentic-research`：底盘型成长股正式深研
 - `equity-catalyst-tracker`：爆点、公告、财报、订单、催化持续跟踪
-- `growth-stock-valuation`：成长股正式估值、PEG、目标市值、估值锚切换
+- `integrated-growth-valuation`：成长股综合估值、PEG/DCF 平行建模、目标市值、模型分歧诊断
 - `industry-chain-agentic-research`：行业或产业链正式深研
 
 ## 核心问题
@@ -52,7 +52,7 @@
 
 - `supply-chain-agentic-research` / `chassis-growth-agentic-research`：`research_artifacts/<标的>/<标的>_final_report.md`
 - `equity-catalyst-tracker`：`research_artifacts/<标的>/<标的>_integrated_update.md`
-- `growth-stock-valuation`：`research_artifacts/<标的>/<标的>_valuation_deepdive.md` 和 `<标的>_valuation_scorecard.md`
+- `integrated-growth-valuation`：`research_artifacts/<标的>/<标的>_integrated_valuation.md`、`<标的>_valuation_scorecard.md` 和 `<标的>_valuation_tracking_feedback.md`
 - `industry-chain-agentic-research`：`research_artifacts/<行业或主线>/<prefix>_final_report_full.md`
 
 ## 交付格式

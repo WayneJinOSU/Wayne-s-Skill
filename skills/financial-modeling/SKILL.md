@@ -47,6 +47,7 @@ languages:
   - zh
 
 related_skills:
+  - integrated-growth-valuation
   - dcf-valuation
   - stock-analysis
   - data-analysis
@@ -100,14 +101,21 @@ Key drivers:
 
 ### Research Handoff Mode
 
-When the user provides a research handoff such as `<company>_financial_model_handoff.md`, use it as the bridge from investment research to modeling:
+When the user provides a research handoff such as `<company>_dcf_financial_model_handoff.md`, use it as the bridge from investment research to modeling:
 
+- Use a single structured financial data source for the three statements by default. Do not pull Tushare, Eastmoney, AkShare, Wencai, and CSV exports in parallel for routine cross-checking. Fallback to another source only when the selected source fails, is inaccessible, lacks required fields, or has an obvious abnormal value.
+- Prefer `<company>_facts_core.md` and `Fact-ID` references when available. Do not copy full raw financial statements, announcement lists, Wencai long rows, or Gemini outputs into modeling files.
+- If raw CSV files exist, extract only the required narrow fields before reading them into context. Avoid broad text search across `*.csv` files because long rows can dominate the context window.
 - First parse the driver map, evidence grades, historical anchors, and scenario ranges. Do not re-write the investment thesis unless needed to explain a driver.
+- Treat these six tables as the preferred structured input: historical anchor table; segment driver table; expense and depreciation table; working-capital table; scenario table; data-gap table. If a table is missing, list it in the data-gap checklist before modeling.
 - Separate company facts, consensus/market assumptions, and self-built assumptions. If a field is missing, show it in a data-gap checklist instead of inventing precision.
 - Build assumptions in this order: revenue drivers -> gross margin -> operating expenses -> D&A/capex -> working capital days -> tax/interest/debt -> minority interest/investment income -> dividends/financing.
 - For each driver, preserve source/evidence grade and state whether it belongs in base case, scenario case, or sensitivity only.
 - Output a DCF-ready UFCF bridge with `EBIT*(1-Tax)+D&A-Capex-ΔNWC`, plus model checks for balance sheet balance, revenue-profit-cash consistency, and working-capital reasonableness.
-- Do not output target price, target market cap, buy/sell advice, or final valuation conclusions unless the user explicitly asks to hand off to `dcf-valuation`.
+- For formal PEG / dynamic PE valuation, output `<company>_peg_ready_package.md` for `$growth-stock-valuation`: adjusted recurring profit or operating profit, YoY growth, 2-3 year CAGR, consensus comparison fields, share count, market cap, price date/source, and quality-adjustment notes.
+- For formal DCF calculation, output `<company>_dcf_ready_package.md` for `/Users/a/.codex/skills/dcf-model`: Revenue, EBIT, tax rate, D&A, Capex, ΔNWC, UFCF, cash, debt, shares, WACC inputs, terminal assumptions, and source comments.
+- Keep PEG-ready and DCF-ready packages compact: model fields, assumptions, source comments, Fact-ID references, quality notes, and data gaps only. Do not restate every module's thesis or duplicate the full profit bridge.
+- Do not output target price, target market cap, buy/sell advice, or final valuation conclusions. For growth-stock formal valuation, hand off PEG-ready inputs to `$growth-stock-valuation` and DCF-ready inputs to `/Users/a/.codex/skills/dcf-model`; `integrated-growth-valuation` only aggregates the two downstream model outputs.
 
 ---
 

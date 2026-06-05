@@ -7,21 +7,21 @@
 正式研究必须输出三类成品：
 
 ```text
-<prefix>_final_report_full.md      # 完整行业深度报告，不能过薄
+<prefix>_final_report.md      # 完整行业深度报告，不能过薄
 <prefix>_plain_investor_guide.md   # 普通投资者导读，解释报告逻辑，不替代 full report
 <prefix>_executive_summary.md      # 给投资人的摘要，不替代 full report
 <prefix>_transmission_map.md       # 产业链传导图谱，解释需求如何进入利润和估值
 <prefix>_final_report_expansion_plan.md # 终稿扩写施工图和反摘要补写记录
 ```
 
-如需兼容旧流程，可额外输出 `<prefix>_final_report.md`，但它不能替代 `final_report_full.md`。
+旧流程中的完整终稿后缀不再作为标准产物；正式终稿统一命名为 `<prefix>_final_report.md`。
 如需保留大量资料、长表、公司清单或被终稿裁剪掉的模块材料，可额外输出 `<prefix>_research_dossier.md`。dossier 是资料卷，不是正式终稿。
 
 ## 可读性合同
 
 正式报告默认面向“具备基本投资常识、但不熟悉本产业链细节的普通投资人 + 专业投资人”。因此必须同时满足两层阅读：
 
-1. **普通读者能顺着逻辑读懂。** 在 `final_report_full.md` 第一屏或紧随第一屏加入“普通投资者导读”或等价段落，先用人话解释：谁掏钱、钱买什么、谁能留利润、哪些只是订单/主题、估值已经反映什么。
+1. **普通读者能顺着逻辑读懂。** 在 `final_report.md` 第一屏或紧随第一屏加入“普通投资者导读”或等价段落，先用人话解释：谁掏钱、钱买什么、谁能留利润、哪些只是订单/主题、估值已经反映什么。
 2. **专业读者能复核证据。** 正文保留关键数据、表格、证据链、利润桥和反查；长表进入 `data_tables.md` 或附录。
 
 `<prefix>_plain_investor_guide.md` 必须单独生成，默认包含：
@@ -39,7 +39,7 @@
 
 ## 传导逻辑合同
 
-正式研究必须生成 `<prefix>_transmission_map.md`，并把其中的关键链条写入 `final_report_full.md` 正文。传导逻辑不能只是一张表或一行箭头，必须展开成文字说明。
+正式研究必须生成 `<prefix>_transmission_map.md`，并把其中的关键链条写入 `final_report.md` 正文。传导逻辑不能只是一张表或一行箭头，必须展开成文字说明。
 
 每条核心主线至少按以下链条展开：
 
@@ -129,7 +129,7 @@
 
 ## 正式报告内容覆盖
 
-`final_report_full.md` 必须覆盖以下 12 类内容。12 章结构只是兜底模板，不是默认目录；正式终稿默认采用 6-10 个一级章节或等价结构，章节顺序应由 `<prefix>_editorial_thesis.md` 决定：
+`final_report.md` 必须覆盖以下 12 类内容。12 章结构只是兜底模板，不是默认目录；正式终稿默认采用 6-10 个一级章节或等价结构，章节顺序应由 `<prefix>_editorial_thesis.md` 决定：
 
 1. 核心结论：行业阶段、利润流向、投资判断变量。
 2. 行业定义与边界：卖什么、谁买单、排除哪些相似但不同的生意。
@@ -162,7 +162,7 @@
 反拼接自检：
 ```
 
-没有 `editorial_thesis.md`，或该文件只是重复 `report_synthesis.md`，不得进入 `final_report_full.md`。
+没有 `editorial_thesis.md`，或该文件只是重复 `report_synthesis.md`，不得进入 `final_report.md`。
 
 ## 终稿复杂度档位
 
@@ -179,7 +179,7 @@
 
 ## 终稿扩写蓝图
 
-写 `final_report_full.md` 前必须先写 `<prefix>_final_report_expansion_plan.md`。它不是读者交付物，而是防止摘要化的施工图，至少包含：
+写 `final_report.md` 前必须先写 `<prefix>_final_report_expansion_plan.md`。它不是读者交付物，而是防止摘要化的施工图，至少包含：
 
 ```text
 复杂度档位与理由：
@@ -277,7 +277,7 @@
 可能导致终稿离散的拼接风险：
 executive_summary 写作指令：
 plain_investor_guide 写作指令：
-final_report_full 写作指令：
+final_report 写作指令：
 ```
 
 如果 synthesis 没有这些字段，主控不能直接写 full report。
@@ -286,7 +286,7 @@ final_report_full 写作指令：
 
 以下任一情况出现，输出只能标记为 `executive_summary` 或 `preliminary draft`，不能称为正式行业深度报告：
 
-- 没有 `final_report_full.md`。
+- 没有 `final_report.md`。
 - 没有 `<prefix>_final_report_expansion_plan.md`。
 - 没有 `<prefix>_plain_investor_guide.md`。
 - 没有 `<prefix>_transmission_map.md`。
@@ -301,23 +301,23 @@ final_report_full 写作指令：
 - 终稿明显短于中间产物，且未说明哪些内容进入附录。
 - 没有 `editorial_thesis.md`，或 `editorial_thesis.md` 没有最终排序和利润桥覆盖。
 - 第一屏没有直接回答“这个行业现在该怎么看、重点看哪、哪些不能写成强结论”。
-- `final_report_full.md` 没有普通读者逻辑桥，开篇直接堆专业术语、长表或公司名单。
+- `final_report.md` 没有普通读者逻辑桥，开篇直接堆专业术语、长表或公司名单。
 - 终稿结构明显复制模块顺序、agent 顺序或 12 章模板，且没有主线递进理由。
 - 正文堆了大量表格和公司清单，但没有说明它们改变了哪个投资判断。
 - 没有运行 `scripts/final_report_gate.py`，或闸门失败后没有补写并复跑。
 
-正式深度报告模式下，`final_report_full.md` 生成后必须运行反摘要闸门：
+正式深度报告模式下，`final_report.md` 生成后必须运行反摘要闸门：
 
 ```bash
 python3 /Users/a/.codex/skills/industry-chain-agentic-research/scripts/final_report_gate.py \
-  "/absolute/path/<prefix>_final_report_full.md"
+  "/absolute/path/<prefix>_final_report.md"
 ```
 
 若 `report_outline.md` 或 `final_report_expansion_plan.md` 已明确判定为 `compact`、`complex` 或 `long-form`，运行对应 profile：
 
 ```bash
 python3 /Users/a/.codex/skills/industry-chain-agentic-research/scripts/final_report_gate.py \
-  "/absolute/path/<prefix>_final_report_full.md" --profile complex
+  "/absolute/path/<prefix>_final_report.md" --profile complex
 ```
 
 默认 `standard` 闸门检查中文字符数、二级章节数、表格数、薄章节比例、深章节数量、行业研究核心概念覆盖和每章财务/验证信号。闸门只防止摘要化，不鼓励堆字数；失败时把失败项写入 `final_report_expansion_plan.md` 的“闸门补写记录”，补写机制和证据后复跑。

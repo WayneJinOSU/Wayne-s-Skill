@@ -48,7 +48,7 @@ languages:
 
 related_skills:
   - integrated-growth-valuation
-  - dcf-valuation
+  - dcf-model
   - stock-analysis
   - data-analysis
 ---

@@ -52,9 +52,11 @@ Personal Codex skills maintained as versioned assets.
 
 调用方式：
 
+注意：仓库里的 `modules/`、`references/`、`agents/` 是某些主控 skill 的内部材料，不是独立 skill，也不需要单独点名调用。调用时只点名真实存在的 skill；如果不确定，就用自然语言描述目标，让 Codex 自动匹配。
+
 1. 点名技能调用：
 
-研究主控：
+研究与跟踪：
 
 - `equity-catalyst-tracker 调研东山精密，启动 subagent`
 - `industry-chain-agentic-research 研究AI服务器产业链，启动 subagent，拆分上游材料、PCB、连接器、电源、液冷和整机环节`
@@ -62,68 +64,64 @@ Personal Codex skills maintained as versioned assets.
 - `supply-chain-agentic-research 调研工业富联，启动 subagent，输出正式深度报告`
 - `local-bank-research 研究江苏银行，重点拆利润桥、资产质量、区域beta、分红和估值预期差`
 
-底盘成长主控私有模块：
-
-- `chassis-growth-agentic-research 研究东山精密，主控私有 modules 会覆盖市场重定价、旧业务底盘、第二曲线、平台复用、竞争客户验证、承接动作、利润桥和跟踪体系`
-
-供应链模块：
-
-- `supply-chain-agentic-research 调研沪电股份，主控私有模块会覆盖周期、地位、订单、承接动作和利润中枢`
-
-成长股估值独立 skill：
+估值与建模：
 
 - `growth-stock-valuation 基于东山精密前置深研和估值接力输入，做目标市值、PEG、一致预期差和赔率判断`
 - `financial-modeling 基于东山精密_dcf_financial_model_handoff.md 生成 PEG-ready 和 DCF-ready 数据包`
 - `dcf-model 基于东山精密_dcf_ready_package.md 生成 DCF 模型、估值摘要和 validation`
 - `integrated-growth-valuation 聚合东山精密 PEG 输出和 DCF 输出，生成统一估值摘要和 scorecard`
 
-数据、写作和工具类：
+数据：
 
 - `akshare 获取东山精密近一年行情、估值和财务数据，并做简要趋势分析`
 - `tushare 导出东山精密近三年财务指标、估值和日行情，整理成表格`
 - `wencai-query 查询最近10日涨停次数最多的A股，导出表格`
+
+输出、发布和工具：
+
 - `finance-research-xhs 把东山精密研究报告改写成小红书长文本笔记`
+- `markdown-report-pdf 把东山精密研究报告转成正式 PDF`
+- `research-report-publication-editor 审校东山精密终稿，清理内部痕迹和工具痕迹`
 - `frontend-design 做一个AI算力供应链研究仪表盘，包含公司对比、催化事件和风险提示`
 - `doc 把东山精密研究报告整理成docx，保留标题层级、表格和风险提示`
 - `find-skills 找一个适合做A股公告跟踪和财报解析的skill`
 - `skill-github-sync 重新同步本地skills到GitHub仓库，并更新README`
+- `feishu-codex-research-bridge 查看飞书投研队列，确认当前运行任务和结果发送状态`
 
 2. 不点名技能的自然语言调用：
 
-研究主控：
+研究与跟踪：
 
 - `调研东山精密，重点看4月9日前后是否有订单、客户、财报或市场行为催化；启动 subagent，输出证据链和后续跟踪清单`
 - `研究AI服务器产业链，启动 subagent，拆分上游材料、PCB、连接器、电源、液冷和整机环节，输出完整产业链深度报告`
 - `研究东山精密，启动 subagent，重点看市场重定价、旧业务底盘、第二成长曲线、平台复用能力、竞争客户验证、利润桥和估值接力输入`
 - `调研工业富联，启动 subagent，重点看AI服务器订单、客户结构、供应链地位、利润释放和估值接力输入`
 - `研究江苏银行，重点拆利润桥、资产质量、区域beta、债券投资、分红和估值预期差`
+- `持续跟踪东山精密的新订单、客户验证、财报和市场行为，判断逻辑是否强化或证伪`
 
-底盘成长主控私有模块：
-
-- `分析东山精密，主控私有 modules 覆盖旧业务底盘、第二成长曲线、平台复用、竞争客户验证、承接动作、利润桥和跟踪体系`
-
-供应链模块：
-
-- `分析AI服务器产业周期，重点看云厂商capex、下游需求持续性、产品迭代和周期见顶风险`
-- `分析工业富联供应链地位，看客户认证、规模交付、复杂产品量产、全球产能和可替代性`
-- `分析沪电股份订单出货，看排产、库存、应收、合同负债、收入确认和经营现金流质量`
-
-成长股估值独立 skill：
+估值与建模：
 
 - `growth-stock-valuation 基于东山精密前置深研和估值接力输入，做目标市值、PEG、一致预期差和赔率判断`
 - `基于东山精密正式研究输出，先做三表和现金流建模，再分别跑 PEG 和 DCF，最后聚合成统一估值摘要`
 - `用官方 dcf-model 对东山精密 DCF-ready 数据包做现金流折现、敏感性分析和模型校验`
+- `把 PEG 和 DCF 两个模型结果合并成一份估值 scorecard，列出关键假设、差异和证伪点`
 
-数据、写作和工具类：
+数据：
 
 - `获取东山精密近一年行情、估值和财务数据，并做简要趋势分析`
 - `导出东山精密近三年财务指标、估值和日行情，整理成表格`
 - `查询最近10日涨停次数最多的A股，导出表格`
+
+输出、发布和工具：
+
 - `把东山精密研究报告改写成小红书长文本笔记，保留证据链、风险和假设分层`
+- `把东山精密研究报告转成带目录、页眉页脚和中文排版的 PDF`
+- `审校这份投研终稿，删除工具痕迹、内部审稿语言和不适合对外发布的措辞`
 - `做一个AI算力供应链研究仪表盘，包含公司对比、催化事件、估值和风险提示`
 - `把东山精密研究报告整理成docx，保留标题层级、表格和风险提示`
 - `帮我找一个适合做A股公告跟踪和财报解析的skill`
 - `重新同步我的本地skills仓库，并更新GitHub仓库README`
+- `看看飞书投研队列现在有多少任务，正在跑哪个任务`
 
 ## Local install
 

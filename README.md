@@ -28,6 +28,24 @@ Personal Codex skills maintained as versioned assets.
 - `tushare`: 面向中文自然语言的 Tushare 数据研究技能。用于把“看看这只股票最近怎么样”“帮我查财报趋势”“最近哪个板块最强”“北向资金在买什么”“给我导出一份行情数据”这类请求，转成可执行的数据获取、清洗、对比、筛选、导出与简要分析流程。适用于 A 股、指数、ETF/基金、财务、估值、资金流、公告新闻、板块概念与宏观数据等研究场景。
 - `wencai-query`: Query Tonghuashun Wencai with the `pywencai` Python package for Chinese-market screening, ranking, and tabular result retrieval. Use when Codex needs to execute or explain a natural-language Wencai request such as A-share stock screening, concept or industry ranking, valuation or financial-factor filtering, limit-up or turnover queries, export Wencai results, or summarize the returned table. Trigger when the user mentions "问财", "同花顺问财", or `pywencai`, or asks to turn a Chinese stock screener prompt into executable code or structured output.
 
+## 估值链路
+
+正式成长股估值拆成四个独立环节，避免一个 skill 同时承担研究、建模、定价和汇总：
+
+```text
+研究主控
+  -> financial-modeling
+  -> growth-stock-valuation + dcf-model
+  -> integrated-growth-valuation
+```
+
+- `financial-modeling`：把研究主控输出的 `dcf_financial_model_handoff` 转成三表、FCF、PEG-ready 和 DCF-ready 数据包，不输出目标价或最终估值结论。
+- `growth-stock-valuation`：只做 PEG / 动态 PE 成长股定价，输出目标市值区间、情景、年份切换和证伪点。
+- `dcf-model`：官方 DCF skill，只基于 DCF-ready 现金流输入独立生成 DCF Excel、summary 和 validation。
+- `integrated-growth-valuation`：只聚合 `growth-stock-valuation` 和 `dcf-model` 已完成的结果，不重新建模、不平均两个模型、不创造新目标价。
+
+`dcf-valuation` 已删除；正式 DCF 一律使用 `dcf-model`。
+
 ## 如何调用技能
 
 在 Codex 里可以直接写技能名，再说明研究对象、输出要求，以及是否启动 subagent。也可以不写技能名，只用自然语言描述任务目标；Codex 会根据意图匹配合适的技能。显式写技能名更精准，自然语言调用更顺手。
@@ -55,6 +73,9 @@ Personal Codex skills maintained as versioned assets.
 成长股估值独立 skill：
 
 - `growth-stock-valuation 基于东山精密前置深研和估值接力输入，做目标市值、PEG、一致预期差和赔率判断`
+- `financial-modeling 基于东山精密_dcf_financial_model_handoff.md 生成 PEG-ready 和 DCF-ready 数据包`
+- `dcf-model 基于东山精密_dcf_ready_package.md 生成 DCF 模型、估值摘要和 validation`
+- `integrated-growth-valuation 聚合东山精密 PEG 输出和 DCF 输出，生成统一估值摘要和 scorecard`
 
 数据、写作和工具类：
 
@@ -90,6 +111,8 @@ Personal Codex skills maintained as versioned assets.
 成长股估值独立 skill：
 
 - `growth-stock-valuation 基于东山精密前置深研和估值接力输入，做目标市值、PEG、一致预期差和赔率判断`
+- `基于东山精密正式研究输出，先做三表和现金流建模，再分别跑 PEG 和 DCF，最后聚合成统一估值摘要`
+- `用官方 dcf-model 对东山精密 DCF-ready 数据包做现金流折现、敏感性分析和模型校验`
 
 数据、写作和工具类：
 

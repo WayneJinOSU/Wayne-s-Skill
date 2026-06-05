@@ -27,7 +27,6 @@ Personal Codex skills maintained as versioned assets.
 - `supply-chain-agentic-research`: 独立主控供应链平台型成长股正式研究；用私有 modules、多角色/subagent、中间产物、进攻型市场交易变量、技术路线到价值量、原材料价格链、竞争/客户认证链、产能升级、订单经营验证、利润天花板、跟踪体系、两轮 QA 和投资人写作，完整覆盖 AI 算力、数据中心、新能源、机器人、先进封装、半导体设备/材料等供应链公司研究。Use when 用户需要深度分析供应链公司，判断身份切换、订单放量、技术路线升级、利润中枢上移、天花板抬升、市场预期差和证伪路径，并产出正式深度报告而非摘要。
 - `tushare`: 面向中文自然语言的 Tushare 数据研究技能。用于把“看看这只股票最近怎么样”“帮我查财报趋势”“最近哪个板块最强”“北向资金在买什么”“给我导出一份行情数据”这类请求，转成可执行的数据获取、清洗、对比、筛选、导出与简要分析流程。适用于 A 股、指数、ETF/基金、财务、估值、资金流、公告新闻、板块概念与宏观数据等研究场景。
 - `wencai-query`: Query Tonghuashun Wencai with the `pywencai` Python package for Chinese-market screening, ranking, and tabular result retrieval. Use when Codex needs to execute or explain a natural-language Wencai request such as A-share stock screening, concept or industry ranking, valuation or financial-factor filtering, limit-up or turnover queries, export Wencai results, or summarize the returned table. Trigger when the user mentions "问财", "同花顺问财", or `pywencai`, or asks to turn a Chinese stock screener prompt into executable code or structured output.
-
 ## 估值链路
 
 正式成长股估值拆成四个独立环节，避免一个 skill 同时承担研究、建模、定价和汇总：

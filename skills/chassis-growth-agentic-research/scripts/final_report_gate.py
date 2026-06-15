@@ -24,7 +24,39 @@ DEFAULT_REQUIRED_TERMS = [
 
 DEFAULT_REQUIRED_ANY = {
     "market_spine": ["市场正在交易", "市场重新定价", "市场重新关注", "市场交易变量"],
+    "offensive_thesis": ["核心交易逻辑", "核心误定价", "市场误定价", "真正稀缺", "关键瓶颈"],
+    "profit_anchor": ["最小利润模型", "单位经济", "数量乘数", "利润中枢区间", "利润中枢"],
+    "sharpness_spine": ["最大预期差", "核心分歧", "第一驱动", "核心利润变量", "最短因果链"],
 }
+
+FRONT_REQUIRED_ANY = [
+    "核心交易逻辑",
+    "核心误定价",
+    "市场误定价",
+    "最小利润模型",
+    "单位经济",
+    "利润中枢区间",
+]
+
+FRONT_SHARPNESS_REQUIRED_ANY = [
+    "最大预期差",
+    "核心分歧",
+    "第一驱动",
+    "核心利润变量",
+    "最短因果链",
+]
+
+FRONT_HEDGE_TERMS = [
+    "待验证",
+    "仍需验证",
+    "证据不足",
+    "后续关注",
+    "不能确认",
+    "尚未验证",
+    "兑现闸门",
+    "风险提示",
+    "反方观点",
+]
 
 DEFAULT_CONCEPT_GROUPS = {
     "base_business": ["旧业务", "底盘", "现金流", "财务质量"],
@@ -52,38 +84,90 @@ SECTION_REQUIRED_SIGNALS = [
     "份额",
 ]
 
+DIDACTIC_TERMS = [
+    "一般而言",
+    "通常来说",
+    "从理论上",
+    "从框架上",
+    "所谓",
+    "我们需要理解",
+    "接下来需要关注",
+    "值得注意的是",
+    "需要指出的是",
+    "这说明",
+    "换句话说",
+    "从投资角度看",
+    "简单来说",
+    "本质上",
+]
+
+PARAGRAPH_SIGNAL_TERMS = [
+    "Fact-",
+    "收入",
+    "利润",
+    "毛利",
+    "费用",
+    "现金流",
+    "客户",
+    "订单",
+    "产能",
+    "份额",
+    "验证",
+    "证伪",
+    "降级",
+    "单位经济",
+    "数量乘数",
+    "第一驱动",
+    "核心利润变量",
+    "最大预期差",
+    "ASP",
+    "折旧",
+    "财务成本",
+    "税率",
+    "少数股东",
+    "敏感性",
+]
+
 PROFILE_PRESETS = {
     "compact": {
-        "min_cjk": 6000,
-        "min_sections": 8,
-        "min_tables": 4,
+        "min_cjk": 5000,
+        "min_sections": 6,
+        "max_sections": 8,
+        "min_tables": 3,
         "min_section_cjk": 300,
         "deep_section_cjk": 900,
         "min_deep_sections": 0,
+        "max_didactic_paragraphs": 2,
     },
     "standard": {
-        "min_cjk": 8000,
-        "min_sections": 8,
-        "min_tables": 5,
+        "min_cjk": 7000,
+        "min_sections": 7,
+        "max_sections": 9,
+        "min_tables": 4,
         "min_section_cjk": 400,
         "deep_section_cjk": 900,
         "min_deep_sections": 2,
+        "max_didactic_paragraphs": 3,
     },
     "complex": {
-        "min_cjk": 12000,
-        "min_sections": 10,
-        "min_tables": 7,
+        "min_cjk": 10000,
+        "min_sections": 8,
+        "max_sections": 11,
+        "min_tables": 5,
         "min_section_cjk": 450,
         "deep_section_cjk": 1000,
-        "min_deep_sections": 4,
+        "min_deep_sections": 3,
+        "max_didactic_paragraphs": 4,
     },
     "long-form": {
-        "min_cjk": 15000,
-        "min_sections": 12,
-        "min_tables": 8,
+        "min_cjk": 14000,
+        "min_sections": 10,
+        "max_sections": 13,
+        "min_tables": 6,
         "min_section_cjk": 550,
         "deep_section_cjk": 1000,
-        "min_deep_sections": 5,
+        "min_deep_sections": 4,
+        "max_didactic_paragraphs": 5,
     },
 }
 
@@ -138,6 +222,20 @@ def table_count(text: str) -> int:
     return count
 
 
+def split_paragraphs(text: str) -> list[str]:
+    paragraphs = []
+    for raw in re.split(r"\n\s*\n", text):
+        paragraph = raw.strip()
+        if not paragraph:
+            continue
+        if paragraph.startswith("#") or paragraph.startswith("|"):
+            continue
+        if "```" in paragraph:
+            continue
+        paragraphs.append(paragraph)
+    return paragraphs
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("report", type=Path)
@@ -152,10 +250,12 @@ def main() -> int:
     parser.add_argument("--profit-line-count", type=int)
     parser.add_argument("--min-cjk", type=int)
     parser.add_argument("--min-sections", type=int)
+    parser.add_argument("--max-sections", type=int)
     parser.add_argument("--min-tables", type=int)
     parser.add_argument("--min-section-cjk", type=int)
     parser.add_argument("--deep-section-cjk", type=int)
     parser.add_argument("--min-deep-sections", type=int)
+    parser.add_argument("--max-didactic-paragraphs", type=int)
     parser.add_argument("--min-section-signal-hits", type=int, default=2)
     parser.add_argument("--max-thin-section-ratio", type=float, default=0.25)
     parser.add_argument("--required-term", action="append", default=[])
@@ -187,6 +287,12 @@ def main() -> int:
         failures.append(f"CJK chars {total_cjk} < required {args.min_cjk}")
     if len(sections) < args.min_sections:
         failures.append(f"H2 sections {len(sections)} < required {args.min_sections}")
+    if args.max_sections is not None and len(sections) > args.max_sections:
+        failures.append(
+            f"H2 sections {len(sections)} > allowed {args.max_sections}; "
+            "merge standalone old-business/second-curve/platform-reuse/"
+            "execution/evidence-boundary/profit-calibration chapters into the main spine"
+        )
     if tables < args.min_tables:
         failures.append(f"tables {tables} < required {args.min_tables}")
 
@@ -221,6 +327,28 @@ def main() -> int:
     if missing_any_groups:
         failures.append("missing required expression groups: " + "、".join(missing_any_groups))
 
+    front_text = text[: min(len(text), 3000)]
+    front_hits = sum(1 for term in FRONT_REQUIRED_ANY if term in front_text)
+    front_sharp_hits = sum(
+        1 for term in FRONT_SHARPNESS_REQUIRED_ANY if term in front_text
+    )
+    front_hedge_hits = sum(front_text.count(term) for term in FRONT_HEDGE_TERMS)
+    if front_hits == 0:
+        failures.append(
+            "front section missing offensive thesis/profit model terms: "
+            + "、".join(FRONT_REQUIRED_ANY)
+        )
+    if front_sharp_hits == 0:
+        failures.append(
+            "front section missing sharp core-logic terms: "
+            + "、".join(FRONT_SHARPNESS_REQUIRED_ANY)
+        )
+    if front_hedge_hits >= 6 and front_hits < 2:
+        failures.append(
+            f"front section appears hedge-led: hedge_terms={front_hedge_hits}, "
+            f"offensive_terms={front_hits}; move skeptic/risk language later"
+        )
+
     if not args.skip_concept_groups:
         missing_groups = []
         for group, terms in DEFAULT_CONCEPT_GROUPS.items():
@@ -240,13 +368,35 @@ def main() -> int:
             + "；".join(weak_signal_sections[:8])
         )
 
+    didactic_paragraphs = []
+    for paragraph in split_paragraphs(text):
+        if cjk_count(paragraph) < 60:
+            continue
+        if not any(term in paragraph for term in DIDACTIC_TERMS):
+            continue
+        signal_hits = sum(1 for term in PARAGRAPH_SIGNAL_TERMS if term in paragraph)
+        has_number = bool(re.search(r"\d", paragraph))
+        if signal_hits < 2 and not has_number:
+            didactic_paragraphs.append(paragraph[:80].replace("\n", " "))
+    if len(didactic_paragraphs) > args.max_didactic_paragraphs:
+        failures.append(
+            f"didactic low-signal paragraphs {len(didactic_paragraphs)} "
+            f"> allowed {args.max_didactic_paragraphs}: "
+            + "；".join(didactic_paragraphs[:5])
+        )
+
     print(f"report={args.report}")
     print(f"profile={active_profile}")
     print(f"cjk_chars={total_cjk}")
     print(f"h2_sections={len(sections)}")
+    print(f"max_h2_sections={args.max_sections}")
     print(f"tables={tables}")
     print(f"thin_sections={len(thin_sections)}")
     print(f"deep_sections={len(deep_sections)}")
+    print(f"didactic_low_signal_paragraphs={len(didactic_paragraphs)}")
+    print(f"front_offensive_terms={front_hits}")
+    print(f"front_sharpness_terms={front_sharp_hits}")
+    print(f"front_hedge_terms={front_hedge_hits}")
 
     if failures:
         print("FAIL")

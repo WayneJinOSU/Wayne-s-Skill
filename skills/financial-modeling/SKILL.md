@@ -1,56 +1,6 @@
 ---
-# ═══════════════════════════════════════════════════════════════════════════════
-# CLAUDE OFFICE SKILL - Financial Modeling
-# ═══════════════════════════════════════════════════════════════════════════════
-
 name: financial-modeling
-description: "Build integrated financial models with 3-statement projections. Create income statement, balance sheet, and cash flow models with proper linkages."
-version: "1.0.0"
-author: claude-office-skills
-license: MIT
-
-category: finance
-tags:
-  - financial-modeling
-  - three-statement
-  - forecasting
-  - income-statement
-  - balance-sheet
-department: Finance/FP&A
-
-models:
-  recommended:
-    - claude-sonnet-4
-    - claude-opus-4
-  compatible:
-    - claude-3-5-sonnet
-    - gpt-4
-    - gpt-4o
-
-mcp:
-  server: office-mcp
-  tools:
-    - read_xlsx
-    - create_xlsx
-    - apply_formula
-    - create_chart
-
-capabilities:
-  - three_statement_modeling
-  - revenue_forecasting
-  - expense_modeling
-  - working_capital_projections
-  - debt_schedule_modeling
-
-languages:
-  - en
-  - zh
-
-related_skills:
-  - integrated-growth-valuation
-  - dcf-model
-  - stock-analysis
-  - data-analysis
+description: Build integrated financial models with 3-statement projections, DCF-ready UFCF bridges, working-capital schedules, and debt/interest linkages. Use for income statement, balance sheet, cash flow, and DCF input preparation; do not use for PEG-ready packages or PEG valuation inputs.
 ---
 
 # Financial Modeling Skill
@@ -112,10 +62,10 @@ When the user provides a research handoff such as `<company>_dcf_financial_model
 - Build assumptions in this order: revenue drivers -> gross margin -> operating expenses -> D&A/capex -> working capital days -> tax/interest/debt -> minority interest/investment income -> dividends/financing.
 - For each driver, preserve source/evidence grade and state whether it belongs in base case, scenario case, or sensitivity only.
 - Output a DCF-ready UFCF bridge with `EBIT*(1-Tax)+D&A-Capex-ΔNWC`, plus model checks for balance sheet balance, revenue-profit-cash consistency, and working-capital reasonableness.
-- For formal PEG / dynamic PE valuation, output `<company>_peg_ready_package.md` for `$growth-stock-valuation`: adjusted recurring profit or operating profit, YoY growth, 2-3 year CAGR, consensus comparison fields, share count, market cap, price date/source, and quality-adjustment notes.
 - For formal DCF calculation, output `<company>_dcf_ready_package.md` for `/Users/a/.codex/skills/dcf-model`: Revenue, EBIT, tax rate, D&A, Capex, ΔNWC, UFCF, cash, debt, shares, WACC inputs, terminal assumptions, and source comments.
-- Keep PEG-ready and DCF-ready packages compact: model fields, assumptions, source comments, Fact-ID references, quality notes, and data gaps only. Do not restate every module's thesis or duplicate the full profit bridge.
-- Do not output target price, target market cap, buy/sell advice, or final valuation conclusions. For growth-stock formal valuation, hand off PEG-ready inputs to `$growth-stock-valuation` and DCF-ready inputs to `/Users/a/.codex/skills/dcf-model`; `integrated-growth-valuation` only aggregates the two downstream model outputs.
+- Do not output `<company>_peg_ready_package.md`; PEG-ready input packs belong to `$growth-stock-valuation`, not financial modeling.
+- Keep DCF-ready packages compact: model fields, assumptions, source comments, Fact-ID references, quality notes, and data gaps only. Do not restate every module's thesis or duplicate the full profit bridge.
+- Do not output target price, target market cap, buy/sell advice, or final valuation conclusions. For formal valuation, hand off DCF-ready inputs to `/Users/a/.codex/skills/dcf-model`; `integrated-growth-valuation` only aggregates downstream PEG and DCF outputs after both exist.
 
 ---
 

@@ -46,7 +46,7 @@ Financial Modeling 基于这些表输出两包数据：
 
 ```text
 PEG-ready：扣非利润/经营利润、YoY、CAGR、一致预期对照、股本/市值、质量说明
-DCF-ready：Revenue、EBIT、Tax、D&A、Capex、ΔNWC、UFCF、现金/债务/股本、WACC 和终值输入
+DCF-ready：Revenue、EBIT、Tax、D&A、Capex、ΔNWC、UFCF、现金/债务/股本、WACC、终值输入和 assumption ledger
 ```
 
 ## Bridge Logic
@@ -70,7 +70,7 @@ DCF 只能消费 UFCF：
 UFCF = EBIT * (1 - Tax Rate) + D&A - Capex - ΔNWC
 ```
 
-若 Capex、D&A 或 ΔNWC 缺失，不得用净利润替代 DCF；只能输出补数清单和现金流质量提示。
+若 Capex、D&A 或 ΔNWC 缺少事实口径，不得用净利润替代 DCF。Formal DCF 应停止；Scenario DCF 可用带来源类型、置信度、区间和敏感性的业务推理/proxy 继续建模；Reverse DCF 可反推当前市值隐含现金流。
 
 ## DCF Model Handoff Package
 
@@ -80,9 +80,9 @@ Financial Modeling 完成共同预测底稿后，应额外整理给 `/Users/a/.c
 | --- | --- |
 | 历史与预测期 | 至少 1 个历史基准年 + 5-7 个显性预测年；成长股可延长至现金流进入稳态 |
 | 经营预测 | Revenue、Revenue growth、EBIT margin、EBIT、Tax rate、NOPAT |
-| UFCF 桥 | D&A、Capex、ΔNWC、UFCF；不得缺项 |
+| UFCF 桥 | Formal DCF 不得缺 D&A、Capex、ΔNWC、UFCF；Scenario DCF 可用区间/proxy，但必须进 assumption ledger |
 | 情景 | Bear/Base/Bull；弱证据变量不得进入 Base |
-| WACC 输入 | Risk-free rate、ERP、Beta、pre-tax cost of debt、tax rate、E/(D+E)、D/(D+E) |
+| WACC 输入 | Risk-free rate、ERP、Beta、pre-tax cost of debt、tax rate、E/(D+E)、D/(D+E)；若为推理区间，标注 source type 和 confidence |
 | 终值 | Terminal growth 或 exit multiple；必须说明来源和稳态约束 |
 | Equity bridge | Cash、Debt、minority interest/other claims、shares、current price/market cap |
 | 来源 | 每个硬编码输入给出 source comment，可追溯到财报、公告、市场数据或明确假设 |

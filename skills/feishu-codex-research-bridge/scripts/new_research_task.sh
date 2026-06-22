@@ -23,7 +23,7 @@ while [[ $# -gt 0 ]]; do
       shift
       ;;
     -h|--help)
-      echo "Usage: scripts/new_research_task.sh [--skill auto|supply-chain-agentic-research|chassis-growth-agentic-research|equity-catalyst-tracker|growth-stock-valuation|industry-chain-agentic-research] [--paused] TASK_NAME [TASK_DESCRIPTION]" >&2
+      echo "Usage: scripts/new_research_task.sh [--skill auto|supply-chain-agentic-research|chassis-growth-agentic-research|equity-catalyst-tracker|growth-stock-valuation|finance-research-xhs|industry-chain-agentic-research] [--paused] TASK_NAME [TASK_DESCRIPTION]" >&2
       exit 0
       ;;
     --)
@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ "${#positional[@]}" -lt 1 ]]; then
-  echo "Usage: scripts/new_research_task.sh [--skill auto|supply-chain-agentic-research|chassis-growth-agentic-research|equity-catalyst-tracker|growth-stock-valuation|industry-chain-agentic-research] [--paused] TASK_NAME [TASK_DESCRIPTION]" >&2
+  echo "Usage: scripts/new_research_task.sh [--skill auto|supply-chain-agentic-research|chassis-growth-agentic-research|equity-catalyst-tracker|growth-stock-valuation|finance-research-xhs|industry-chain-agentic-research] [--paused] TASK_NAME [TASK_DESCRIPTION]" >&2
   exit 1
 fi
 

@@ -1,7 +1,7 @@
 interface:
-  display_name: "个股爆点追踪"
-  short_description: "跟踪增量证据，判断个股逻辑升级、高潮或证伪"
-  default_prompt: "Use $equity-catalyst-tracker to evaluate whether the latest company news, disclosure, earnings update, customer signal, or market move is a true catalyst, a high-position re-acceleration signal, a repeated consensus, a climax signal, or a thesis-breaking warning. For resource-heavy tracking, use multi-agent evidence collection but synthesize one integrated conclusion."
+  display_name: "个股催化因果推演"
+  short_description: "从领先变量推演利润与估值锚变化"
+  default_prompt: "Use $equity-catalyst-tracker to build a stock-specific Driver Map, use Quick/Standard/Deep catalyst modes, and judge whether leading variables can change profit anchors, valuation anchors, or thesis-breaking conditions."
 
 policy:
   allow_implicit_invocation: true

@@ -103,8 +103,103 @@ Fetch data from MCP servers, user provided data, and the web.
 **Financial Modeling Handoff Boundary:**
 - Do not consume `peg_valuation_handoff` for DCF assumptions; it is for PEG band, quality discount, year-switching, and disconfirmation boundaries.
 - Do not use net income, recurring profit, adjusted attributable profit, or EBITDA as a substitute for UFCF.
-- If Revenue, EBIT, Tax, D&A, Capex, or ΔNWC are missing from the DCF-ready package and cannot be sourced, stop and output a DCF preparation checklist instead of a formal valuation.
+- If Revenue, EBIT, Tax, D&A, Capex, or ΔNWC are missing from the DCF-ready package and cannot be sourced as facts, stop only the **Formal DCF** path. You may still build **Scenario DCF** or **Reverse DCF** if every inferred/proxy input has an explicit source type, confidence score, range, and sensitivity treatment.
 - DCF output must remain independent from PEG output; do not use PEG target market cap to calibrate WACC, terminal value, or exit multiple.
+
+## Valuation Modes
+
+DCF is a structured reasoning model, not only an accounting-data model. The task is to prevent false precision, not to prohibit inference. Choose one of these modes before building:
+
+| Mode | Trigger | Allowed inputs | Required label | Output status |
+| --- | --- | --- | --- | --- |
+| `formal_dcf` | Core UFCF bridge and WACC inputs are sourced or auditable | Facts, consensus, and limited well-sourced assumptions | Formal DCF | Can output formal equity value, model, summary, validation |
+| `scenario_dcf` | Some D&A, ΔNWC, WACC, terminal, segment, or Capex fields are not directly available but can be bounded | Facts, consensus, business inference, proxy inputs, sensitivity ranges | Scenario DCF with Assumption Ledger | Can output scenario equity value ranges; must not imply audit-level precision |
+| `reverse_dcf` | Forecast data is too thin for a forward DCF but current market cap is known | Current market cap, WACC/terminal ranges, reverse-implied UFCF/margin | Reverse DCF / market-implied cash-flow test | Can output implied cash-flow requirements; not a prediction |
+| `preparation_only` | Key drivers have no reasonable boundary, or source/confidence cannot be stated | Gap list only | Preparation checklist | No valuation output |
+
+Scenario DCF is preferred over preparation-only when the analyst can state explicit ranges and confidence. Preparation-only is reserved for cases where the model would be unconstrained.
+
+## Assumption Ledger
+
+Every non-factual DCF input must be recorded before it is consumed by the model. Use this table in the summary and, when building Excel, include it as an `Assumption Ledger` sheet or section.
+
+| Field | Value / Range | Source type | Source / reasoning | Confidence | Sensitivity treatment | Model use |
+| --- | ---: | --- | --- | --- | --- | --- |
+| Revenue |  | Fact / Consensus / Business Inference / Proxy / Reverse Implied |  | A/B/C/D | Base/Bull/Bear or sensitivity axis | Formal / Scenario / Reverse |
+| EBIT margin |  |  |  |  |  |  |
+| Tax rate |  |  |  |  |  |  |
+| D&A |  |  |  |  |  |  |
+| Capex |  |  |  |  |  |  |
+| ΔNWC |  |  |  |  |  |  |
+| WACC |  |  |  |  |  |  |
+| Terminal growth / exit multiple |  |  |  |  |  |  |
+
+Source type discipline:
+
+- `Fact`: financial statements, announcements, exchange filings, audited notes, market data snapshots.
+- `Consensus`: Wind/Choice/iFinD/F10/Wencai or sell-side forecast aggregates; include date, institution count when available, and whether the source is fallback.
+- `Business Inference`: order conversion, capacity ramp, product mix, pricing, customer validation, margin path; tie to evidence grade and explicit triggers.
+- `Proxy`: EBITDA-EBIT for D&A, OCF-Capex as cash-pressure check, ΔRevenue percentage for ΔNWC, peer beta for beta; must be ranged and sensitivity-tested.
+- `Reverse Implied`: values inferred from current market cap; use only to describe what the market is pricing, not as a forecast.
+
+Confidence guide:
+
+| Confidence | Meaning | Can enter Base? |
+| --- | --- | --- |
+| A | Direct fact or high-quality consensus | Yes |
+| B | Multi-source supported inference or robust proxy | Yes, with sensitivity |
+| C | Plausible but weakly sourced inference/proxy | Scenario or sensitivity only |
+| D | Thin clue, theme, or unverified single source | Tracking only; not Base |
+
+## Scenario DCF Rules
+
+Scenario DCF can use inferred and proxy values if all of the following are true:
+
+1. Every key input has a range, not just one point estimate.
+2. The model labels which values are facts, consensus, business inference, proxy, or reverse implied.
+3. C-confidence inputs are not hidden in Base without a sensitivity or explicit discount.
+4. D-confidence inputs cannot drive Base or Bull valuation; they can only appear in tracking or optional upside notes.
+5. The summary states that the result is `Scenario DCF`, not `Formal DCF`.
+6. If an Excel model is produced, formulas still apply: projection, UFCF, discounting, terminal value, EV bridge, and sensitivity cells must be live formulas.
+
+Scenario DCF deliverables:
+
+```text
+<target>_dcf_assumption_ledger.md
+<target>_scenario_dcf_summary.md
+<target>_scenario_dcf_model.xlsx       # preferred when time allows
+<target>_scenario_dcf_validation.json  # required when an Excel model is created
+```
+
+Reverse DCF deliverables:
+
+```text
+<target>_dcf_assumption_ledger.md
+<target>_reverse_dcf_summary.md
+```
+
+Formal DCF deliverables remain:
+
+```text
+<target>_dcf_model.xlsx
+<target>_dcf_summary.md
+<target>_dcf_validation.json
+```
+
+## Reverse DCF Rules
+
+Use Reverse DCF when the better question is "what cash-flow path does the current market cap require?"
+
+Reverse DCF should output:
+
+- Current enterprise value / equity value bridge.
+- WACC and terminal growth ranges.
+- Implied terminal UFCF, explicit-period UFCF ramp, EBIT margin, or FCF margin required to justify current value.
+- Comparison to facts, consensus, business inference, and proxy ranges.
+- Trigger conditions that would make the implied path credible.
+- Disconfirmation points that would make the implied path too aggressive.
+
+Reverse DCF must not be described as the analyst's fair value forecast.
 
 **Validation Checklist:**
 - Verify net debt vs net cash (critical for valuation)
@@ -1136,11 +1231,39 @@ This approach centralizes scenario logic, making the model easier to audit and m
 
 ## Deliverables Structure
 
-**File naming**: `[Ticker]_DCF_Model_[Date].xlsx`
+Choose deliverables by mode.
+
+Formal DCF:
+
+```text
+<target>_dcf_model.xlsx
+<target>_dcf_summary.md
+<target>_dcf_validation.json
+```
+
+Scenario DCF:
+
+```text
+<target>_dcf_assumption_ledger.md
+<target>_scenario_dcf_summary.md
+<target>_scenario_dcf_model.xlsx       # preferred when producing Excel
+<target>_scenario_dcf_validation.json  # required if Excel is produced
+```
+
+Reverse DCF:
+
+```text
+<target>_dcf_assumption_ledger.md
+<target>_reverse_dcf_summary.md
+```
+
+Legacy generic Excel naming may still be used for temporary workbooks, but final research artifacts should use the mode-specific filenames above.
 
 **Two sheets**:
 1. **DCF** - Complete model with Bear/Base/Bull cases + three sensitivity tables at bottom (WACC vs Terminal Growth, Revenue Growth vs EBIT Margin, Beta vs Risk-Free Rate)
 2. **WACC** - Cost of capital calculation
+
+For Scenario DCF Excel, add an **Assumption Ledger** sheet or section listing source type, confidence, range, and sensitivity treatment for all non-factual inputs.
 
 **Key features**: Case selector (1/2/3), consolidation column with INDEX/OFFSET formulas, color-coded cells, cell comments on all inputs, professional borders
 
@@ -1253,7 +1376,7 @@ This approach centralizes scenario logic, making the model easier to audit and m
 
 ## Final Output Checklist
 
-Before delivering DCF model:
+Before delivering Formal DCF model:
 
 **Required:**
 - Run `python recalc.py model.xlsx 30` until status is "success" (zero formula errors)
@@ -1269,3 +1392,23 @@ Before delivering DCF model:
 - Terminal growth < WACC
 - Tax rate 21-28%
 - File naming: `[Ticker]_DCF_Model_[Date].xlsx`
+
+Before delivering Scenario DCF:
+
+**Required:**
+- Clearly label `Scenario DCF with Assumption Ledger`.
+- Produce `<target>_dcf_assumption_ledger.md`.
+- Every Revenue, EBIT margin, Tax, D&A, Capex, ΔNWC, WACC, and terminal input has: value/range, source type, source/reasoning, confidence, sensitivity treatment.
+- State which inputs are facts, consensus, business inference, proxy, and reverse implied.
+- Use ranges and scenario outputs; avoid presenting a single precise fair value unless the uncertainty is also shown.
+- Do not claim audit-level precision or formal DCF completion.
+- If Excel is produced, formulas, sensitivity tables, source comments, and validation rules still apply.
+
+Before delivering Reverse DCF:
+
+**Required:**
+- Clearly label `Reverse DCF`.
+- Start from current market cap / enterprise value.
+- Output implied UFCF, EBIT margin, FCF margin, WACC, or terminal assumptions required to support current value.
+- Compare implied values with facts, consensus, and business-inference ranges.
+- State this is a market-implied test, not a fair-value forecast.

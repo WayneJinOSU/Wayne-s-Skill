@@ -79,6 +79,10 @@ Common environment variables:
 - `LARK_BRIDGE_CONSUME_AS`: usually `bot`
 - `LARK_BRIDGE_REPLY_AS`: usually `bot`
 - `RESEARCH_TASK_TIMEOUT_SECONDS`: default long task timeout
+- `RESEARCH_SKILL_ROOTS`: optional path-delimited override for queue worker skill roots
+- `RESEARCH_EXTRA_SKILL_ROOTS`: optional path-delimited extra skill roots appended after defaults
 - `GIT_CEILING_DIRECTORIES`: set to the parent of the target repo to avoid accidental home-level Git discovery
+
+The queue worker should merge project-level skills from `.agents/skills` with user-level global skills from `$HOME/.codex/skills`. Keep reusable research and writing skills in `$HOME/.codex/skills`; keep project-specific bridge/Lark workflows in `.agents/skills`. If the same skill name exists in both roots, the project-level skill takes priority.
 
 For detailed setup, read `references/bridge-installation.md`.

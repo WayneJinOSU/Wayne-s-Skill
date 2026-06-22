@@ -1,0 +1,4 @@
+interface:
+  display_name: "L2 ETF Strategy"
+  short_description: "L2 ETF季度调仓、持仓跟踪、风险边界与回测复现助手"
+  default_prompt: "Use $l2-etf-strategy to generate the next quarterly ETF rebalance list and verify the backtest evidence."

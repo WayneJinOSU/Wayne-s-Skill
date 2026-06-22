@@ -1,0 +1,13 @@
+{
+  "as_of": "2026-06-01",
+  "status": "partial_initial_build",
+  "note": "User confirmed initial 6-ETF buy on 2026-06-01. Remaining ETF target list is intentionally deferred due to same-day weakness in chip/AI ETFs.",
+  "holdings": {
+    "159663": 1100,
+    "159667": 1100,
+    "159326": 1200,
+    "159320": 1100,
+    "159259": 1700,
+    "159732": 1600
+  }
+}

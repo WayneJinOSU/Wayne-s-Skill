@@ -18,6 +18,7 @@ for file in \
   research_queue_worker_daemon.sh \
   run_research_queue.sh \
   check_research_queue_health.sh \
+  check_skill_drift.sh \
   notify_research_result.sh
 do
   cp "$SKILL_DIR/scripts/$file" "$TARGET_DIR/scripts/$file"
@@ -32,6 +33,7 @@ chmod +x \
   "$TARGET_DIR/scripts/research_queue_worker_daemon.sh" \
   "$TARGET_DIR/scripts/run_research_queue.sh" \
   "$TARGET_DIR/scripts/check_research_queue_health.sh" \
+  "$TARGET_DIR/scripts/check_skill_drift.sh" \
   "$TARGET_DIR/scripts/notify_research_result.sh"
 
 echo "Installed Feishu Codex research bridge into: $TARGET_DIR"

@@ -67,7 +67,7 @@ PEG 估值路径
 | --- | --- | --- | --- |
 | Financial Modeling | 分业务收入/毛利率、扣非利润、EBIT、D&A、Capex、ΔNWC、OCF/UFCF、净债务/股本、股价/市值/股本、一致预期对照 | `dcf_financial_model_handoff` + 公告/一致预期/市场数据 | 列缺口，不自填 |
 | PEG | `growth-stock-valuation` 输入包：扣非利润/经营利润、利润 YoY、2-3 年 CAGR、质量折价因子、证据等级、年份切换条件、当前市值/股价/股本/来源 | `$financial-modeling` 输出的 PEG-ready 数据包 + `peg_valuation_handoff` + 市场参数 | 无 PEG-ready 数据包时不调用正式 PEG |
-| DCF | `dcf-model` 输入包：Revenue、EBIT、Tax、D&A、Capex、ΔNWC、UFCF、WACC 参数、终值、现金/债务/股本/现价、source comments | Financial Modeling 输出的 DCF-ready 数据包 + 市场参数 | 无 UFCF 或关键来源缺失时只做现金流质量提示，不调用正式 DCF |
+| DCF | `dcf-model` 输入包：Revenue、EBIT、Tax、D&A、Capex、ΔNWC、UFCF、WACC 参数、终值、现金/债务/股本/现价、source comments、assumption ledger | Financial Modeling 输出的 DCF-ready 数据包 + 市场参数 + 业务推理/proxy 台账 | 无审计级 UFCF 时不调用 Formal DCF；若有明确区间、来源类型和置信度，可调用 Scenario DCF 或 Reverse DCF |
 
 ## Evidence Admission
 
@@ -77,6 +77,30 @@ PEG 估值路径
 | B | 有条件 | 是 | 是 | IR、客户/竞品公告、认证、公开订单 |
 | C | 否，除非多源交叉且有历史锚 | 有条件 | 是 | 券商、行业报告、份额估计、市场假设 |
 | D | 否 | 否，除非明确标为趋势上沿 | 是 | 未交叉验证线索、交易热词、弱口径 |
+
+## DCF Assumption Admission
+
+DCF 可以消费推理数据，但必须带标签：
+
+| Source type | 例子 | 可进入 DCF 的方式 |
+| --- | --- | --- |
+| Fact | 年报收入、OCF、Capex、现金、债务、股本 | Formal 或 Scenario 的硬锚 |
+| Consensus | Wind/Choice/iFinD/F10/问财收入、净利、EPS、机构数 | Forecast anchor，注明日期和机构数 |
+| Business Inference | 订单转收入、毛利率改善、产能爬坡、产品结构升级 | Scenario Base/Bull，绑定触发和证伪 |
+| Proxy | OCF-Capex、EBITDA-EBIT、收入增量比例估 ΔNWC、同行 beta | 只作为情景/敏感性输入，必须给区间 |
+| Reverse Implied | 当前市值反推 UFCF / EBIT margin / WACC | Reverse DCF，不作为预测 |
+
+最低字段：
+
+```text
+field
+value_or_range
+source_type
+source_or_reasoning
+confidence
+sensitivity_treatment
+model_use
+```
 
 ## Minimal Company Context
 

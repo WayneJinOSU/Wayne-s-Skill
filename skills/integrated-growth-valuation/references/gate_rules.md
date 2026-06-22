@@ -11,11 +11,12 @@
 <标的>_valuation_scorecard.md
 <标的>_peg_valuation_deepdive.md
 <标的>_peg_valuation_scorecard.md
-<标的>_dcf_summary.md
-<标的>_dcf_validation.json
+Formal DCF: <标的>_dcf_summary.md + <标的>_dcf_validation.json
+Scenario DCF: <标的>_scenario_dcf_summary.md + <标的>_dcf_assumption_ledger.md
+Reverse DCF: <标的>_reverse_dcf_summary.md + <标的>_dcf_assumption_ledger.md
 ```
 
-若 PEG 或 DCF 上游输出缺失，只能输出缺口清单，不能称为正式聚合完成。
+若 PEG 或任何 DCF 形态的上游输出缺失，只能输出缺口清单，不能称为聚合完成。若 DCF 为 Scenario/Reverse，聚合可以通过 gate，但必须在正文标注降级模式。
 
 ## Required Content
 
@@ -40,6 +41,25 @@ DCF
 `dcf_summary.md` 应至少包含 Revenue、EBIT、Tax、NOPAT、D&A、Capex、ΔNWC、UFCF、Discount factor、PV of UFCF、Terminal value、Enterprise value、Equity value、Value per share、WACC build-up 和 sensitivity。
 
 `dcf_validation.json` 应来自 `/Users/a/.codex/skills/dcf-model/scripts/validate_dcf.py`，且不应存在 formula error 或 terminal growth >= WACC 等 HIGH 问题。
+
+若报告使用 Scenario DCF，建议同时检查：
+
+```text
+<标的>_scenario_dcf_summary.md
+<标的>_dcf_assumption_ledger.md
+<标的>_scenario_dcf_validation.json（如生成 Excel）
+```
+
+Scenario DCF summary 必须包含 `Scenario DCF`、`Assumption Ledger`、`Fact`、`Consensus`、`Business Inference`、`Proxy`、`Confidence` 或对应中文术语。
+
+若报告使用 Reverse DCF，建议同时检查：
+
+```text
+<标的>_reverse_dcf_summary.md
+<标的>_dcf_assumption_ledger.md
+```
+
+Reverse DCF 必须标注“反推 / market-implied / 当前市值隐含”，不得写成预测值。
 
 若报告声称完成正式 PEG，建议同时检查：
 

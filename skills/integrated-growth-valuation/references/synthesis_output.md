@@ -31,6 +31,26 @@
 
 `dcf_model.xlsx` 必须保留公式、WACC build-up、敏感性和 source comments；`dcf_summary.md` 展示 DCF 桥和 EV-to-equity 结果；`dcf_validation.json` 保存 validator 结果。
 
+若做 Scenario DCF，另行输出：
+
+```text
+<标的>_dcf_assumption_ledger.md
+<标的>_scenario_dcf_summary.md
+<标的>_scenario_dcf_model.xlsx
+<标的>_scenario_dcf_validation.json
+```
+
+聚合报告中的 DCF 标题必须写成 `Scenario DCF`，并摘录 assumption ledger 中的来源类型和置信度。可以并列展示情景股权价值区间，但不得称为 Formal DCF 或审计级内在价值。
+
+若做 Reverse DCF，另行输出：
+
+```text
+<标的>_dcf_assumption_ledger.md
+<标的>_reverse_dcf_summary.md
+```
+
+聚合报告中的 DCF 标题必须写成 `Reverse DCF` 或“当前市值隐含现金流检验”，并说明它是反推，不是预测。
+
 若做正式 PEG，另行输出：
 
 ```text
@@ -49,6 +69,7 @@
 | 主线阶段 | 预期型/半兑现/兑现型/高潮型/证伪型 |
 | PEG 结论 |  |
 | DCF 结论 |  |
+| DCF 模式 | Formal / Scenario / Reverse |
 | 差异提示 |  |
 | 当前市值隐含 |  |
 | 区间并列 |  |

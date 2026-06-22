@@ -62,8 +62,6 @@ def check_required_files(artifact_dir: Path, target: str) -> list[Finding]:
         f"{target}_valuation_scorecard.md",
         f"{target}_peg_valuation_deepdive.md",
         f"{target}_peg_valuation_scorecard.md",
-        f"{target}_dcf_summary.md",
-        f"{target}_dcf_validation.json",
     ]
     findings: list[Finding] = []
     for name in files:
@@ -72,6 +70,48 @@ def check_required_files(artifact_dir: Path, target: str) -> list[Finding]:
             severity = "HIGH" if "valuation_aggregate" in name else "MEDIUM"
             findings.append(Finding(severity, str(path), "Required aggregation artifact or upstream model output is missing."))
     return findings
+
+
+def detect_dcf_mode(artifact_dir: Path, target: str) -> tuple[str | None, list[Finding]]:
+    """Detect which DCF output family is available.
+
+    Formal DCF remains the highest-quality path. Scenario and Reverse DCF are
+    accepted when they have an assumption ledger, so the aggregate can disclose
+    source type and confidence instead of pretending the model is formal.
+    """
+    findings: list[Finding] = []
+
+    formal_summary = artifact_dir / f"{target}_dcf_summary.md"
+    formal_validation = artifact_dir / f"{target}_dcf_validation.json"
+    scenario_summary = artifact_dir / f"{target}_scenario_dcf_summary.md"
+    scenario_model = artifact_dir / f"{target}_scenario_dcf_model.xlsx"
+    scenario_validation = artifact_dir / f"{target}_scenario_dcf_validation.json"
+    reverse_summary = artifact_dir / f"{target}_reverse_dcf_summary.md"
+    ledger = artifact_dir / f"{target}_dcf_assumption_ledger.md"
+
+    if formal_summary.exists() and formal_validation.exists():
+        return "formal", findings
+
+    if scenario_summary.exists():
+        if not ledger.exists():
+            findings.append(Finding("HIGH", str(ledger), "Scenario DCF output is missing the required assumption ledger."))
+        if scenario_model.exists() and not scenario_validation.exists():
+            findings.append(Finding("MEDIUM", str(scenario_validation), "Scenario DCF Excel exists but scenario validation JSON is missing."))
+        return "scenario", findings
+
+    if reverse_summary.exists():
+        if not ledger.exists():
+            findings.append(Finding("HIGH", str(ledger), "Reverse DCF output is missing the required assumption ledger."))
+        return "reverse", findings
+
+    findings.append(
+        Finding(
+            "HIGH",
+            str(artifact_dir),
+            "No DCF output found. Expected Formal DCF, Scenario DCF, or Reverse DCF outputs.",
+        )
+    )
+    return None, findings
 
 
 def check_report_content(report: Path) -> list[Finding]:
@@ -103,6 +143,41 @@ def check_report_content(report: Path) -> list[Finding]:
     return findings
 
 
+def check_dcf_mode_disclosure(report: Path, dcf_mode: str | None) -> list[Finding]:
+    if not report.exists() or dcf_mode is None:
+        return []
+
+    text = read_text(report)
+    findings: list[Finding] = []
+
+    if dcf_mode == "scenario":
+        required_any = ["Scenario DCF", "情景 DCF", "情景DCF"]
+        if not any(term in text for term in required_any):
+            findings.append(Finding("HIGH", str(report), "Scenario DCF aggregation must explicitly label the DCF mode."))
+        disclosure_groups = [
+            ("assumption ledger", ["Assumption Ledger", "假设台账"]),
+            ("confidence", ["Confidence", "置信度"]),
+            ("proxy", ["Proxy", "代理值", "代理"]),
+            ("business inference", ["Business Inference", "业务推理", "业务假设"]),
+        ]
+        for label, terms in disclosure_groups:
+            if not any(term in text for term in terms):
+                findings.append(Finding("MEDIUM", str(report), f"Scenario DCF aggregation should disclose assumption-ledger signal: {label}"))
+
+    if dcf_mode == "reverse":
+        required_any = ["Reverse DCF", "反推", "隐含"]
+        if not any(term in text for term in required_any):
+            findings.append(Finding("HIGH", str(report), "Reverse DCF aggregation must explicitly label the DCF mode as reverse/implied."))
+
+    if dcf_mode in {"scenario", "reverse"}:
+        banned_phrases = ["正式 DCF 完成", "Formal DCF completed", "审计级", "完整 DCF 已完成"]
+        for phrase in banned_phrases:
+            if phrase in text:
+                findings.append(Finding("HIGH", str(report), f"Downgraded DCF mode is misrepresented as formal: {phrase}"))
+
+    return findings
+
+
 def check_handoff_content(path: Path, required_terms: list[str]) -> list[Finding]:
     if not path.exists():
         return []
@@ -114,16 +189,22 @@ def check_handoff_content(path: Path, required_terms: list[str]) -> list[Finding
     return findings
 
 
-def check_dcf_model_outputs(artifact_dir: Path, target: str) -> list[Finding]:
+def check_dcf_model_outputs(artifact_dir: Path, target: str, dcf_mode: str | None) -> list[Finding]:
     findings: list[Finding] = []
-    validation_path = artifact_dir / f"{target}_dcf_validation.json"
-    if validation_path.exists():
+    if dcf_mode == "formal":
+        validation_path = artifact_dir / f"{target}_dcf_validation.json"
+    elif dcf_mode == "scenario":
+        validation_path = artifact_dir / f"{target}_scenario_dcf_validation.json"
+    else:
+        validation_path = None
+
+    if validation_path and validation_path.exists():
         try:
             validation = json.loads(read_text(validation_path))
         except json.JSONDecodeError:
             findings.append(Finding("HIGH", str(validation_path), "DCF validation JSON is invalid."))
         else:
-            if validation.get("status") not in {None, "PASS"}:
+            if validation.get("status") not in {None, "PASS", "SCENARIO_PASS"}:
                 findings.append(Finding("HIGH", str(validation_path), "dcf-model validation did not pass."))
             for error in validation.get("errors", []):
                 findings.append(Finding("HIGH", str(validation_path), f"DCF validation error: {error}"))
@@ -160,8 +241,11 @@ def main() -> int:
 
     findings: list[Finding] = []
     findings.extend(check_required_files(artifact_dir, target))
+    dcf_mode, dcf_mode_findings = detect_dcf_mode(artifact_dir, target)
+    findings.extend(dcf_mode_findings)
     findings.extend(check_report_content(artifact_dir / f"{target}_valuation_aggregate.md"))
-    findings.extend(check_dcf_model_outputs(artifact_dir, target))
+    findings.extend(check_dcf_mode_disclosure(artifact_dir / f"{target}_valuation_aggregate.md", dcf_mode))
+    findings.extend(check_dcf_model_outputs(artifact_dir, target, dcf_mode))
     findings.extend(check_peg_model_outputs(artifact_dir, target))
 
     if not findings:

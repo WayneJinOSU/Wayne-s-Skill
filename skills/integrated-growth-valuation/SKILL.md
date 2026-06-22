@@ -16,7 +16,7 @@ description: 成长股估值聚合器；只读取 growth-stock-valuation 的 PEG
 ```text
 Financial Modeling -> 给两个模型提供利润锚和 UFCF 底稿
 growth-stock-valuation -> PEG / 动态 PE 估值输出
-skills/dcf-model -> DCF Excel、summary、validation 输出
+skills/dcf-model -> Formal DCF、Scenario DCF 或 Reverse DCF 输出
 Integrated Growth Valuation -> 聚合两个输出，形成统一阅读稿和 scorecard
 ```
 
@@ -28,6 +28,7 @@ Integrated Growth Valuation -> 聚合两个输出，形成统一阅读稿和 sco
 - 不机械平均 PEG 与 DCF，不创造一个“综合目标价”来覆盖两个模型原始输出。
 - 可以输出统一摘要、模型并列表、差异提示、当前市值隐含情景、证伪点和跟踪清单。
 - 默认不输出买卖评级、仓位建议或确定性收益承诺。
+- 若 DCF 是 `Scenario DCF` 或 `Reverse DCF`，聚合报告必须显著标注模型等级和输入置信度，不得写成 Formal DCF 或审计级内在价值。
 
 ## When To Use
 
@@ -58,6 +59,24 @@ research_artifacts/<标的>/
   <标的>_dcf_validation.json
 ```
 
+若 `dcf-model` 输出为情景版或反推版，可替代读取：
+
+```text
+research_artifacts/<标的>/
+  <标的>_scenario_dcf_summary.md
+  <标的>_scenario_dcf_model.xlsx
+  <标的>_scenario_dcf_validation.json
+  <标的>_dcf_assumption_ledger.md
+```
+
+或：
+
+```text
+research_artifacts/<标的>/
+  <标的>_reverse_dcf_summary.md
+  <标的>_dcf_assumption_ledger.md
+```
+
 可选读取：
 
 ```text
@@ -66,7 +85,7 @@ research_artifacts/<标的>/
 <标的>_final_report.md
 ```
 
-若 PEG 或 DCF 核心输出缺失，不能生成正式聚合结论；只输出缺口清单。
+若 PEG 或任何 DCF 形态的核心输出均缺失，不能生成聚合结论；只输出缺口清单。若只有 Scenario/Reverse DCF，可生成降级聚合，但必须标注 `Scenario DCF aggregation` 或 `Reverse DCF aggregation`。
 
 ## Workflow
 
@@ -77,11 +96,12 @@ research_artifacts/<标的>/
 ```text
 <标的>_peg_valuation_deepdive.md
 <标的>_peg_valuation_scorecard.md
-<标的>_dcf_summary.md
-<标的>_dcf_validation.json
+Formal: <标的>_dcf_summary.md + <标的>_dcf_validation.json
+Scenario: <标的>_scenario_dcf_summary.md + <标的>_dcf_assumption_ledger.md
+Reverse: <标的>_reverse_dcf_summary.md + <标的>_dcf_assumption_ledger.md
 ```
 
-缺任一核心文件时，只列缺口和下一步要运行的 skill。
+缺 PEG 或缺任何 DCF 形态时，只列缺口和下一步要运行的 skill。
 
 ### Step 2: 摘取 PEG 与 DCF 结论
 
@@ -98,10 +118,11 @@ research_artifacts/<标的>/
 从 DCF 输出摘取：
 
 ```text
+DCF mode: Formal / Scenario / Reverse
 企业价值、股权价值、每股价值/目标市值
 WACC、终值假设、UFCF 路径
 敏感性区间
-validation 状态和主要警告
+validation 状态和主要警告（Scenario DCF 若无 Excel，读取 assumption ledger 的置信度和敏感性）
 现金流质量约束
 ```
 
@@ -158,3 +179,4 @@ research_artifacts/<标的>/
 6. 若 PEG 与 DCF 差异大，只做差异提示和跟踪清单。
 7. DCF validation 未通过时，聚合报告必须把 DCF 标记为未通过校验。
 8. 最终回复用户时说明聚合了哪些上游文件、哪些文件缺失、闸门是否通过。
+9. Scenario/Reverse DCF 可以参与聚合，但聚合结论不得称为正式 PEG+DCF 完整估值；应称为“PEG + Scenario DCF 聚合”或“PEG + Reverse DCF 隐含检验”。

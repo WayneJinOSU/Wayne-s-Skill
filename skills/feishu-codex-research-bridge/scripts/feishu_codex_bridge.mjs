@@ -338,6 +338,7 @@ function normalizeSkill(raw = "auto") {
   if (["chassis", "chassis-growth", "chassis-growth-agentic", "chassis-growth-agentic-research", "成长股", "底盘", "底盘成长"].includes(value)) return "chassis-growth-agentic-research";
   if (["catalyst", "tracker", "equity-catalyst", "equity-catalyst-tracker", "爆点", "跟踪", "催化"].includes(value)) return "equity-catalyst-tracker";
   if (["valuation", "growth-stock-valuation", "估值", "peg"].includes(value)) return "growth-stock-valuation";
+  if (["xhs", "redbook", "xiaohongshu", "finance-research-xhs", "小红书", "小红书写作", "投研小红书", "笔记", "长文笔记"].includes(value)) return "finance-research-xhs";
   if (["industry", "industry-chain", "industry-chain-agentic", "industry-chain-agentic-research", "行业", "产业链"].includes(value)) return "industry-chain-agentic-research";
   return value;
 }
@@ -349,6 +350,7 @@ function isKnownSkill(raw = "") {
     "chassis-growth-agentic-research",
     "equity-catalyst-tracker",
     "growth-stock-valuation",
+    "finance-research-xhs",
     "industry-chain-agentic-research",
   ].includes(normalizeSkill(raw));
 }

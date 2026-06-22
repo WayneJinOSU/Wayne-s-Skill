@@ -1,0 +1,61 @@
+{
+  "as_of": "2026-06-10",
+  "status": "initial_build_completed_20_etfs",
+  "source": "User broker screenshot at 2026-06-10 16:08 plus prior confirmed ETF fills.",
+  "note": "ETF/fund holdings are handled by the separate L2 ETF plan and excluded from Turtle stock strategy. Initial build is complete. 159381 is above the original equal-weight target and should be corrected only at the next quarterly rebalance unless the user explicitly requests an interim rebalance.",
+  "target_allocation_rmb": 50000.0,
+  "market_value_snapshot": 49210.6,
+  "unrealized_pnl_snapshot": 71.84,
+  "holdings": {
+    "515050": 2100,
+    "159327": 900,
+    "159381": 1800,
+    "159388": 2100,
+    "159663": 1100,
+    "159242": 1000,
+    "159382": 800,
+    "159363": 1800,
+    "159667": 1100,
+    "159246": 1900,
+    "159279": 1500,
+    "512480": 1200,
+    "159326": 1200,
+    "159325": 1100,
+    "159259": 1700,
+    "159320": 1100,
+    "512760": 2200,
+    "159732": 1600,
+    "159801": 2100,
+    "159781": 2000
+  },
+  "cost_basis": {
+    "159279": 1.558,
+    "159382": 2.95,
+    "159246": 1.301,
+    "159363": 1.424,
+    "159242": 2.385,
+    "159801": 1.194,
+    "159781": 1.263,
+    "512480": 2.113,
+    "159388": 1.167,
+    "159381": 1.389
+  },
+  "trade_log": [
+    {
+      "date": "2026-06-09",
+      "action": "BUY",
+      "code": "159363",
+      "shares": 1800,
+      "cost": 1.424,
+      "source": "User confirmed in chat"
+    },
+    {
+      "date": "2026-06-10",
+      "action": "BUILD_COMPLETE",
+      "code": "ETF_BUCKET",
+      "shares": null,
+      "cost": null,
+      "source": "User confirmed ETF build completed with broker screenshot; fund market value 49210.60, unrealized PnL 71.84."
+    }
+  ]
+}

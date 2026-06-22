@@ -1,7 +1,7 @@
 interface:
   display_name: "Agentic 底盘型成长股研究"
   short_description: "底盘型成长股深研：私有模块、多角色、反摘要终稿、三表/估值接力"
-  default_prompt: "Use $chassis-growth-agentic-research for a formal A-share chassis growth stock report: follow its progressive references and private modules, run grouped role-separated research using the 5 research subagents + 2 QA subagents pattern or file-based substitutes, build facts_core/evidence_queue/evidence index/midterm QA/skeptic QA/final report gate, preserve offensive market-repricing variables with evidence boundaries, pass prior files by Fact-ID, short summaries, or targeted snippets rather than full upstream dumps, prepare dcf_financial_model_handoff for $dcf-valuation-workflow and peg_valuation_handoff for $growth-stock-valuation, and do not put target price, target market cap, buy/sell rating, PE/PEG/SOTP conclusions, or formal valuation advice in final_report."
+  default_prompt: "Use $chassis-growth-agentic-research for a formal A-share chassis growth stock report: follow its progressive references and private modules, run grouped role-separated research using the 5 research subagents + 2 QA subagents pattern or file-based substitutes, build facts_core/evidence_queue/evidence index/midterm QA/skeptic QA/final report gate, preserve offensive market-repricing variables with evidence boundaries, pass prior files by Fact-ID, short summaries, or targeted snippets rather than full upstream dumps, prepare focused post-report valuation handoffs only after final_report gate passes, and do not put target price, target market cap, buy/sell rating, PE/PEG/SOTP conclusions, or formal valuation advice in final_report."
 
 policy:
   allow_implicit_invocation: true

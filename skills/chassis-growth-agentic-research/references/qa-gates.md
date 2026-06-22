@@ -11,7 +11,7 @@
 - 检查 `investment_logic_card` 是否有且只有一条第一主线，并完整回答最大预期差/核心分歧、最短因果链、核心利润变量/第一驱动参数、第二/第三驱动参数和非核心信息如何降级或删除。若只是列多个看点，没有排序和取舍，必须重写。
 - 检查利润桥是否足以支撑终稿讨论利润中枢和利润斜率：至少说明收入、毛利率、费用、capex、营运资本、现金流、少数股东/投资收益和关键敏感变量如何影响主线。若缺失，必须补写利润桥或证据边界。
 - 检查利润桥是否有最小可计算模型：单位经济、数量乘数、兑现节奏、保守/中性/乐观利润中枢区间和敏感性。若只写“待验证/方向改善/利润中枢有望上移”，必须补写。
-- 中期 QA 不检查正式 `dcf_financial_model_handoff` 或 `peg_valuation_handoff`；正式 handoff 字段完整性和 PEG 系数机制只在 post-report handoff QA 检查。
+- 中期 QA 不检查 post-report `dcf_financial_model_handoff` 或 `peg_valuation_handoff`；handoff 字段完整性和 PEG 系数机制只在 post-report handoff QA 检查。
 - 检查是否缺“进攻型主线”：市场到底在押什么、为什么不是旧业务修复/普通扩产/概念映射、客户份额/毛利率/产品放量若成立如何改变利润斜率、下一季什么信号会让逻辑升级。
 - 检查所有核心模块是否都映射到同一个利润模型：每个模块必须说明自己影响单位经济、数量乘数、兑现节奏、份额、ASP、毛利率、费用率、折旧/财务成本、税率、少数股东或现金回收中的哪一项；不能映射的内容应降级为背景、跟踪或删除。
 - 检查是否有“先反方后主线”的倾向：若提纲或终稿开篇以“证据不足、仍需验证、兑现闸门、现金流压力、治理折价、风险提示”为主语，而没有先写核心交易逻辑和利润弹性，必须重写提纲。
@@ -59,7 +59,7 @@
 9. 随机抽查 10 个正文段落，逐段做入场券测试：是否包含公司特定事实/数字、是否影响利润参数、是否增强/校准/证伪第一主线、是否给验证/证伪指标。任一段 4 项全无，必须删除；只有 1 项且只是背景，必须压缩。
 10. 搜索“估值、目标价、目标市值、PE、PEG、SOTP、赔率、定价”等词。
 11. 若出现在 final_report 中形成估值结论，必须删除。
-    - PEG 侧：市场隐含预期、最小利润模型、PEG 估值因子、PEG-ready 候选利润锚、情景准入、年份切换或质量折价，可移至正文利润模型或 post-report `peg_valuation_handoff` 的待承接清单。
+    - PEG 侧：市场隐含预期、最小利润模型、PEG 估值因子、利润锚准入纪律、情景准入、年份切换或质量折价，可移至正文利润模型或 post-report `peg_valuation_handoff` 的待承接清单。
     - DCF 侧：三表/FCF 驱动、DCF-ready 候选字段、WACC、UFCF 或 validation 驱动，可移至 post-report `dcf_financial_model_handoff` 的待承接清单。
     - 两类接力都不得形成目标价、目标市值、买卖建议或“当前贵不贵”。
 12. 随机抽查 3 个核心章节：如果章节主要由表格和短结论组成，必须补写段落。
@@ -75,12 +75,12 @@
 
 ## Post-Report Handoff QA
 
-正式 valuation handoff QA 只能在 `final_report` 完成、`skeptic_review` 存在且 `scripts/final_report_gate.py` PASS 之后执行。
+Post-report handoff QA 在 `final_report` 完成、`skeptic_review` 存在且 `scripts/final_report_gate.py` PASS 之后执行；两个 handoff 都必须存在。
 
 检查项：
 
-- `<prefix>_dcf_financial_model_handoff.md` 和 `<prefix>_peg_valuation_handoff.md` 必须同时存在，且生成时间不得早于 `<prefix>_final_report.md`。
-- 两个文件都必须写明 `handoff_status: final_report_passed`、source paths、gate status 和 generation time。
-- `dcf_financial_model_handoff` 必须把终稿后的研究变量翻译成 `$dcf-valuation-workflow` / `$financial-modeling` 可消费的 DCF-ready/UFCF bridge、validation 要求和数据缺口。
+- `<prefix>_dcf_financial_model_handoff.md` 和 `<prefix>_peg_valuation_handoff.md` 必须都存在，且不得早于 `<prefix>_final_report.md`。
+- 两个 handoff 文件必须写明 `handoff_status: final_report_passed`、source paths、gate status 和 generation time。
+- `dcf_financial_model_handoff` 只检查 DCF 准入、UFCF guardrails 和阻断缺口；不得重建三表、填正式预测或输出 DCF 结论。
 - `peg_valuation_handoff` 必须把终稿后的研究变量翻译成 PEG 因子消费规则，并逐项说明如何影响 PEG 系数：提高、降低、封顶、仅允许乐观情景、阻止年份切换或暂不影响。
 - 任一 handoff 写成目标价、目标市值、买卖建议、半份估值报告或正式 PEG/DCF 结论，必须重写。

@@ -18,7 +18,7 @@
 - 核心变量段落必须落到“成立时利润如何变，不成立时逻辑降级成什么”。
 - 每个核心段落必须落到利润模型参数：单位经济、数量乘数、兑现节奏、份额、ASP、毛利率、费用率、折旧/财务成本、税率、少数股东或现金回收。不能落到参数的内容，压缩成背景或删除。
 - 表格只能做索引、对比和数字承载；关键推理必须用段落讲清楚。
-- `final_report.md` 不放独立估值章节，不写目标价、目标市值、PE/PEG/SOTP、买卖建议或“当前贵不贵”的正式估值结论。PEG 估值因子、情景准入和模型消费规则由终稿 gate 通过后的 `peg_valuation_handoff.md` 承接；三表/FCF/UFCF 驱动和 DCF-ready 候选字段由终稿 gate 通过后的 `dcf_financial_model_handoff.md` 承接，并由 `$dcf-valuation-workflow` 主控 Financial Modeling 与 dcf-model 完成 DCF 闭环；正式预测和估值结论由后续估值系统生成。
+- `final_report.md` 不放独立估值章节，不写目标价、目标市值、PE/PEG/SOTP、买卖建议或“当前贵不贵”的正式估值结论。PEG 估值因子、情景准入、模型消费规则、三表/FCF/UFCF 驱动和 DCF-ready 候选字段只作为研究 readiness 或 focused post-report handoff；正式预测和估值结论由后续估值系统生成。
 
 ## 反废话与反说教硬约束
 

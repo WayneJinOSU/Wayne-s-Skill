@@ -71,7 +71,7 @@ Token discipline:
 
 ## Subagent Role Packet
 
-本节优化正式研究、QA 和终稿前阶段的上下文传递；正式 post-report valuation handoff 阶段仍按下方 `Post-Report Valuation Handoff Stage` 和 `references/handoffs.md` 执行，不在本轮改动范围内。
+本节优化正式研究、QA 和终稿前阶段的上下文传递；post-report valuation handoff 阶段按下方 `Post-Report Valuation Handoff Stage` 和 `references/handoffs.md` 执行。
 
 启动每个 subagent 时，主控必须传入一个最小 `role_packet`，不能只给角色名，也不能把完整上游文件作为常规输入：
 
@@ -92,9 +92,9 @@ Token discipline:
 
 ## Post-Report Valuation Handoff Stage
 
-正式估值接力不属于 `5+2` 研究 subagent 的中期产物。`final_report` 完成、`skeptic_review` 存在且 `scripts/final_report_gate.py` PASS 后，主控再启动一个 valuation-handoff subagent 或等价文件化阶段。
+估值接力不属于 `5+2` 研究 subagent 的中期产物。`final_report` 完成、`skeptic_review` 存在且 `scripts/final_report_gate.py` PASS 后，主控启动一个 valuation-handoff subagent 或等价文件化阶段。
 
-该阶段读取 `final_report`、`skeptic_review`、`profit_bridge`、`tracking_dashboard`、`evidence_grading`、`facts_core` 和必要片段，写且只写两个正式接力文件：
+该阶段读取 `final_report`、`skeptic_review`、`profit_bridge`、`tracking_dashboard`、`evidence_grading`、`facts_core` 和必要片段，写两个轻量接力文件：
 
 ```text
 <prefix>_dcf_financial_model_handoff.md

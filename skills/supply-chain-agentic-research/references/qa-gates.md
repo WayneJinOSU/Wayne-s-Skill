@@ -62,12 +62,12 @@
 
 ## Post-Report Handoff QA
 
-正式 valuation handoff QA 只能在 `final_report` 完成、`skeptic_review` 存在且 `scripts/final_report_gate.py` PASS 之后执行。
+Post-report handoff QA 在 `final_report` 完成、`skeptic_review` 存在且 `scripts/final_report_gate.py` PASS 之后执行；两个 handoff 都必须存在。
 
 检查项：
 
-- `<prefix>_dcf_financial_model_handoff.md` 和 `<prefix>_peg_valuation_handoff.md` 必须同时存在，且生成时间不得早于 `<prefix>_final_report.md`。
-- 两个文件都必须写明 `handoff_status: final_report_passed`、source paths、gate status 和 generation time。
-- `dcf_financial_model_handoff` 必须把终稿后的研究变量翻译成 `$dcf-valuation-workflow` / `$financial-modeling` 可消费的 DCF-ready/UFCF bridge、validation 要求和数据缺口。
+- `<prefix>_dcf_financial_model_handoff.md` 和 `<prefix>_peg_valuation_handoff.md` 必须都存在，且不得早于 `<prefix>_final_report.md`。
+- 两个 handoff 文件必须写明 `handoff_status: final_report_passed`、source paths、gate status 和 generation time。
+- `dcf_financial_model_handoff` 只检查 DCF 准入、UFCF guardrails 和阻断缺口；不得重建三表、填正式预测或输出 DCF 结论。
 - `peg_valuation_handoff` 必须把终稿后的研究变量翻译成 PEG 因子消费规则，并逐项说明如何影响 PEG 系数：提高、降低、封顶、仅允许乐观情景、阻止年份切换或暂不影响。
 - 任一 handoff 写成目标价、目标市值、买卖建议、半份估值报告或正式 PEG/DCF 结论，必须重写。

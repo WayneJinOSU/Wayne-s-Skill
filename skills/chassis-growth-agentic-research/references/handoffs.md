@@ -96,7 +96,7 @@ Token discipline:
 
 ### PEG 候选利润锚骨架
 
-下表只记录投研候选锚和情景边界，不是正式 PEG-ready 数据包。正式利润锚、YoY 和 CAGR 以后续 `$financial-modeling` 输出为准。
+下表只记录投研候选锚和情景边界，不是正式 PEG-ready 数据包。正式利润锚、YoY 和 CAGR 以后续 `$growth-stock-valuation` 的 PEG-ready 生成或确认结果为准；本 handoff 必须保留给 PEG skill 的利润锚边界和 PEG 系数机制。
 
 | 年份 | 利润口径 | 一致预期 | 投研候选中性 | 投研候选乐观 | YoY 增速 | CAGR 区间 | 证据等级 | 备注 |
 | --- | --- | ---: | ---: | ---: | ---: | --- | --- | --- |

@@ -51,7 +51,7 @@
 9. 输出利润侧市场变量交付：行业经济性、份额、客户导入、产品放量、平台复用、毛利率、费用率、折旧和少数股东权益等变量的证据等级、成立/不成立时的利润斜率变化。
 10. 输出上行情景交付：哪些变量触发中性到乐观利润斜率切换，哪些变量会让利润桥从上行降级回旧业务底盘。
 11. 列出会让利润桥失效的反证条件，并说明它会下修哪一个模型参数，而不是只列风险。
-12. 为终稿 gate 通过后的 `dcf_financial_model_handoff` 预留三表/FCF 驱动、PEG-ready 候选字段和 DCF-ready 候选字段：收入拆分/增速、扣非或经营利润、YoY、CAGR、一致预期对照、毛利率、费用率、折旧、capex、应收/存货/应付或营运资本变化、税率、利息/债务、少数股东/投资收益和 UFCF 影响；缺数据时写清待补项，不硬编数字。
+12. 为终稿 gate 通过后的两个正式 handoff 分别预留字段：`dcf_financial_model_handoff` 只承接三表/FCF/UFCF 与 DCF-ready 候选字段，包括收入拆分/增速、毛利率、费用率、折旧、capex、应收/存货/应付或营运资本变化、税率、利息/债务和 UFCF 影响；`peg_valuation_handoff` 单独承接 PEG 利润锚与估值因子，包括扣非或经营利润、YoY、CAGR、一致预期对照、利润质量、年份切换和 PEG 系数影响机制。缺数据时写清待补项，不硬编数字。
 13. 默认只做轻量利润中枢、利润斜率和敏感变量；正式 PEG 交给 `$growth-stock-valuation`，正式 DCF 交给 `$dcf-valuation-workflow` 主控 `$financial-modeling` 和 `dcf-model`。
 
 ## Output

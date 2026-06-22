@@ -2,7 +2,13 @@
 
 ## 目标
 
-本 skill 不替代 `$tushare`、`$wencai-query`、公告 PDF 处理、外部搜索或 Gemini Google Search 能力。它负责确定证据链、调用顺序、市场变量扩表和口径解释。正式 PEG 估值交给 `$growth-stock-valuation`，正式 DCF 估值交给 `$dcf-valuation-workflow` 主控 `$financial-modeling` 和 `dcf-model`；本文件只说明哪些数据应进入研究阶段候选字段，以及终稿 gate 通过后的 `dcf_financial_model_handoff` 和 `peg_valuation_handoff`。DCF-ready 数据包由 `$dcf-valuation-workflow` 调用 `$financial-modeling` 从 post-report `dcf_financial_model_handoff` 拆出；PEG-ready 输入由 `$growth-stock-valuation` 自己确认或生成。
+本 skill 不替代 `$tushare`、`$wencai-query`、公告 PDF 处理、外部搜索或 Gemini Google Search 能力。它负责确定证据链、调用顺序、市场变量扩表和口径解释。
+
+正式 PEG 估值交给 `$growth-stock-valuation`。PEG-ready 输入由 `$growth-stock-valuation` 自己确认或生成。
+
+正式 DCF 估值交给 `$dcf-valuation-workflow` 主控 `$financial-modeling` 和 `dcf-model`。DCF-ready 数据包由 `$dcf-valuation-workflow` 调用 `$financial-modeling` 从 post-report `dcf_financial_model_handoff` 拆出。
+
+本文件只说明哪些数据应进入研究阶段候选字段，以及终稿 gate 通过后的 `dcf_financial_model_handoff` 和 `peg_valuation_handoff`。
 
 ## 证据优先级
 

@@ -266,7 +266,7 @@ After that gate passes, launch one valuation-handoff subagent or equivalent post
 
 These files are the bridges from finished research to later modeling and valuation:
 
-- `dcf_financial_model_handoff`: financial modeling inputs, PEG-ready candidate fields, DCF-ready / UFCF bridge requirements, and data gaps.
+- `dcf_financial_model_handoff`: financial modeling inputs, DCF-ready / UFCF bridge requirements, and data gaps.
 - `peg_valuation_handoff`: PEG factor treatment, scenario admission, quality discounts, year-switching limits, validation metrics, and prohibitions.
 
 Both handoffs must include `handoff_status: final_report_passed`, source file paths, gate status, and generation time. Neither handoff may contain target price, target market cap, buy/sell language, or formal PEG / DCF conclusions.

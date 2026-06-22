@@ -101,10 +101,10 @@ Fetch data from MCP servers, user provided data, and the web.
 4. **Web Search/Fetch** - Current prices, beta, debt and cash when needed
 
 **Financial Modeling Handoff Boundary:**
-- Do not consume `peg_valuation_handoff` for DCF assumptions; it is for PEG band, quality discount, year-switching, and disconfirmation boundaries.
-- Do not use net income, recurring profit, adjusted attributable profit, or EBITDA as a substitute for UFCF.
+- DCF assumptions come from the DCF-ready package, assumption ledger, market data, and source-backed operating forecast. `peg_valuation_handoff` is a separate PEG valuation handoff for band, quality discount, year-switching, and disconfirmation boundaries.
+- UFCF is the cash-flow basis for DCF; net income, recurring profit, adjusted attributable profit, and EBITDA are supporting references rather than UFCF substitutes.
 - If Revenue, EBIT, Tax, D&A, Capex, or ΔNWC are missing from the DCF-ready package and cannot be sourced as facts, stop only the **Formal DCF** path. You may still build **Scenario DCF** or **Reverse DCF** if every inferred/proxy input has an explicit source type, confidence score, range, and sensitivity treatment.
-- DCF output must remain independent from PEG output; do not use PEG target market cap to calibrate WACC, terminal value, or exit multiple.
+- DCF output remains independent from PEG output. WACC, terminal value, and exit multiple are calibrated from DCF-ready inputs, market data, and source-backed assumptions.
 
 ## Valuation Modes
 

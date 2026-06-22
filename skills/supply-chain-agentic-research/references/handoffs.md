@@ -98,7 +98,7 @@ PEG 核心因子接口：
 | 市场环境 | 震荡市/结构牛/主升浪/高潮期 | 决定倍数上限 |  |  |
 | 证伪压力 | 毛利率、现金流、合同负债、存货等风险 | 压低 PEG 或限制年份切换 |  |  |
 
-进入正式估值阶段时，PEG 由 `$growth-stock-valuation` 独立消费 `peg_valuation_handoff`；DCF 由 `$dcf-valuation-workflow` 主控 `$financial-modeling` 生成 DCF-ready 数据包并继续调用 `dcf-model`。两条估值链路平行独立，不再通过综合估值 skill 聚合；任何后续比较只能在报告层并列引用，且不得倒灌进 `final_report` 形成目标价、目标市值、买卖建议或“当前贵不贵”的正式估值结论。
+进入正式估值阶段时，PEG 由 `$growth-stock-valuation` 独立消费 `peg_valuation_handoff`；DCF 由 `$dcf-valuation-workflow` 主控 `$financial-modeling` 生成 DCF-ready 数据包并继续调用 `dcf-model`。两条估值链路平行独立；任何后续比较在报告层并列引用，且不得倒灌进 `final_report` 形成目标价、目标市值、买卖建议或“当前贵不贵”的正式估值结论。
 
 ## Post-Report Valuation Handoff Override
 

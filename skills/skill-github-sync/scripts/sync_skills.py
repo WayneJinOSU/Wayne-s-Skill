@@ -91,7 +91,7 @@ def default_readme_tail() -> str:
             "- `financial-modeling`：把研究主控输出的 `dcf_financial_model_handoff` 转成三表、FCF、UFCF 和 DCF-ready 数据包，不输出目标价或最终估值结论。",
             "- `dcf-model`：只基于 DCF-ready 现金流输入独立生成 DCF Excel、summary 和 validation。",
             "",
-            "`integrated-growth-valuation` 已删除；PEG 与 DCF 如需对照，只在报告层并列引用两个独立产物。",
+            "PEG 与 DCF 如需对照，只在报告层并列引用两个独立产物。",
             "",
             "## 如何调用技能",
             "",

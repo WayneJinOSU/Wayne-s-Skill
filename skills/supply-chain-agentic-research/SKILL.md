@@ -9,7 +9,7 @@ description: 独立主控供应链平台型成长股正式研究；用私有 mod
 
 这是一个独立主控 skill，直接编排供应链平台型成长股研究的私有 modules，并通过多角色研究、中间文件、市场变量扩表、技术路线到价值量、原材料价格链、竞争/客户认证链、订单经营验证、利润桥、跟踪体系、两轮 QA 和投资人写作控制输出质量。`final_report` 是本 skill 的主终点；它负责把市场为什么交易公司、技术路线如何改变价值量、订单如何变收入、收入如何变利润、利润如何变现金流、哪些信号会让主线升级或证伪讲清楚。
 
-本 skill 在研究阶段只沉淀两类研究接力候选输入；终稿 gate 通过后再生成两类正式研究接力文件：`dcf_financial_model_handoff` 交给 `$dcf-valuation-workflow`，由其主控 `$financial-modeling` 形成 DCF-ready 数据包并继续调用 `dcf-model`；`peg_valuation_handoff` 交给 `$growth-stock-valuation` 判断 PEG/动态 PE 的质性边界和 PEG 系数影响机制。PEG 与 DCF 平行独立，不再通过综合估值 skill 聚合。`final_report` 不写目标价、目标市值、PE/PEG/SOTP、买卖评级或明确投资建议。
+本 skill 在研究阶段只沉淀两类研究接力候选输入；终稿 gate 通过后再生成两类正式研究接力文件：`dcf_financial_model_handoff` 交给 `$dcf-valuation-workflow`，由其主控 `$financial-modeling` 形成 DCF-ready 数据包并继续调用 `dcf-model`；`peg_valuation_handoff` 交给 `$growth-stock-valuation` 判断 PEG/动态 PE 的质性边界和 PEG 系数影响机制。PEG 与 DCF 平行独立；若后续需要对照，在报告层并列引用两个独立产物。`final_report` 不写目标价、目标市值、PE/PEG/SOTP、买卖评级或明确投资建议。
 
 Token discipline:
 
@@ -33,7 +33,7 @@ Token discipline:
 
 prefix 允许中文、英文字母、数字和下划线；空格、斜杠、冒号、括号、连字符、标点统一改为下划线，连续下划线压成一个。不要把日期放入常规 prefix；同一对象多次研究需要区分时，在末尾追加主题短码，例如 `A_300750_宁德时代_储能`。`artifact_key` 固定使用小写 `snake_case`，不得混用中文、空格、连字符或临时编号。
 
-跨投研 skill 的通用命名固定如下：`question`、`facts_core`、`evidence_queue`、`evidence_index`、`market_variables_map`、`midterm_structure_review`、`skeptic_review`、`report_outline`、`final_report_expansion_plan`、`final_report`。投研到模型的接力文件只使用 `dcf_financial_model_handoff` 和 `peg_valuation_handoff`；`peg_valuation_deepdive`、`peg_valuation_scorecard`、`dcf_summary`、`dcf_model`、`dcf_validation`、`valuation_aggregate` 和 `valuation_scorecard` 只能由后续估值 skill 生成。
+跨投研 skill 的通用命名固定如下：`question`、`facts_core`、`evidence_queue`、`evidence_index`、`market_variables_map`、`midterm_structure_review`、`skeptic_review`、`report_outline`、`final_report_expansion_plan`、`final_report`。投研到模型的接力文件只使用 `dcf_financial_model_handoff` 和 `peg_valuation_handoff`；PEG deepdive/scorecard 与 DCF summary/model/validation 属于后续估值阶段产物。
 
 ## When To Use
 
@@ -139,7 +139,7 @@ research_artifacts/<prefix>/
   <prefix>_final_report.md
 ```
 
-所有中间产物、QA、post-report 估值接力文件和终稿必须写入上述目录；不得把投研文件写到任务根目录、`artifacts/` 或其他临时目录。本 skill 只生成到 `final_report` 以及终稿 gate 通过后的 `dcf_financial_model_handoff`、`peg_valuation_handoff` 为止；`peg_valuation_deepdive`、`dcf_model`、`valuation_aggregate` 等文件只能由后续独立 skill 生成。
+所有中间产物、QA、post-report 估值接力文件和终稿必须写入上述目录；不得把投研文件写到任务根目录、`artifacts/` 或其他临时目录。本 skill 的终点是 `final_report`，以及终稿 gate 通过后的 `dcf_financial_model_handoff` 和 `peg_valuation_handoff`；PEG deepdive、DCF model 等正式估值产物属于后续估值阶段。
 
 ### Step 2: 主线假设与适用性分诊
 

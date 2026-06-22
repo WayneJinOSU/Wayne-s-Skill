@@ -1,13 +1,13 @@
 ---
 name: dcf-valuation-workflow
-description: DCF-only valuation workflow orchestrator for equity research. Use when the user asks for DCF估值, DCF闭环, intrinsic value, Formal DCF, Scenario DCF, Reverse DCF, or wants a one-pass workflow that first prepares financial-modeling DCF-ready inputs and then runs dcf-model outputs. This skill coordinates financial-modeling to dcf-model only; do not use it for PEG valuation, PEG+DCF aggregation, or 综合估值.
+description: DCF-only valuation workflow orchestrator for equity research. Use when the user asks for DCF估值, DCF闭环, intrinsic value, Formal DCF, Scenario DCF, Reverse DCF, or wants a one-pass workflow that first prepares financial-modeling DCF-ready inputs and then runs dcf-model outputs. This skill coordinates financial-modeling to dcf-model for DCF deliverables only.
 ---
 
 # DCF Valuation Workflow
 
 ## Overview
 
-This skill is the DCF control layer. It does not build the three-statement model itself, does not calculate DCF formulas itself, and does not combine PEG with DCF.
+This skill is the DCF control layer. It delegates three-statement preparation to `financial-modeling`, delegates discounting and validation to `dcf-model`, and leaves PEG comparison to the report layer.
 
 It orchestrates two independent skills:
 
@@ -20,10 +20,10 @@ dcf-model -> Formal, Scenario, or Reverse DCF model / summary / validation
 
 - Always use `$financial-modeling` before any forward DCF path.
 - Use `$dcf-model` only after a DCF-ready handoff, assumption ledger, or explicit data-gap decision exists.
-- Keep PEG fully out of scope. Do not read PEG target market cap, PEG bands, or PEG scorecards to calibrate WACC, terminal value, exit multiple, or DCF equity value.
-- Do not output buy/sell advice, target position size, or certainty language.
+- DCF model inputs are limited to operating forecasts, UFCF bridge, WACC, terminal assumptions, and EV-to-equity bridge; PEG target market cap, PEG bands, and PEG scorecards are outside the DCF input set.
+- Output mode, valuation files, validation status, and data gaps; omit buy/sell advice, target position size, and certainty language.
 - If the DCF inputs are not strong enough for Formal DCF, downgrade to Scenario DCF, Reverse DCF, or preparation-only instead of inventing precision.
-- If the user asks to compare PEG and DCF, complete this DCF workflow first and leave comparison to the report layer; do not recreate a PEG+DCF aggregator.
+- If the user asks to compare PEG and DCF, complete this DCF workflow first and leave cross-model comparison to the report layer.
 
 ## Progressive Disclosure
 

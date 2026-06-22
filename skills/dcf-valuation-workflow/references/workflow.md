@@ -84,7 +84,7 @@ terminal growth or exit multiple range
 historical or normalized margin/cash-flow anchors
 ```
 
-Do not use PEG outputs or target market cap as DCF inputs.
+DCF inputs are limited to the market-value bridge, operating forecast, UFCF bridge, WACC range, and terminal assumptions admitted in the DCF-ready package or assumption ledger.
 
 ## 5. Validation Gate
 

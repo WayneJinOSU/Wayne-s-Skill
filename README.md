@@ -7,6 +7,7 @@ Personal Codex skills maintained as versioned assets.
 - `akshare`: Chinese financial data access using AkShare library. Fetch real-time and historical data for A-shares, Hong Kong stocks, US stocks, futures, funds, and macroeconomic indicators. Use when user requests Chinese market data, stock prices, market analysis, or financial information from Chinese exchanges. Supports stock quotes, historical data, futures market data, fund information, macroeconomic indicators, and real-time market updates.
 - `chassis-growth-agentic-research`: 独立主控底盘型成长股正式研究；用私有 modules、多角色/subagent、中间产物、进攻型市场重定价主线、行业经济性与蛋糕分配、竞争/客户验证链、中期进攻 QA、终审事实 QA 和投资人写作，完整覆盖旧业务底盘、第二成长曲线、TAM/SAM/SOM、平台复用、承接动作、利润桥、跟踪体系、证据边界、三表/FCF 建模接力输入和估值接力输入。Use when 用户需要深度分析 A 股制造业、AI算力、数据中心、新能源、机器人、先进制造、半导体设备/材料等底盘型成长公司，判断旧业务托底、行业经济性拐点、新业务抬天花板、公司份额提升、平台能力复用、竞争客户验证、利润中枢上移、预期差和证伪路径，并产出正式深度报告而非摘要。
 - `dcf-model`: Real DCF (Discounted Cash Flow) model creation for equity valuation. Retrieves financial data from SEC filings and analyst reports, builds comprehensive cash flow projections with proper WACC calculations, performs sensitivity analysis, and outputs professional Excel models with executive summaries. Use when users need to value a company using DCF methodology, request intrinsic value analysis, or ask for detailed financial modeling with growth projections and terminal value calculations.
+- `dcf-valuation-workflow`: DCF-only valuation workflow orchestrator for equity research. Use when the user asks for DCF估值, DCF闭环, intrinsic value, Formal DCF, Scenario DCF, Reverse DCF, or wants a one-pass workflow that first prepares financial-modeling DCF-ready inputs and then runs dcf-model outputs. This skill coordinates financial-modeling to dcf-model only; do not use it for PEG valuation, PEG+DCF aggregation, or 综合估值.
 - `doc`: Professional document creation, editing, and analysis for Office formats (docx, pdf, pptx, xlsx). Use when working with Word documents, PDFs, PowerPoint presentations, or Excel spreadsheets.
 - `equity-catalyst-tracker`: 个股持续研究、领先变量识别与催化剂因果推演；在已有产业链、成长股、供应链平台或估值研究基础上，先建立标的专属 Driver Map 和利润传导链，再跟踪客户、订单、原材料、价格、技术路线、产能、同行、财报、预期修正和定价状态等增量证据，判断哪些领先变量会迫使市场未来修改利润锚、估值锚或证伪逻辑；按 Quick/Standard/Deep 分层使用 subagent，默认 Standard 只保留领先变量、财报传导和反方审查，Deep 才完整多角色取证。Use when 用户要求持续研究股票、跟踪爆点、审核新闻/公告/财报/产业变量是否强化逻辑、寻找未被市场充分定价的催化、判断原材料涨价是否收益传导、判断高位是否仍有新势能、识别高潮退潮或证伪，尤其适用于 A股/港股/美股成长股、AI算力、数据中心、新能源、机器人、半导体、先进制造供应链公司。
 - `feishu-codex-research-bridge`: Build, migrate, inspect, and operate the local Feishu-to-Codex research bridge: Feishu bot messages create queued research tasks, a serialized worker runs Codex with research skills, final reports are converted to PDF or Drive links, and results are sent back to a Feishu group. Use when the user mentions 飞书/Codex 桥梁, 飞书投研队列, lark-cli event consume, /投研, queue worker, report delivery to Feishu, or migrating this bridge to another repository.
@@ -14,9 +15,8 @@ Personal Codex skills maintained as versioned assets.
 - `financial-modeling`: Build integrated financial models with 3-statement projections, DCF-ready UFCF bridges, working-capital schedules, and debt/interest linkages. Use for income statement, balance sheet, cash flow, and DCF input preparation; do not use for PEG-ready packages or PEG valuation inputs.
 - `find-skills`: Helps users discover and install agent skills when they ask questions like "how do I do X", "find a skill for X", "is there a skill that can...", or express interest in extending capabilities. This skill should be used when the user is looking for functionality that might exist as an installable skill.
 - `frontend-design`: Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, artifacts, posters, or applications (examples include websites, landing pages, dashboards, React components, HTML/CSS layouts, or when styling/beautifying any web UI). Generates creative, polished code and UI design that avoids generic AI aesthetics.
-- `growth-stock-valuation`: 成长股专用 PEG/动态 PE 深度估值与定价判断；基于前置深研、利润桥和证据台账，以自有正常/乐观利润锚、动态 PEG、复合 PEG、一致预期差、隐含利润和牛市/产业主升浪估值容忍度为核心，只输出正常估值与乐观估值、触发条件和证伪点；一致预期用于市场对照和隐含预期反推，不默认作为目标市值利润锚；当一致预期缺失但 PEG-ready 自有利润锚完整时，可降级进入 no_consensus_mode，输出明确标注的自建情景估值和当前市值反推。本 skill 只做 PEG/动态 PE，不扩展到其他估值方法。Use when 用户要求对成长股、供应链平台股、底盘型成长股或产业链龙头做 PEG/动态 PE 估值、目标市值、PEG、一致预期差、估值透支、赔率、牛市估值上沿或估值锚切换分析。
+- `growth-stock-valuation`: 成长股 PEG/动态 PE 估值 skill；用于成长股、供应链平台股、产业链龙头的 PEG、动态 PE、复合 PEG、目标市值、目标价、一致预期差、当前市值隐含预期、估值年份切换和证伪点分析。目标市值默认使用自有正常/乐观利润锚，一致预期只作市场对照；本 skill 不做 DCF。若用户要求 bottom-up/算小账/分业务利润桥与 PEG 并列对照，使用共享 catalyst precheck、独立 PEG subagent、独立 bottom-up subagent 和并列模块，防止估值与利润计算互相污染。
 - `industry-chain-agentic-research`: 强约束 Agentic 行业产业链深度研究；真实 subagent 优先，分角色证据收集、模块手册、子环节拆分、数据表沉淀、章节草稿、反查反证、反方审查、报告汇总、主笔重构和完整行业深度报告，用于 A 股/港股/美股行业、赛道、产业链或细分环节正式研究，防止摘要化、只说好话、终稿过薄、模块拼接和普通投资人读不懂。
-- `integrated-growth-valuation`: 成长股估值聚合器；只读取 growth-stock-valuation 的 PEG/动态 PE 输出和 skills/dcf-model 的 DCF 输出，将两个模型结果聚合成一份统一估值摘要、并列表、差异提示、关键假设、证伪点和跟踪清单。Use when 用户已经完成 PEG 与 DCF 两个独立估值 skill，希望把结果合并成一份正式估值汇总、统一 scorecard、当前市值隐含情景或模型差异摘要。
 - `l2-etf-strategy`: Operate and reproduce the user's L2 ETF strategy package. Use when the user asks about L2 ETF, TRD_K20_ADV50M_NoKCB, quarterly ETF rebalancing, ETF picks/trades, live ETF holdings, NAV logs, or reproducing the ETF backtest/experiment evidence from the 2026-06-10 package.
 - `local-bank-research`: 研究城商行、农商行等地方商业银行股的利润桥、资产质量、区域beta、债券投资、分红与预期差。
 - `markdown-report-pdf`: Convert one or more Markdown reports into a polished HTML/CSS research-report PDF. Use when the user asks for Markdown -> HTML/CSS -> PDF, md to pdf, markdown report PDF, 投研报告 PDF, 研报排版导出, or wants a reusable report export workflow with Chinese typography, tables, print CSS, and PDF verification.
@@ -30,21 +30,22 @@ Personal Codex skills maintained as versioned assets.
 - `wencai-query`: Query Tonghuashun Wencai with the `pywencai` Python package for Chinese-market screening, ranking, and tabular result retrieval. Use when Codex needs to execute or explain a natural-language Wencai request such as A-share stock screening, concept or industry ranking, valuation or financial-factor filtering, limit-up or turnover queries, export Wencai results, or summarize the returned table. Trigger when the user mentions "问财", "同花顺问财", or `pywencai`, or asks to turn a Chinese stock screener prompt into executable code or structured output.
 ## 估值链路
 
-正式成长股估值拆成四个独立环节，避免一个 skill 同时承担研究、建模、定价和汇总：
+正式成长股估值拆成 PEG 与 DCF 两条独立闭环，避免一个 skill 同时承担研究、建模、定价和汇总：
 
 ```text
 研究主控
-  -> financial-modeling
-  -> growth-stock-valuation + dcf-model
-  -> integrated-growth-valuation
+  -> growth-stock-valuation
+  -> dcf-valuation-workflow
+       -> financial-modeling
+       -> dcf-model
 ```
 
-- `financial-modeling`：把研究主控输出的 `dcf_financial_model_handoff` 转成三表、FCF、PEG-ready 和 DCF-ready 数据包，不输出目标价或最终估值结论。
 - `growth-stock-valuation`：只做 PEG / 动态 PE 成长股定价，输出目标市值区间、情景、年份切换和证伪点。
-- `dcf-model`：官方 DCF skill，只基于 DCF-ready 现金流输入独立生成 DCF Excel、summary 和 validation。
-- `integrated-growth-valuation`：只聚合 `growth-stock-valuation` 和 `dcf-model` 已完成的结果，不重新建模、不平均两个模型、不创造新目标价。
+- `dcf-valuation-workflow`：DCF 主控闭环，先调用 `financial-modeling` 生成 DCF-ready / UFCF / assumption ledger，再调用 `dcf-model` 完成 Formal、Scenario 或 Reverse DCF。
+- `financial-modeling`：把研究主控输出的 `dcf_financial_model_handoff` 转成三表、FCF、UFCF 和 DCF-ready 数据包，不输出目标价或最终估值结论。
+- `dcf-model`：只基于 DCF-ready 现金流输入独立生成 DCF Excel、summary 和 validation。
 
-`dcf-valuation` 已删除；正式 DCF 一律使用 `dcf-model`。
+`integrated-growth-valuation` 已删除；PEG 与 DCF 如需对照，只在报告层并列引用两个独立产物。
 
 ## 如何调用技能
 
@@ -67,9 +68,9 @@ Personal Codex skills maintained as versioned assets.
 估值与建模：
 
 - `growth-stock-valuation 基于东山精密前置深研和估值接力输入，做目标市值、PEG、一致预期差和赔率判断`
-- `financial-modeling 基于东山精密_dcf_financial_model_handoff.md 生成 PEG-ready 和 DCF-ready 数据包`
+- `dcf-valuation-workflow 基于东山精密_dcf_financial_model_handoff.md 先生成 DCF-ready/UFCF，再完成 DCF 模型、估值摘要和 validation`
+- `financial-modeling 基于东山精密_dcf_financial_model_handoff.md 生成 DCF-ready 和 UFCF 数据包`
 - `dcf-model 基于东山精密_dcf_ready_package.md 生成 DCF 模型、估值摘要和 validation`
-- `integrated-growth-valuation 聚合东山精密 PEG 输出和 DCF 输出，生成统一估值摘要和 scorecard`
 
 数据：
 

@@ -78,6 +78,6 @@
 
 - `<prefix>_dcf_financial_model_handoff.md` 和 `<prefix>_peg_valuation_handoff.md` 必须同时存在，且生成时间不得早于 `<prefix>_final_report.md`。
 - 两个文件都必须写明 `handoff_status: final_report_passed`、source paths、gate status 和 generation time。
-- `dcf_financial_model_handoff` 必须把终稿后的研究变量翻译成 `$financial-modeling` 可消费的 PEG-ready 候选字段、DCF-ready/UFCF bridge、validation 要求和数据缺口。
+- `dcf_financial_model_handoff` 必须把终稿后的研究变量翻译成 `$dcf-valuation-workflow` / `$financial-modeling` 可消费的 DCF-ready/UFCF bridge、validation 要求和数据缺口。
 - `peg_valuation_handoff` 必须把终稿后的研究变量翻译成 PEG 因子消费规则，并逐项说明如何影响 PEG 系数：提高、降低、封顶、仅允许乐观情景、阻止年份切换或暂不影响。
 - 任一 handoff 写成目标价、目标市值、买卖建议、半份估值报告或正式 PEG/DCF 结论，必须重写。

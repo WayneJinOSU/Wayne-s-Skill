@@ -1,0 +1,4 @@
+interface:
+  display_name: "DCF Workflow"
+  short_description: "主控financial-modeling与DCF闭环"
+  default_prompt: "Use $dcf-valuation-workflow to run financial-modeling first, then complete Formal, Scenario, or Reverse DCF outputs with validation."

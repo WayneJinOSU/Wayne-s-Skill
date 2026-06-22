@@ -65,7 +65,7 @@ When the user provides a research handoff such as `<company>_dcf_financial_model
 - For formal DCF calculation, output `<company>_dcf_ready_package.md` for `/Users/a/.codex/skills/dcf-model`: Revenue, EBIT, tax rate, D&A, Capex, ΔNWC, UFCF, cash, debt, shares, WACC inputs, terminal assumptions, and source comments.
 - Do not output `<company>_peg_ready_package.md`; PEG-ready input packs belong to `$growth-stock-valuation`, not financial modeling.
 - Keep DCF-ready packages compact: model fields, assumptions, source comments, Fact-ID references, quality notes, and data gaps only. Do not restate every module's thesis or duplicate the full profit bridge.
-- Do not output target price, target market cap, buy/sell advice, or final valuation conclusions. For formal valuation, hand off DCF-ready inputs to `/Users/a/.codex/skills/dcf-model`; `integrated-growth-valuation` only aggregates downstream PEG and DCF outputs after both exist.
+- Do not output target price, target market cap, buy/sell advice, or final valuation conclusions. For DCF valuation, hand off DCF-ready inputs through `$dcf-valuation-workflow` to `/Users/a/.codex/skills/dcf-model`; PEG valuation remains outside this skill.
 
 ---
 

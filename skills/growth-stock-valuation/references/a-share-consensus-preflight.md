@@ -2,6 +2,16 @@
 
 当 A 股 PEG-ready 包缺一致预期、接口报错、或准备进入 `no_consensus_mode` 时读取本文件。目标是在降级前穷尽轻量、结构化、可复现的 skill/API 接口，避免把“接口选错”误判成“市场无一致预期”。
 
+## Contents
+
+- 降级前必须完成
+- AkShare 主接口
+- AkShare 备用接口
+- Wencai / pywencai 分年查询
+- 结果判定
+- 记录模板
+- 进入 no_consensus_mode 的条件
+
 ## 降级前必须完成
 
 除非用户明确禁止联网或接口包不可用，进入 `no_consensus_mode` 前至少完成以下三步，并记录每步结果：

@@ -37,7 +37,7 @@ Token discipline:
 
 ## DCF Financial Model Handoff
 
-终稿通过后的 `<标的>_dcf_financial_model_handoff.md` 用于后续 `$financial-modeling` 建三表/FCF，并拆成 PEG-ready 与 DCF-ready 两个数据包；它不是 PEG-ready/DCF-ready 数据包本身，也不是估值结论，不进入 `final_report`。Step 4 只在利润桥、跟踪体系和证据边界中准备这些字段的候选口径与缺口。
+终稿通过后的 `<标的>_dcf_financial_model_handoff.md` 用于后续 `$dcf-valuation-workflow` 调用 `$financial-modeling` 建三表/FCF/UFCF，并形成 DCF-ready 数据包；它不是 DCF-ready 数据包本身，也不是估值结论，不进入 `final_report`。Step 4 只在利润桥、跟踪体系和证据边界中准备这些字段的候选口径与缺口。
 
 必须按固定模板输出 6 张表，字段缺失时写“缺口/待补”，不得省略表格：
 
@@ -98,7 +98,7 @@ PEG 核心因子接口：
 | 市场环境 | 震荡市/结构牛/主升浪/高潮期 | 决定倍数上限 |  |  |
 | 证伪压力 | 毛利率、现金流、合同负债、存货等风险 | 压低 PEG 或限制年份切换 |  |  |
 
-进入正式估值阶段时，先调用 `$financial-modeling` 生成 PEG-ready 与 DCF-ready 数据包；再由 `$growth-stock-valuation` 和 `dcf-model` 独立估值；最后可由 `$integrated-growth-valuation` 聚合。聚合输出不得倒灌进 `final_report` 形成目标价、目标市值、买卖建议或“当前贵不贵”的正式估值结论。
+进入正式估值阶段时，PEG 由 `$growth-stock-valuation` 独立消费 `peg_valuation_handoff`；DCF 由 `$dcf-valuation-workflow` 主控 `$financial-modeling` 生成 DCF-ready 数据包并继续调用 `dcf-model`。两条估值链路平行独立，不再通过综合估值 skill 聚合；任何后续比较只能在报告层并列引用，且不得倒灌进 `final_report` 形成目标价、目标市值、买卖建议或“当前贵不贵”的正式估值结论。
 
 ## Post-Report Valuation Handoff Override
 
@@ -121,7 +121,7 @@ scripts/final_report_gate.py returns PASS
 
 The handoff stage should be run by one valuation-handoff subagent or equivalent post-report pass. It reads `final_report`, `skeptic_review`, `profit_bridge`, `tracking_dashboard`, `facts_core`, and only necessary supporting snippets.
 
-The handoff pair is not an estimate and not a model. It is the execution bridge from completed research to later `$financial-modeling`, `$growth-stock-valuation`, `dcf-model`, and `$integrated-growth-valuation`.
+The handoff pair is not an estimate and not a model. It is the execution bridge from completed research to later `$growth-stock-valuation` and `$dcf-valuation-workflow`.
 
 Required sections for `dcf_financial_model_handoff`:
 

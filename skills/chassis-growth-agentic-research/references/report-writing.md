@@ -1,6 +1,6 @@
 # 投资人写作规范
 
-终稿要让一般投资人理解“为什么这个结论成立”，而不是只看到研究员式摘要。写作目标是把市场正在交易的主线、旧业务下限、第二曲线天花板、行业经济性与蛋糕分配、平台复用、竞争/客户验证、承接动作、利润斜率、证据边界和证伪路径讲透；正式 PEG、DCF 和聚合分别交给 `$growth-stock-valuation`、`dcf-model` 和 `$integrated-growth-valuation`。
+终稿要让一般投资人理解“为什么这个结论成立”，而不是只看到研究员式摘要。写作目标是把市场正在交易的主线、旧业务下限、第二曲线天花板、行业经济性与蛋糕分配、平台复用、竞争/客户验证、承接动作、利润斜率、证据边界和证伪路径讲透；正式 PEG 交给 `$growth-stock-valuation`，正式 DCF 交给 `$dcf-valuation-workflow`。
 
 ## 写作原则
 
@@ -18,7 +18,7 @@
 - 核心变量段落必须落到“成立时利润如何变，不成立时逻辑降级成什么”。
 - 每个核心段落必须落到利润模型参数：单位经济、数量乘数、兑现节奏、份额、ASP、毛利率、费用率、折旧/财务成本、税率、少数股东或现金回收。不能落到参数的内容，压缩成背景或删除。
 - 表格只能做索引、对比和数字承载；关键推理必须用段落讲清楚。
-- `final_report.md` 不放独立估值章节，不写目标价、目标市值、PE/PEG/SOTP、买卖建议或“当前贵不贵”的正式估值结论。PEG 估值因子、情景准入和模型消费规则由终稿 gate 通过后的 `peg_valuation_handoff.md` 承接；三表/FCF 驱动、PEG-ready 候选字段和 DCF-ready 候选字段由终稿 gate 通过后的 `dcf_financial_model_handoff.md` 承接，并由 Financial Modeling 生成 PEG-ready 与 DCF-ready 两个数据包；正式预测和估值结论由后续估值系统生成。
+- `final_report.md` 不放独立估值章节，不写目标价、目标市值、PE/PEG/SOTP、买卖建议或“当前贵不贵”的正式估值结论。PEG 估值因子、情景准入和模型消费规则由终稿 gate 通过后的 `peg_valuation_handoff.md` 承接；三表/FCF/UFCF 驱动和 DCF-ready 候选字段由终稿 gate 通过后的 `dcf_financial_model_handoff.md` 承接，并由 `$dcf-valuation-workflow` 主控 Financial Modeling 与 dcf-model 完成 DCF 闭环；正式预测和估值结论由后续估值系统生成。
 
 ## 反废话与反说教硬约束
 

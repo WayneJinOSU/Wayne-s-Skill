@@ -14,7 +14,7 @@ Token discipline:
 利润桥研究写入 `<标的简称或代码>_profit_bridge.md`：
 
 - 旧业务底盘利润、行业扩容中公司可获取份额、第二曲线新增利润、平台复用收益、扩张成本的方向性拆解。
-- 默认输出轻量利润中枢：方向性区间、关键变量和敏感性；正式 PEG、DCF 和聚合分别交给 `$growth-stock-valuation`、`dcf-model` 和 `$integrated-growth-valuation`。
+- 默认输出轻量利润中枢：方向性区间、关键变量和敏感性；正式 PEG 交给 `$growth-stock-valuation`，正式 DCF 交给 `$dcf-valuation-workflow`。
 - 保守、中性、乐观三种情景可以简化为“利润斜率情景”：分别由哪些市场变量触发，并说明证据强度。
 - 必须处理并表利润、权益法收益、少数股东损益、非经常性损益和现金流质量，避免重复计算。
 - 利润桥必须能解释变量如何影响收入、毛利率、费用率、折旧/财务费用/爬坡损耗、现金流和归母利润；不能只给三情景结论表。
@@ -39,7 +39,7 @@ Token discipline:
 
 ## DCF Financial Model Handoff
 
-终稿通过后的三表建模接力输入写入 `<标的简称或代码>_dcf_financial_model_handoff.md`，用于先调用 `$financial-modeling` 建三表/FCF，并由 Financial Modeling 拆出 PEG-ready 与 DCF-ready 两个数据包；它不是 PEG-ready/DCF-ready 数据包本身，也不是估值结论，不进入 `final_report`。Step 4 只在利润桥、跟踪体系和证据边界中准备这些字段的候选口径与缺口。
+终稿通过后的三表建模接力输入写入 `<标的简称或代码>_dcf_financial_model_handoff.md`，用于后续 `$dcf-valuation-workflow` 调用 `$financial-modeling` 建三表/FCF/UFCF，并形成 DCF-ready 数据包；它不是 DCF-ready 数据包本身，也不是估值结论，不进入 `final_report`。Step 4 只在利润桥、跟踪体系和证据边界中准备这些字段的候选口径与缺口。
 
 必须从旧业务底盘、第二曲线、行业空间份额、执行信号、利润桥、跟踪体系和证据分级中抽取可建模驱动，分清公司事实、市场口径和自有假设。
 
@@ -63,13 +63,13 @@ Token discipline:
 
 必须输出 DCF-ready UFCF 桥所需字段：`EBIT*(1-Tax)+D&A-Capex-ΔNWC`。缺数据写“待 financial-modeling 补数/待财报补充”，不得硬编精确数字。若某变量只能支撑利润情景、不能支撑三表预测，必须标为“情景压力测试”，不得写成基准模型假设。
 
-必须为后续 PEG-ready 数据包保留建模候选字段：扣非利润或经营利润、2026E-2028E 中性与乐观候选锚、YoY、2-3 年 CAGR、一致预期对照、当前市值/股价/股本来源、非经常性/少数股东/投资收益和 OCF/UFCF 质量说明；正式口径以后续 `$financial-modeling` 输出的 `<标的>_peg_ready_package.md` 为准。
+可为后续 PEG-ready 数据包保留候选利润字段：扣非利润或经营利润、2026E-2028E 中性与乐观候选锚、YoY、2-3 年 CAGR、一致预期对照、当前市值/股价/股本来源、非经常性/少数股东/投资收益和 OCF/UFCF 质量说明；正式 PEG-ready 口径以后续 `$growth-stock-valuation` 生成为准。
 
 每张表应控制为模型消费所需的最小行数：历史锚、核心分业务、核心驱动和关键缺口即可。原始三表、完整公告列表、完整研报列表和宽表 CSV 不进入 handoff。
 
 ## PEG Valuation Handoff
 
-终稿通过后的 PEG 估值接力输入写入 `<标的简称或代码>_peg_valuation_handoff.md`。它是“投研因子 -> `$growth-stock-valuation`”的接口协议，不是半份估值报告，也不是三表模型说明。正式利润预测数由 `$financial-modeling` 生成 PEG-ready 数据包；本文件只定义 PEG 因子、倍数边界、情景准入、年份切换、质量折价和 PEG 系数影响机制。Step 4 只在跟踪体系和证据边界中准备 PEG 因子的候选口径与缺口。
+终稿通过后的 PEG 估值接力输入写入 `<标的简称或代码>_peg_valuation_handoff.md`。它是“投研因子 -> `$growth-stock-valuation`”的接口协议，不是半份估值报告，也不是三表模型说明。正式利润锚、PEG-ready 数据包和估值口径由 `$growth-stock-valuation` 独立生成或确认；本文件只定义 PEG 因子、倍数边界、情景准入、年份切换、质量折价和 PEG 系数影响机制。Step 4 只在跟踪体系和证据边界中准备 PEG 因子的候选口径与缺口。
 
 `peg_valuation_handoff` 不得做：
 
@@ -105,14 +105,14 @@ Token discipline:
 | 2027E | 归母/扣非/经营利润 |  |  |  |  |  | A/B/C | PEG 主年份守门 |
 | 2028E | 归母/扣非/经营利润 |  |  |  |  |  | C/D | 只作年份切换 |
 
-## Valuation Feedback Loop
+## Valuation Follow-Up Boundary
 
-若后续调用 `$integrated-growth-valuation` 并生成 `<标的>_valuation_aggregate.md` 和 `<标的>_valuation_scorecard.md`，主控必须把其中的跟踪指标与原 `<标的>_tracking_dashboard.md` 对齐：
+后续正式估值分两条独立链路：
 
-- PEG 侧反馈回填到利润斜率、订单/收入、毛利率、费用率、年份切换和一致预期上修跟踪。
-- DCF 侧反馈回填到 Capex、D&A、ΔNWC、应收、存货、合同负债、OCF/UFCF 和现金转化率跟踪。
-- 模型分歧反馈回填为红黄绿灯阈值：哪些指标使 PEG 与 DCF 收敛，哪些指标使估值只能依赖远期验证。
-- 估值反哺不得改写前置研究事实，不得把目标价、目标市值或买卖建议倒灌进 `final_report`。
+- PEG 侧交给 `$growth-stock-valuation`，反馈可用于订单/收入、毛利率、费用率、年份切换和一致预期上修跟踪。
+- DCF 侧交给 `$dcf-valuation-workflow`，反馈可用于 Capex、D&A、Delta NWC、应收、存货、合同负债、OCF/UFCF 和现金转化率跟踪。
+
+任何估值反馈不得改写前置研究事实，不得把目标价、目标市值或买卖建议倒灌进 `final_report`。
 
 ## Post-Report Valuation Handoff Override
 
@@ -135,7 +135,7 @@ scripts/final_report_gate.py returns PASS
 
 The handoff stage should be run by one valuation-handoff subagent or equivalent post-report pass. It reads `final_report`, `skeptic_review`, `profit_bridge`, `tracking_dashboard`, `facts_core`, and only necessary supporting snippets.
 
-The handoff pair is not an estimate and not a model. It is the execution bridge from completed research to later `$financial-modeling`, `$growth-stock-valuation`, `dcf-model`, and `$integrated-growth-valuation`.
+The handoff pair is not an estimate and not a model. It is the execution bridge from completed research to later `$growth-stock-valuation` and `$dcf-valuation-workflow`.
 
 Required sections for `dcf_financial_model_handoff`:
 

@@ -1,7 +1,0 @@
-interface:
-  display_name: "Valuation Aggregator"
-  short_description: "聚合 growth-stock-valuation 与 dcf-model 输出"
-  default_prompt: "Use $integrated-growth-valuation to aggregate growth-stock-valuation PEG outputs and dcf-model DCF outputs into one valuation summary."
-
-policy:
-  allow_implicit_invocation: true

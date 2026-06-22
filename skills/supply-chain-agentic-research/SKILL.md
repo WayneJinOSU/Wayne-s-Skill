@@ -9,7 +9,7 @@ description: 独立主控供应链平台型成长股正式研究；用私有 mod
 
 这是一个独立主控 skill，直接编排供应链平台型成长股研究的私有 modules，并通过多角色研究、中间文件、市场变量扩表、技术路线到价值量、原材料价格链、竞争/客户认证链、订单经营验证、利润桥、跟踪体系、两轮 QA 和投资人写作控制输出质量。`final_report` 是本 skill 的主终点；它负责把市场为什么交易公司、技术路线如何改变价值量、订单如何变收入、收入如何变利润、利润如何变现金流、哪些信号会让主线升级或证伪讲清楚。
 
-本 skill 在研究阶段只沉淀两类研究接力候选输入；终稿 gate 通过后再生成两类正式研究接力文件：`dcf_financial_model_handoff` 交给 `$financial-modeling` 形成 PEG-ready 和 DCF-ready 数据包；`peg_valuation_handoff` 交给 `$growth-stock-valuation` 判断 PEG/动态 PE 的质性边界和 PEG 系数影响机制。正式 DCF 输入来自 `$financial-modeling` 输出的 DCF-ready 数据包，再交给 `dcf-model`；最后可由 `$integrated-growth-valuation` 聚合两个模型输出。`final_report` 不写目标价、目标市值、PE/PEG/SOTP、买卖评级或明确投资建议。
+本 skill 在研究阶段只沉淀两类研究接力候选输入；终稿 gate 通过后再生成两类正式研究接力文件：`dcf_financial_model_handoff` 交给 `$dcf-valuation-workflow`，由其主控 `$financial-modeling` 形成 DCF-ready 数据包并继续调用 `dcf-model`；`peg_valuation_handoff` 交给 `$growth-stock-valuation` 判断 PEG/动态 PE 的质性边界和 PEG 系数影响机制。PEG 与 DCF 平行独立，不再通过综合估值 skill 聚合。`final_report` 不写目标价、目标市值、PE/PEG/SOTP、买卖评级或明确投资建议。
 
 Token discipline:
 

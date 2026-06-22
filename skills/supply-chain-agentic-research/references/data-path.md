@@ -78,7 +78,7 @@
 11. 写 `<标的>_competition_customer_chain.md`，把供应链地位拆成客户链、认证阶段、份额、替代风险和竞品反证
 12. 对关键原料和产能升级，分别写 `<标的>_raw_material_price_chain.md` 和 `<标的>_capacity_second_curve.md`
 13. 写 `<标的>_orders_business_validation.md`，验证订单、排产、出货、收入确认、利润释放和现金回收
-14. 写 `<标的>_profit_bridge.md`、`<标的>_tracking_dashboard.md` 和两类估值接力候选输入；正式 `dcf_financial_model_handoff` 与 `peg_valuation_handoff` 只在终稿 gate PASS 后生成。后续正式估值再分别交给 `$growth-stock-valuation` 和 `dcf-model`，最后可由 `$integrated-growth-valuation` 聚合
+14. 写 `<标的>_profit_bridge.md`、`<标的>_tracking_dashboard.md` 和两类估值接力候选输入；正式 `dcf_financial_model_handoff` 与 `peg_valuation_handoff` 只在终稿 gate PASS 后生成。后续正式估值分别交给 `$growth-stock-valuation` 和 `$dcf-valuation-workflow`
 15. 写中期结构 QA、终审事实 QA、提纲、扩写蓝图和投资人可读报告，并在终稿前检查关键市场变量是否被无意删掉
 ```
 
@@ -136,8 +136,8 @@
 | 订单出货与经营验证 | 订单公告、量产、出货、海关、排产、客户认证、份额、替代周期 | 财报收入、毛利率、存货、应收、合同负债、现金流 |
 | 利润桥 | 财报分产品、毛利率、订单、产能和成本 | 行业毛利率、同行净利率、募投效益 |
 | 跟踪体系与警报信号 | 财报日历、订单/认证/投产事件、客户 capex、原材料价格、竞品认证 | 利润桥敏感变量、市场变量覆盖 QA、终审事实 QA |
-| PEG 边界候选输入 | `$tushare` 市值/估值/行情、利润桥、tracking dashboard、evidence grading 中的候选利润字段 | 一致预期、历史估值、市场阶段、主线强度、兑现阶段、利润质量、订单可见度、第二曲线、竞争壁垒、现金流质量、证伪压力；正式 `peg_valuation_handoff` 在终稿 gate PASS 后输出，后续 `$growth-stock-valuation` 必须同时读取 `$financial-modeling` 生成的 PEG-ready 数据包 |
-| DCF-ready 建模候选输入 | 财报现金流、利润桥、tracking dashboard、evidence grading 中的三表/FCF 候选字段 | Revenue、EBIT、Tax、D&A、Capex、ΔNWC、UFCF、WACC 参数、终值、现金、债务、股本、现金流质量和 validation 要求；正式 `dcf_financial_model_handoff` 在终稿 gate PASS 后输出，后续 `$financial-modeling` 拆成 DCF-ready，`dcf-model` 估值 |
+| PEG 边界候选输入 | `$tushare` 市值/估值/行情、利润桥、tracking dashboard、evidence grading 中的候选利润字段 | 一致预期、历史估值、市场阶段、主线强度、兑现阶段、利润质量、订单可见度、第二曲线、竞争壁垒、现金流质量、证伪压力；正式 `peg_valuation_handoff` 在终稿 gate PASS 后输出，后续 `$growth-stock-valuation` 独立生成或确认 PEG-ready |
+| DCF-ready 建模候选输入 | 财报现金流、利润桥、tracking dashboard、evidence grading 中的三表/FCF 候选字段 | Revenue、EBIT、Tax、D&A、Capex、ΔNWC、UFCF、WACC 参数、终值、现金、债务、股本、现金流质量和 validation 要求；正式 `dcf_financial_model_handoff` 在终稿 gate PASS 后输出，后续 `$dcf-valuation-workflow` 调用 `$financial-modeling` 拆成 DCF-ready，再调用 `dcf-model` 估值 |
 
 ## 关键数据口径
 

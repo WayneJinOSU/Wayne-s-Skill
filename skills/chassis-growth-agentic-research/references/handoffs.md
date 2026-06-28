@@ -1,6 +1,6 @@
 # Handoffs And Financial Bridge
 
-本文件承接 `SKILL.md` 的接力产物细则。主控必须在 Step 4 读取本文件，用于写入利润桥、跟踪体系、证据边界中的三表建模候选字段、PEG 因子、证据等级和缺口。`dcf_financial_model_handoff` 与 `peg_valuation_handoff` 只能在 `final_report` 完成、`skeptic_review` 存在且 `final_report_gate.py` PASS 后生成。所有接力文件都不得写目标价、目标市值、买卖建议或最终估值结论。
+本文件承接 `SKILL.md` 的接力产物细则。主控必须在 Step 4 读取本文件，用于写入利润桥、跟踪体系、证据边界中的三表建模候选字段、PEG 因子、证据等级和缺口。`dcf_financial_model_handoff` 与 `peg_valuation_handoff` 只能在 `final_report` 完成、`skeptic_review` 存在、`final_report_gate.py` PASS 且 publication hygiene gate 以 `--fail-on medium` PASS 后生成。所有接力文件都不得写目标价、目标市值、买卖建议或最终估值结论。
 
 Token discipline:
 
@@ -52,6 +52,7 @@ Generate both files only after:
 <prefix>_final_report.md exists
 <prefix>_skeptic_review.md exists
 scripts/final_report_gate.py returns PASS
+publication_hygiene_gate.py --fail-on medium returns PASS
 ```
 
 The handoff stage reads `final_report`, `skeptic_review`, `profit_bridge`, `tracking_dashboard`, `facts_core`, and only necessary supporting snippets.
@@ -62,7 +63,7 @@ Use only these sections for `dcf_financial_model_handoff`:
 
 | Section | Purpose |
 | --- | --- |
-| Status | Record `handoff_status: final_report_passed`, source paths, gate status, generation time |
+| Status | Record `handoff_status: final_report_passed`, source paths, `final_report_gate_status`, `publication_hygiene_status`, generation time |
 | Driver Admission | Map research variables to Base / Scenario / Sensitivity / Tracking-only |
 | UFCF Guardrails | List forbidden substitutions, scenario-only variables, and downgrade triggers |
 | Blocking Gaps | List gaps and whether they block Formal DCF |
@@ -74,7 +75,7 @@ Required sections for `peg_valuation_handoff`:
 
 | Section | Purpose |
 | --- | --- |
-| Status | Record `handoff_status: final_report_passed`, source paths, gate status, generation time |
+| Status | Record `handoff_status: final_report_passed`, source paths, `final_report_gate_status`, `publication_hygiene_status`, generation time |
 | Research Verdict | Compress the final report's investment logic and key disconfirming conditions |
 | PEG Factor Treatment | Map final-report factors to explicit PEG coefficient impact, scenario admission, year-switching limits, and validation metrics |
 | Profit Anchor Discipline | List profit metric discipline, quality discounts, year discipline, scenario admission, and missing fields |

@@ -27,6 +27,8 @@ DEFAULT_REQUIRED_ANY = {
     "offensive_thesis": ["核心交易逻辑", "核心误定价", "市场误定价", "真正稀缺", "关键瓶颈"],
     "profit_anchor": ["最小利润模型", "单位经济", "数量乘数", "利润中枢区间", "利润中枢"],
     "sharpness_spine": ["最大预期差", "核心分歧", "第一驱动", "核心利润变量", "最短因果链"],
+    "base_to_slope_spine": ["旧业务给", "旧业务底盘", "经营下限", "利润斜率", "利润穿透率"],
+    "source_expression": ["公司披露", "公告披露", "财报披露", "公司公告", "公告", "财报", "披露", "年报", "半年报", "交易所", "券商假设", "产业链线索"],
 }
 
 FRONT_REQUIRED_ANY = [
@@ -56,6 +58,55 @@ FRONT_HEDGE_TERMS = [
     "兑现闸门",
     "风险提示",
     "反方观点",
+]
+
+FRONT_INVESTOR_JUDGMENT_TERMS = [
+    "我们认为",
+    "本报告认为",
+    "核心分歧在于",
+]
+
+FRONT_PROFIT_TRANSMISSION_TERMS = [
+    "利润传导",
+    "利润桥",
+    "利润弹性",
+    "利润斜率",
+    "利润中枢",
+    "毛利率",
+    "费用率",
+    "现金流",
+]
+
+FRONT_VALIDATION_OR_DOWNGRADE_TERMS = [
+    "验证",
+    "证伪",
+    "降级",
+    "若",
+]
+
+BANNED_FINAL_REPORT_PATTERNS = [
+    ("visible_fact_id", r"\bF\d{3,}\b|\bFact[-_ ]?\d{3,}\b|\bFact-ID\b|\bFact ID\b"),
+    ("visible_lead_id", r"\bL\d{3,}\b|\bLead[-_ ]?\d{3,}\b|\bLead-ID\b|\bLead ID\b"),
+    ("internal_skill", r"\bskill\b|\bsubagent\b|\bgate\b|\bhandoff\b"),
+    ("internal_file_mode", r"\bfinal_report\b|\bbrokerage_report\b|\bsell_side_report\b"),
+    ("internal_chinese_trace", r"扩写蓝图|闸门|终稿|研究阶段候选|正确写法|普通投资人最容易误判|本报告只做|提示词|审稿词"),
+    ("rating_or_target", r"目标价|目标市值|买入评级|卖出评级|增持评级|减持评级|买入建议|卖出建议|明确投资建议"),
+    ("formal_valuation", r"\bPE\b|\bPEG\b|\bDCF\b|SOTP|估值|当前贵不贵"),
+]
+
+WRITING_PROCESS_PATTERNS = [
+    (
+        "research_process_voice",
+        r"这轮研究|研究重点|研究抓手|研究路径|研究问题|研究含义|研究框架|研究方法",
+    ),
+    (
+        "report_process_voice",
+        r"报告表达|报告写法|正文写法|章节写法|这张竞争表对报告|对报告表达|写法很关键",
+    ),
+    (
+        "meta_judgment_voice",
+        r"不应再写成|判断.{0,12}不应只问|真正需要跟踪的是|更有效的研究|更稳妥的处理方式|这套逻辑的优势",
+    ),
 ]
 
 DEFAULT_CONCEPT_GROUPS = {
@@ -102,7 +153,13 @@ DIDACTIC_TERMS = [
 ]
 
 PARAGRAPH_SIGNAL_TERMS = [
-    "Fact-",
+    "公告",
+    "财报",
+    "披露",
+    "年报",
+    "交易所",
+    "券商假设",
+    "产业链",
     "收入",
     "利润",
     "毛利",
@@ -236,6 +293,28 @@ def split_paragraphs(text: str) -> list[str]:
     return paragraphs
 
 
+def banned_pattern_hits(text: str) -> list[tuple[str, int, str]]:
+    hits: list[tuple[str, int, str]] = []
+    for label, pattern in BANNED_FINAL_REPORT_PATTERNS:
+        matches = list(re.finditer(pattern, text, flags=re.IGNORECASE))
+        if not matches:
+            continue
+        sample = matches[0].group(0).replace("\n", " ")
+        hits.append((label, len(matches), sample))
+    return hits
+
+
+def writing_process_hits(text: str) -> list[tuple[str, int, str]]:
+    hits: list[tuple[str, int, str]] = []
+    for label, pattern in WRITING_PROCESS_PATTERNS:
+        matches = list(re.finditer(pattern, text, flags=re.IGNORECASE))
+        if not matches:
+            continue
+        sample = matches[0].group(0).replace("\n", " ")
+        hits.append((label, len(matches), sample))
+    return hits
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("report", type=Path)
@@ -258,6 +337,8 @@ def main() -> int:
     parser.add_argument("--max-didactic-paragraphs", type=int)
     parser.add_argument("--min-section-signal-hits", type=int, default=2)
     parser.add_argument("--max-thin-section-ratio", type=float, default=0.25)
+    parser.add_argument("--max-writing-process-hits", type=int, default=0)
+    parser.add_argument("--front-window", type=int, default=1500)
     parser.add_argument("--required-term", action="append", default=[])
     parser.add_argument("--skip-concept-groups", action="store_true")
     args = parser.parse_args()
@@ -320,6 +401,30 @@ def main() -> int:
     if missing_terms:
         failures.append("missing required terms: " + "、".join(missing_terms))
 
+    banned_hits = banned_pattern_hits(text)
+    if banned_hits:
+        details = [
+            f"{label}={count}(sample: {sample})"
+            for label, count, sample in banned_hits
+        ]
+        failures.append(
+            "banned internal trace or valuation language in final_report: "
+            + "；".join(details)
+        )
+
+    process_hits = writing_process_hits(text)
+    process_hit_count = sum(count for _, count, _ in process_hits)
+    if process_hit_count > args.max_writing_process_hits:
+        details = [
+            f"{label}={count}(sample: {sample})"
+            for label, count, sample in process_hits
+        ]
+        failures.append(
+            f"writing/research process voice {process_hit_count} "
+            f"> allowed {args.max_writing_process_hits}: "
+            + "；".join(details)
+        )
+
     missing_any_groups = []
     for group, terms in DEFAULT_REQUIRED_ANY.items():
         if not any(term in text for term in terms):
@@ -327,10 +432,19 @@ def main() -> int:
     if missing_any_groups:
         failures.append("missing required expression groups: " + "、".join(missing_any_groups))
 
-    front_text = text[: min(len(text), 3000)]
+    front_text = text[: min(len(text), args.front_window)]
     front_hits = sum(1 for term in FRONT_REQUIRED_ANY if term in front_text)
     front_sharp_hits = sum(
         1 for term in FRONT_SHARPNESS_REQUIRED_ANY if term in front_text
+    )
+    front_investor_hits = sum(
+        1 for term in FRONT_INVESTOR_JUDGMENT_TERMS if term in front_text
+    )
+    front_profit_hits = sum(
+        1 for term in FRONT_PROFIT_TRANSMISSION_TERMS if term in front_text
+    )
+    front_validation_hits = sum(
+        1 for term in FRONT_VALIDATION_OR_DOWNGRADE_TERMS if term in front_text
     )
     front_hedge_hits = sum(front_text.count(term) for term in FRONT_HEDGE_TERMS)
     if front_hits == 0:
@@ -342,6 +456,21 @@ def main() -> int:
         failures.append(
             "front section missing sharp core-logic terms: "
             + "、".join(FRONT_SHARPNESS_REQUIRED_ANY)
+        )
+    if front_investor_hits == 0:
+        failures.append(
+            "front section missing investor judgment language: "
+            + "、".join(FRONT_INVESTOR_JUDGMENT_TERMS)
+        )
+    if front_profit_hits == 0:
+        failures.append(
+            "front section missing profit-transmission language: "
+            + "、".join(FRONT_PROFIT_TRANSMISSION_TERMS)
+        )
+    if front_validation_hits < 2:
+        failures.append(
+            "front section missing validation/downgrade language: "
+            + "、".join(FRONT_VALIDATION_OR_DOWNGRADE_TERMS)
         )
     if front_hedge_hits >= 6 and front_hits < 2:
         failures.append(
@@ -394,9 +523,15 @@ def main() -> int:
     print(f"thin_sections={len(thin_sections)}")
     print(f"deep_sections={len(deep_sections)}")
     print(f"didactic_low_signal_paragraphs={len(didactic_paragraphs)}")
+    print(f"banned_final_report_hits={sum(count for _, count, _ in banned_hits)}")
+    print(f"writing_process_hits={process_hit_count}")
     print(f"front_offensive_terms={front_hits}")
     print(f"front_sharpness_terms={front_sharp_hits}")
+    print(f"front_investor_judgment_terms={front_investor_hits}")
+    print(f"front_profit_transmission_terms={front_profit_hits}")
+    print(f"front_validation_or_downgrade_terms={front_validation_hits}")
     print(f"front_hedge_terms={front_hedge_hits}")
+    print(f"front_window={args.front_window}")
 
     if failures:
         print("FAIL")

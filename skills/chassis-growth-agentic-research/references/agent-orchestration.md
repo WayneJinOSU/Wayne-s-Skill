@@ -12,7 +12,7 @@
 
 | Subagent / 阶段 | 覆盖模块或规则 | 主要职责 | 必写输出 |
 | --- | --- | --- | --- |
-| 市场重定价 / 第二曲线 agent | `modules/market-repricing-spine.md` + `modules/second-curve-ceiling.md` | 市场正在交易什么、身份切换在哪里、预期差来自哪里、新业务如何抬收入/毛利率/客户粘性/平台身份、哪些变量决定利润斜率；必须输出核心交易逻辑、市场误定价、稀缺资源/关键瓶颈、最小利润模型候选和验证点；不得把行业 TAM 直接写成公司利润 | `<标的>_investment_logic_card.md`、`<标的>_market_variables_map.md`、`<标的>_second_curve_ceiling.md` |
+| 市场重定价 / 第二曲线 agent | `modules/market-repricing-spine.md` + `modules/second-curve-ceiling.md` | 市场正在交易什么、身份切换在哪里、预期差来自哪里、新业务如何抬收入/毛利率/客户粘性/平台身份、哪些变量决定利润斜率；必须输出核心交易逻辑、市场误定价、稀缺资源/关键瓶颈、最小利润模型候选、验证点和 200-350 字“投资人首页判断”；不得把行业 TAM 直接写成公司利润 | `<标的>_investment_logic_card.md`、`<标的>_market_variables_map.md`、`<标的>_second_curve_ceiling.md` |
 | 旧业务底盘 / 平台复用 agent | `modules/base-business-floor.md` + `modules/platform-reuse.md` | 收入利润、现金流、客户基础、行业地位、财务质量、下限支撑，以及技术/客户/工艺/产能/供应链/认证/组织能力如何复用 | `<标的>_base_business_floor.md`、`<标的>_platform_reuse.md` |
 | 行业空间 / 竞争客户 agent | `modules/industry-space-share.md` + `modules/competition-customer-validation.md` | 行业为什么扩容、渗透率为何提升、TAM/SAM/SOM 如何分层、公司份额如何变化、客户验证处于哪一段、同行替代风险和公司优势来源 | `<标的>_industry_space_share.md`、`<标的>_competition_customer_validation.md` |
 | 承接动作 / 利润桥 agent | `modules/execution-signals.md` + `modules/profit-bridge.md` + `references/handoffs.md` | 扩产、融资、设备、客户验证、订单、量产、研发投入、人员变化和现金流验证如何传导到旧业务利润、第二曲线利润、扩张成本、少数股东和三表/FCF 驱动；必须把最小利润模型细化成单位经济、数量乘数、兑现节奏、利润中枢区间和敏感性；只沉淀候选字段和缺口，不写正式 handoff | `<标的>_execution_signals.md`、`<标的>_profit_bridge.md` |
@@ -22,7 +22,7 @@
 
 ## Required Agent Outputs
 
-每个研究 subagent 可以覆盖多个 modules，但每个 module 都必须按自己的 `Output` 段独立落盘，并输出本模块识别到的“市场变量交付块”“上行情景交付块”和“核心逻辑校准块”。只要涉及新业务收入、客户份额、订单/量产、产品放量、毛利率、平台复用、研发团队、产能爬坡、核心资源或少数股东权益，即使证据弱，也要写清：市场口径说什么、证据等级、若成立如何改变收入/毛利率/费用率/现金流/利润中枢、若不成立逻辑降级成什么、影响最小利润模型的哪个参数、应在终稿哪个章节保留。若变量会改变核心交易逻辑、最大预期差、第一驱动参数或最小利润模型，必须同步更新或建议更新 `<标的>_investment_logic_card.md`。
+每个研究 subagent 可以覆盖多个 modules，但每个 module 都必须按自己的 `Output` 段独立落盘，并输出本模块识别到的“市场变量交付块”“上行情景交付块”和“核心逻辑校准块”。只要涉及新业务收入、客户份额、订单/量产、产品放量、毛利率、平台复用、研发团队、产能爬坡、核心资源或少数股东权益，即使证据弱，也要写清：市场口径说什么、证据等级、若成立如何改变收入/毛利率/费用率/现金流/利润中枢、若不成立逻辑降级成什么、影响最小利润模型的哪个参数、应在终稿哪个章节保留。若变量会改变核心交易逻辑、最大预期差、第一驱动参数或最小利润模型，必须同步更新或建议更新 `<标的>_investment_logic_card.md` 及其“投资人首页判断”。
 
 Token discipline:
 
@@ -79,8 +79,8 @@ Token discipline:
 - 本轮 `execution_contract` 中与该角色相关的规则摘要、禁止项和输出骨架；若 contract 不存在，主控必须先读取相关 reference/module 后生成，不得让每个角色重复读取静态规则全文。
 - 必读输入切片：`question`、`investment_logic_card`（若已生成）的摘要或相关段落、`facts_core` 相关 Fact-ID 行、`evidence_queue` 相关 Lead-ID 行、必要 `evidence_index` 摘要，以及该 subagent 覆盖的一个或多个 `modules/*.md` 的 `Purpose/Inputs/Workflow/Output` 摘要。已完成的上游中间文件默认只传路径、相关 Fact-ID、下游摘要块、200-400 字摘要或与本角色直接相关的片段；禁止把完整上游研究稿作为 role packet 的常规输入。
 - 必读 reference 的加载规则：研究姿态、QA、终稿写作等静态规则优先来自 `execution_contract`；只有 contract 缺失、规则冲突或角色需要未压缩细则时，才回读 `references/research-posture.md`、`references/qa-gates.md`、`references/final-report.md` 或 `references/report-writing.md`。
-- 必须对覆盖的每个 module 分别输出“市场变量交付块”“上行情景交付块”“核心逻辑校准块”“终稿保留方式”“证据缺口/降级路径”；若是 QA 角色，还必须按对应 reference 的表格骨架输出。正式 handoff 角色只允许在终稿 gate PASS 后启动。
-- 市场重定价 / 第二曲线 agent 必须写或更新 `<标的>_investment_logic_card.md`；承接动作 / 利润桥 agent 必须检查该卡中的最小利润模型是否需要修正，并在 `<标的>_profit_bridge.md` 记录修正结果。
+- 必须对覆盖的每个 module 分别输出“市场变量交付块”“上行情景交付块”“核心逻辑校准块”“终稿保留方式”“证据缺口/降级路径”；若是 QA 角色，还必须按对应 reference 的表格骨架输出。正式 handoff 角色只允许在 `final_report_gate.py` 与 publication hygiene gate 均 PASS 后启动。
+- 市场重定价 / 第二曲线 agent 必须写或更新 `<标的>_investment_logic_card.md`，包括“投资人首页判断”；承接动作 / 利润桥 agent 必须检查该卡中的最小利润模型和首页判断是否需要修正，并在 `<标的>_profit_bridge.md` 记录修正结果。
 - 禁止写目标价、目标市值、买卖建议或把市场口径伪装成公告事实。若文件不可读或信息不足，先列缺口、替代数据路径和可执行的情景边界，不得跳过角色。
 - 禁止把 Gemini/Google Search 输出直接当作事实；只能引用已核验并写入 `facts_core` 的 Fact-ID，或引用 `evidence_queue` 的 Lead-ID 作为待核验线索。
 
@@ -92,7 +92,7 @@ Token discipline:
 
 ## Post-Report Valuation Handoff Stage
 
-估值接力不属于 `5+2` 研究 subagent 的中期产物。`final_report` 完成、`skeptic_review` 存在且 `scripts/final_report_gate.py` PASS 后，主控启动一个 valuation-handoff subagent 或等价文件化阶段。
+估值接力不属于 `5+2` 研究 subagent 的中期产物。`final_report` 完成、`skeptic_review` 存在、`scripts/final_report_gate.py` PASS 且 publication hygiene gate 以 `--fail-on medium` PASS 后，主控启动一个 valuation-handoff subagent 或等价文件化阶段。
 
 该阶段读取 `final_report`、`skeptic_review`、`profit_bridge`、`tracking_dashboard`、`evidence_grading`、`facts_core` 和必要片段，写两个轻量接力文件：
 

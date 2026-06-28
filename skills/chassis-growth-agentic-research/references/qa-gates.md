@@ -7,7 +7,7 @@
 中期进攻 QA 写入 `<标的简称或代码>_midterm_structure_review.md`，在写终稿提纲前执行：
 
 - 检查是否缺市场重定价变量、旧业务底盘、第二曲线、行业经济性与蛋糕分配、TAM/SAM/SOM、公司份额、平台复用、竞争客户链、承接动作、利润斜率、跟踪体系和证据边界。
-- 检查是否存在 `<prefix>_investment_logic_card.md`，且其中完整回答核心交易逻辑、市场误定价、稀缺资源或关键瓶颈、最小利润模型、数量乘数、未来 2-3 年利润中枢区间、置信度、最关键验证点和一票否决证伪点。
+- 检查是否存在 `<prefix>_investment_logic_card.md`，且其中完整回答核心交易逻辑、市场误定价、稀缺资源或关键瓶颈、最小利润模型、数量乘数、未来 2-3 年利润中枢区间、置信度、最关键验证点和一票否决证伪点，并包含 200-350 字“投资人首页判断”。
 - 检查 `investment_logic_card` 是否有且只有一条第一主线，并完整回答最大预期差/核心分歧、最短因果链、核心利润变量/第一驱动参数、第二/第三驱动参数和非核心信息如何降级或删除。若只是列多个看点，没有排序和取舍，必须重写。
 - 检查利润桥是否足以支撑终稿讨论利润中枢和利润斜率：至少说明收入、毛利率、费用、capex、营运资本、现金流、少数股东/投资收益和关键敏感变量如何影响主线。若缺失，必须补写利润桥或证据边界。
 - 检查利润桥是否有最小可计算模型：单位经济、数量乘数、兑现节奏、保守/中性/乐观利润中枢区间和敏感性。若只写“待验证/方向改善/利润中枢有望上移”，必须补写。
@@ -53,15 +53,15 @@
 3. 搜索“平台化、协同、国产替代、第二曲线、生态化”等抽象词。
 4. 若这些词没有伴随收入、毛利率、费用率、客户、订单、现金流或复用链条解释，必须重写。
 5. 检查前 30% 篇幅是否已经展开“核心交易逻辑、市场误定价、最小利润模型/单位经济、利润中枢区间、验证点”。若没有，必须补写；若前 30% 主要由风险、待验证、证据不足或反方观点构成，必须重写开篇。
-6. 检查前 30% 篇幅是否已经出现“最大预期差/核心分歧、第一驱动参数、最短因果链或核心利润变量”。若没有，说明报告缺少刀口，必须重写开篇。
+6. 检查前 30% 篇幅是否已经出现“我们认为”或等价判断句，并展开“最大预期差/核心分歧、第一驱动参数、最短因果链或核心利润变量”。若没有，说明报告缺少投资人首页判断，必须重写开篇。
 7. 随机抽查 3 个核心章节：每章第一段必须说明本章影响哪个核心利润参数，以及是增强、校准还是证伪第一主线；若只是背景介绍或模块摘要，必须改写或合并。
 8. 搜索“所谓、一般而言、通常来说、从框架上、从理论上、我们需要理解、接下来需要关注、值得注意的是、这说明、换句话说、从投资角度看”等说教式连接词。若所在段落没有公司特定事实、数字、客户/订单/产能/竞争线索、利润参数或验证指标，必须删除或改写。
 9. 随机抽查 10 个正文段落，逐段做入场券测试：是否包含公司特定事实/数字、是否影响利润参数、是否增强/校准/证伪第一主线、是否给验证/证伪指标。任一段 4 项全无，必须删除；只有 1 项且只是背景，必须压缩。
-10. 搜索“估值、目标价、目标市值、PE、PEG、SOTP、赔率、定价”等词。
-11. 若出现在 final_report 中形成估值结论，必须删除。
-    - PEG 侧：市场隐含预期、最小利润模型、PEG 估值因子、利润锚准入纪律、情景准入、年份切换或质量折价，可移至正文利润模型或 post-report `peg_valuation_handoff` 的待承接清单。
-    - DCF 侧：三表/FCF 驱动、DCF-ready 候选字段、WACC、UFCF 或 validation 驱动，可移至 post-report `dcf_financial_model_handoff` 的待承接清单。
-    - 两类接力都不得形成目标价、目标市值、买卖建议或“当前贵不贵”。
+10. 搜索“目标价、目标市值、PE、PEG、SOTP、DCF、赔率、当前贵不贵、估值结论、估值表、买入、卖出、评级”等词。
+11. 若这些词出现在 `final_report` 正文，必须删除或改写为利润模型、市场隐含预期差、证据边界或跟踪指标；不得在正文形成任何估值段落、估值表或估值结论。
+    - PEG 侧：PEG 因子、利润锚准入纪律、情景准入、年份切换或质量折价，移至 post-report `peg_valuation_handoff` 的待承接清单；正文只保留最小利润模型、利润中枢和验证路径。
+    - DCF 侧：三表/FCF 驱动、DCF-ready 候选字段、WACC、UFCF 或 validation 驱动，移至 post-report `dcf_financial_model_handoff` 的待承接清单；正文只保留现金流质量、capex、折旧、营运资本和财务费用对利润穿透率的影响。
+    - 两类接力都不得回流到 `final_report`，不得形成目标价、目标市值、买卖建议或“当前贵不贵”。
 12. 随机抽查 3 个核心章节：如果章节主要由表格和短结论组成，必须补写段落。
 13. 搜索一级标题：若标题没有变量、机制或结论方向，必须重写为结论型标题。
 14. 对照 final_report_expansion_plan 的章节素材映射表：若中间文件中的关键证据只在终稿中被一句话概括，必须恢复为完整论证。
@@ -71,16 +71,16 @@
 
 ## Publication Hygiene
 
-正式导出 PDF/HTML 前，必须运行 `$research-report-publication-editor` 的 publication hygiene gate，清除导出痕迹、skill/subagent/工具名、终稿自述和提示词式内部审稿语言；若存在 HIGH 问题，不得声称正式版完成。
+`final_report_gate.py` PASS 后，必须运行 `$research-report-publication-editor` 的 publication hygiene gate，且使用 `--fail-on medium`。它负责清除导出痕迹、skill/subagent/工具名、终稿自述和提示词式内部审稿语言；若存在 MEDIUM 及以上问题，不得声称正式报告完成。正式导出 PDF/HTML 前再次运行。
 
 ## Post-Report Handoff QA
 
-Post-report handoff QA 在 `final_report` 完成、`skeptic_review` 存在且 `scripts/final_report_gate.py` PASS 之后执行；两个 handoff 都必须存在。
+Post-report handoff QA 在 `final_report` 完成、`skeptic_review` 存在、`scripts/final_report_gate.py` PASS 且 publication hygiene gate 以 `--fail-on medium` PASS 之后执行；两个 handoff 都必须存在。
 
 检查项：
 
 - `<prefix>_dcf_financial_model_handoff.md` 和 `<prefix>_peg_valuation_handoff.md` 必须都存在，且不得早于 `<prefix>_final_report.md`。
-- 两个 handoff 文件必须写明 `handoff_status: final_report_passed`、source paths、gate status 和 generation time。
+- 两个 handoff 文件必须写明 `handoff_status: final_report_passed`、source paths、`final_report_gate_status`、`publication_hygiene_status` 和 generation time。
 - `dcf_financial_model_handoff` 只检查 DCF 准入、UFCF guardrails 和阻断缺口；不得重建三表、填正式预测或输出 DCF 结论。
 - `peg_valuation_handoff` 必须把终稿后的研究变量翻译成 PEG 因子消费规则，并逐项说明如何影响 PEG 系数：提高、降低、封顶、仅允许乐观情景、阻止年份切换或暂不影响。
 - 任一 handoff 写成目标价、目标市值、买卖建议、半份估值报告或正式 PEG/DCF 结论，必须重写。

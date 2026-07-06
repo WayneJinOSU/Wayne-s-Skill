@@ -1,0 +1,4 @@
+interface:
+  display_name: "Core Stock Sector Impact"
+  short_description: "Analyze core stock breadth impact on sector risk"
+  default_prompt: "Use -stock-sector-impact to analyze whether my core stock basket is warning about a sector index."

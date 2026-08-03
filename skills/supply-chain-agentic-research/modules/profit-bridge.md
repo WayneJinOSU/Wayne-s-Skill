@@ -4,7 +4,7 @@
 
 用于回答：供应链放量和市场变量能不能转化为利润中枢上移，并把利润天花板抬高到哪一档？产品代际、客户份额、ASP、毛利率、良率、产能利用率、原材料、折旧和少数股东权益如何改变利润斜率？
 
-这是 `supply-chain-agentic-research` 的私有模块，只做研究阶段的利润中枢、利润斜率和利润天花板判断；不是正式预测表、三表模型或估值模型。正式 PEG 由后续 `$growth-stock-valuation` 接手，正式 DCF 由 `$dcf-valuation-workflow` 主控 `$financial-modeling` 和 `dcf-model` 接手。终稿不写目标价、目标市值、PE/PEG/SOTP 或买卖建议。
+这是 `supply-chain-agentic-research` 的私有模块，只做研究阶段的利润中枢、利润斜率和利润天花板判断；不是正式预测表、三表模型或估值模型。正式 PEG 由后续 `$growth-stock-valuation` 接手，正式 DCF 由 `$dcf-valuation-workflow` 主控 `$financial-modeling` 和 `dcf-model` 接手。正式报告不写目标价、目标市值、PE/PEG/SOTP 或买卖建议。
 
 ## Inputs
 
@@ -57,7 +57,7 @@
 市场变量的利润传导：
 市场变量交付：
 上行情景交付：
-终稿保留方式：
+正式报告保留方式：
 最敏感变量：
 反证或失效条件：
 数据不足之处：
@@ -73,7 +73,7 @@
 成立时利润传导：
 不成立时降级路径：
 验证指标：
-终稿保留方式：
+正式报告保留方式：
 ```
 
 上行情景交付：
@@ -84,7 +84,7 @@
 触发条件：
 降级条件：
 验证指标：
-终稿保留章节：
+正式报告保留章节：
 ```
 
 ## Discipline

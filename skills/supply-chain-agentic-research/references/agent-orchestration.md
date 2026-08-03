@@ -4,7 +4,7 @@
 
 ## Required Roles
 
-正式研究必须覆盖 6 个主攻模块、3 个横向护栏模块、两类 handoff readiness、post-report handoff stage 和两轮 QA。模块覆盖不等于 subagent 数量。标准正式研究推荐按 `5 个研究 subagent + 2 个 QA subagent` 合并执行；复杂标的可以进一步拆分，但每个 module 的 Output 文件必须独立落盘。
+正式研究必须覆盖 6 个主攻模块、3 个横向护栏模块、两类 handoff readiness、`brokerage_report` 改写层、post-report handoff stage 和两轮 QA。模块覆盖不等于 subagent 数量。标准正式研究推荐按 `5 个研究 subagent + 2 个 QA subagent` 合并执行；复杂标的可以进一步拆分，但每个 module 的 Output 文件必须独立落盘。
 
 标准分组如下：
 
@@ -16,7 +16,7 @@
 | 订单经营验证 agent | `modules/orders-business-validation.md` | 订单、排产、出货、收入确认、利润释放、现金回收、客户 capex 穿透、供应链地位和承接动作验证 | `<标的>_orders_business_validation.md` |
 | 利润桥 / 跟踪 / readiness agent | `modules/profit-bridge.md` + `modules/tracking-dashboard.md` + `references/handoffs.md` | 利润天花板、利润斜率、敏感性、红黄绿灯、三表/FCF 候选驱动、PEG 估值候选因子；只沉淀候选字段和缺口，不写正式 handoff | `<标的>_profit_bridge.md`、`<标的>_tracking_dashboard.md` |
 | 中期结构 QA agent | `references/qa-gates.md` | 写提纲前检查行业、技术、竞争、客户、产能、订单、利润模型、跟踪体系、证据边界和市场变量正文保留 | `<标的>_midterm_structure_review.md` |
-| 终审事实 QA / 反方审查 agent | `references/qa-gates.md` | 终稿前集中寻找证据缺口、替代解释、市场变量误用、把扩产当订单、把收入当利润、把市场口径当事实等问题 | `<标的>_skeptic_review.md` |
+| 终审事实 QA / 反方审查 agent | `references/qa-gates.md` | 正式报告前集中寻找证据缺口、替代解释、市场变量误用、把扩产当订单、把收入当利润、把市场口径当事实等问题 | `<标的>_skeptic_review.md` |
 
 ## Required Agent Outputs
 
@@ -39,7 +39,7 @@ Token discipline:
 成立时利润传导：
 不成立时降级路径：
 验证指标：
-终稿保留方式：
+正式报告保留方式：
 ```
 
 上行情景交付块：
@@ -50,10 +50,10 @@ Token discipline:
 触发条件：
 降级条件：
 验证指标：
-终稿保留章节：
+正式报告保留章节：
 ```
 
-只要涉及产品代际、客户份额、ASP、毛利率、订单/排产、良率、核心客户认证、关键原料、产能利用率、单机价值量、第二曲线、少数股东权益或投资收益，即使证据弱，也要写清证据等级、成立/不成立时的财务传导和终稿保留方式。
+只要涉及产品代际、客户份额、ASP、毛利率、订单/排产、良率、核心客户认证、关键原料、产能利用率、单机价值量、第二曲线、少数股东权益或投资收益，即使证据弱，也要写清证据等级、成立/不成立时的财务传导和正式报告保留方式。
 
 ## Subagent Prompt Packet
 
@@ -61,8 +61,8 @@ Token discipline:
 
 - 标的名称/代码、任务目录、必须写入的一个或多个输出文件绝对路径。
 - 必读输入文件：`question`、`facts_core`、`evidence_queue`、`evidence_index`、`market_variables_map`，以及该 subagent 覆盖的一个或多个 `modules/*.md` 文件。已完成的上游中间文件默认只传路径、相关 Fact-ID、200-400 字摘要或与本角色直接相关的片段；禁止把完整上游研究稿作为 prompt packet 的常规输入。
-- 必读 reference：研究姿态读取 `references/research-posture.md`；技术路线读取 `references/technology-route-value-chain.md`；接力候选输入和 post-report 接力产物读取 `references/handoffs.md`；QA 读取 `references/qa-gates.md`；提纲、扩写蓝图和终稿读取 `references/final-report.md` 与 `references/report-writing.md`。
-- 必须对覆盖的每个 module 分别输出“市场变量交付块”“上行情景交付块”“终稿保留方式”“证据缺口/降级路径”；若是 QA 角色，还必须按对应 reference 的表格骨架输出。正式 handoff 角色只允许在终稿 gate PASS 后启动。
+- 必读 reference：研究姿态读取 `references/research-posture.md`；技术路线读取 `references/technology-route-value-chain.md`；接力候选输入和 post-report 接力产物读取 `references/handoffs.md`；QA 读取 `references/qa-gates.md`；提纲和券商风格交付稿读取 `references/brokerage-report.md` 与 `references/report-writing.md`。
+- 必须对覆盖的每个 module 分别输出“市场变量交付块”“上行情景交付块”“正式报告保留方式”“证据缺口/降级路径”；若是 QA 角色，还必须按对应 reference 的表格骨架输出。正式 handoff 角色只允许在 `brokerage_report` gate PASS 后启动。
 - 禁止写目标价、目标市值、买卖建议或把市场口径伪装成公告事实。若文件不可读或信息不足，先列缺口、替代数据路径和可执行的情景边界，不得跳过角色。
 - 禁止把 Gemini/Google Search 输出直接当作事实；只能引用已核验并写入 `facts_core` 的 Fact-ID，或引用 `evidence_queue` 的 Lead-ID 作为待核验线索。
 
@@ -73,16 +73,26 @@ Token discipline:
 兜底流程不得停在研究文件。完成研究角色后必须继续：
 
 ```text
-midterm_structure_review -> 缺口补写 -> report_outline -> final_report_expansion_plan -> final_report -> final_report_gate.py -> 失败补写并复跑
+midterm_structure_review -> 缺口补写 -> report_outline -> brokerage_report -> brokerage_report_gate.py -> 失败补写并复跑
 ```
+
+完成中期 QA、终审 QA、brokerage report gate 或 post-report handoff 后，主控必须运行完成审计脚本，不能只凭记忆判断是否可以停：
+
+```bash
+python3 /Users/a/.codex/skills/supply-chain-agentic-research/scripts/workflow_completion_audit.py \
+  "/absolute/path/research_artifacts/<prefix>" \
+  --prefix "<prefix>"
+```
+
+若返回 `status=INCOMPLETE`，必须按 `next_action` 继续；只有用户明确要求“只要中间产物/先停/不要写正式报告”时，才允许在最终回复中说明暂停和缺失项。
 
 任何角色无法获取足够信息时，仍要输出市场正在交易的假设、缺少的数据、合理的情景边界和验证路径，不能跳过该角色。
 
-## Post-Report Valuation Handoff Stage
+## Brokerage Report And Post-Report Valuation Handoff Stage
 
-估值接力不属于 `5+2` 研究 subagent 的中期产物。`final_report` 完成、`skeptic_review` 存在且 `scripts/final_report_gate.py` PASS 后，主控启动一个 valuation-handoff subagent 或等价文件化阶段。
+估值接力不属于 `5+2` 研究 subagent 的中期产物。`brokerage_report` 完成、`skeptic_review` 存在且 `scripts/brokerage_report_gate.py` PASS 后，主控启动一个 valuation-handoff subagent 或等价文件化阶段。
 
-该阶段读取 `final_report`、`skeptic_review`、`profit_bridge`、`tracking_dashboard`、`evidence_grading`、`facts_core` 和必要片段，写两个轻量接力文件：
+该阶段读取 `brokerage_report`、`skeptic_review`、`profit_bridge`、`tracking_dashboard`、`evidence_grading`、`facts_core` 和必要片段，写两个轻量接力文件：
 
 ```text
 <prefix>_dcf_financial_model_handoff.md
@@ -90,3 +100,5 @@ midterm_structure_review -> 缺口补写 -> report_outline -> final_report_expan
 ```
 
 `peg_valuation_handoff` 必须单独说明 PEG 系数机制：每个主要因子到底是提高系数、降低系数、封顶、仅允许乐观情景、阻止年份切换，还是暂不影响。不得只写“利好/利空/正面/负面”。
+
+handoff 写完后再次运行 `workflow_completion_audit.py`。若 handoff 缺失或早于 `brokerage_report`，必须重写，不能声称完整研究完成。

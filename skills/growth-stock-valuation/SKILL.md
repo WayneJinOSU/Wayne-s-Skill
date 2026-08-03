@@ -1,6 +1,6 @@
 ---
 name: growth-stock-valuation
-description: 成长股 PEG/动态 PE 估值 skill；用于成长股、供应链平台股、产业链龙头的 PEG、动态 PE、复合 PEG、目标市值、目标价、一致预期差、当前市值隐含预期、估值年份切换和证伪点分析。目标市值默认使用自有正常/乐观利润锚，一致预期只作市场对照；范围限定为 PEG/动态 PE 成长定价。若用户要求 bottom-up/算小账/分业务利润桥与 PEG 并列对照，使用共享 catalyst precheck、独立 PEG subagent、独立 bottom-up subagent 和并列模块，防止估值与利润计算互相污染。
+description: 成长股 PEG/动态 PE 估值 skill；用于成长股、供应链平台股、产业链龙头的 PEG、动态 PE、复合 PEG、目标市值、目标价、一致预期差、当前市值隐含预期、估值年份切换、证伪点分析，以及默认并列 bottom-up/算小账/分业务利润桥复核。目标市值默认使用自有正常/乐观利润锚，一致预期只作市场对照；正式估值接力默认使用共享 catalyst precheck、独立 PEG 分支、独立 bottom-up 小账分支和并列模块，防止估值与利润计算互相污染；只有用户明确说“PEG only / 不算小账 / 跳过 bottom-up”时才跳过小账。
 ---
 
 # 成长股 PEG / 动态 PE 估值
@@ -28,7 +28,7 @@ description: 成长股 PEG/动态 PE 估值 skill；用于成长股、供应链�
 | 正式 PEG / 动态 PE 估值 | `references/peg-workflow.md`、`references/output-templates.md` | 输出目标市值、目标价、动态 PEG 或 scorecard 前 |
 | A 股一致预期缺失或接口异常 | `references/a-share-consensus-preflight.md`、`references/data-source-fallbacks.md` | 主一致预期源失败、字段缺失或数值异常时 |
 | 无一致预期但自有利润锚完整 | `references/no-consensus-mode.md` | fallback 后仍无可用一致预期时 |
-| 用户要求算小账 / bottom-up / 分业务利润桥并列对照 | `references/parallel-peg-bottom-up-branches.md` | 需要 PEG 与利润小账并列且防止上下文污染时 |
+| 正式估值接力默认并列小账，或用户要求算小账 / bottom-up / 分业务利润桥并列对照 | `references/parallel-peg-bottom-up-branches.md` | 除非用户明确说“PEG only / 不算小账 / 跳过 bottom-up”，正式 PEG 输出目标市值、目标价或 scorecard 前都读取 |
 
 不要一次性读取所有 references。先判断任务模式，再读取对应文件。
 
@@ -40,8 +40,9 @@ description: 成长股 PEG/动态 PE 估值 skill；用于成长股、供应链�
 4. 正常/乐观两档足够。不要输出保守、悲观、下限或 downside 目标市值表；风险用证伪点表达。
 5. 三视角必须并列：`Auditor View` 看财报和现金流底线，`PM View` 看 12-24 个月市场定价，`Catalyst View` 看催化剂是否允许 PEG 上修或年份切换。
 6. 不得让审计口径成为唯一结论，也不得让市场一致预期直接覆盖自有利润锚。
-7. 若启用 bottom-up 并列小账，PEG 分支和 bottom-up 分支只能共享 `catalyst_precheck`、事实文件和公开财务数据；默认不得读取或回写彼此结论。
-8. 若用户明确要求或授权 subagent/并行分支，PEG 和 bottom-up 必须分别由独立 subagent 完成；主控只生成并列对照模块。
+7. 正式 PEG 估值默认启用 bottom-up 并列小账。只有用户明确说“PEG only / 不算小账 / 跳过 bottom-up”时，才允许只跑 PEG 分支。
+8. 启用 bottom-up 并列小账时，PEG 分支和 bottom-up 分支只能共享 `catalyst_precheck`、事实文件和公开财务数据；不得读取或回写彼此结论。
+9. 若用户要求或授权 subagent/并行分支，PEG 和 bottom-up 必须分别由独立 subagent 完成；主控只生成并列对照模块。
 
 ## Required Inputs
 
@@ -110,9 +111,9 @@ Stage scorecard：
 
 若一致预期不可用，读取 `references/no-consensus-mode.md`。
 
-## Optional Bottom-Up Parallel Branch
+## Default Bottom-Up Parallel Branch
 
-只有用户明确要求“算小账 / bottom-up / 分板块利润桥 / 与 PEG 并列对照”时启用，并读取 `references/parallel-peg-bottom-up-branches.md`。
+正式 PEG 估值接力默认启用，并读取 `references/parallel-peg-bottom-up-branches.md`。只有用户明确说“PEG only / 不算小账 / 跳过 bottom-up”时，才跳过本分支。
 
 硬边界：
 
@@ -145,13 +146,15 @@ research_artifacts/<标的>/
   <标的>_no_consensus_peg_valuation_scorecard.md
 ```
 
-可选并列小账输出：
+默认并列小账输出：
 
 ```text
 research_artifacts/<标的>/
   <标的>_bottom_up_profit_bridge_recheck.md
   <标的>_peg_bottom_up_parallel_module.md
 ```
+
+正式 PEG 估值接力默认生成并列小账输出；若用户明确跳过 bottom-up，最终回复必须说明“小账按用户要求跳过”。
 
 不要覆盖已有 `<标的>_valuation_scorecard.md`。本 skill 的正式 scorecard 文件必须带 `peg_` 或 `no_consensus_peg_` 前缀。
 
@@ -163,4 +166,4 @@ research_artifacts/<标的>/
 - 输出模式是 `consensus_mode`、`no_consensus_mode` 还是 `preparation_only`。
 - 正常/乐观目标市值和关键触发条件。
 - 未能验证的数据缺口。
-- 若启用 bottom-up 并列小账：说明 `catalyst_precheck` 是共同上游，PEG 与 bottom-up 由独立分支完成，主控只做并列对照，双方互不回写。
+- 说明 bottom-up 并列小账是否执行；默认应执行。若执行，说明 `catalyst_precheck` 是共同上游，PEG 与 bottom-up 由独立分支完成，主控只做并列对照，双方互不回写；若跳过，说明用户明确要求跳过。

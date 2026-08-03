@@ -1,6 +1,6 @@
 # Handoffs And Financial Bridge
 
-本文件承接利润桥、跟踪体系、三表/FCF 建模候选输入和 PEG 估值候选输入。Handoff 是投研系统给后续估值的判断接口，不是正式估值结论；只能在 `final_report` 完成、`skeptic_review` 存在且 `final_report_gate.py` PASS 后生成。
+本文件承接利润桥、跟踪体系、三表/FCF 建模候选输入和 PEG 估值候选输入。Handoff 是投研系统给后续估值的判断接口，不是正式估值结论；只能在 `skeptic_review` 存在、`brokerage_report` 完成且 `brokerage_report_gate.py` PASS 后生成。
 
 Token discipline:
 
@@ -49,12 +49,20 @@ Post-report handoffs are required research-to-valuation judgment interfaces:
 Generate both files only after:
 
 ```text
-<prefix>_final_report.md exists
 <prefix>_skeptic_review.md exists
-scripts/final_report_gate.py returns PASS
+<prefix>_brokerage_report.md exists
+scripts/brokerage_report_gate.py returns PASS
 ```
 
-The handoff stage reads `final_report`, `skeptic_review`, `profit_bridge`, `tracking_dashboard`, `facts_core`, and only necessary supporting snippets.
+Before generating handoffs and again before replying to the user, run the workflow completion audit. If it returns `INCOMPLETE`, follow `next_action` rather than explaining the gap:
+
+```bash
+python3 /Users/a/.codex/skills/supply-chain-agentic-research/scripts/workflow_completion_audit.py \
+  "/absolute/path/research_artifacts/<prefix>" \
+  --prefix "<prefix>"
+```
+
+The handoff stage reads `brokerage_report`, `skeptic_review`, `profit_bridge`, `tracking_dashboard`, `facts_core`, and only necessary supporting snippets.
 
 The handoff files are not estimates, models, or data packages. They are mandatory outputs of the research workflow, carrying only research judgment for downstream valuation.
 
@@ -62,7 +70,7 @@ Use only these sections for `dcf_financial_model_handoff`:
 
 | Section | Purpose |
 | --- | --- |
-| Status | Record `handoff_status: final_report_passed`, source paths, gate status, generation time |
+| Status | Record `handoff_status: brokerage_report_passed`, `source_brokerage_report`, source paths, `brokerage_report_gate_status`, generation time |
 | Driver Admission | Map research variables to Base / Scenario / Sensitivity / Tracking-only |
 | UFCF Guardrails | List forbidden substitutions, scenario-only variables, and downgrade triggers |
 | Blocking Gaps | List gaps and whether they block Formal DCF |
@@ -74,15 +82,15 @@ Required sections for `peg_valuation_handoff`:
 
 | Section | Purpose |
 | --- | --- |
-| Status | Record `handoff_status: final_report_passed`, source paths, gate status, generation time |
-| Research Verdict | Compress the final report's investment logic and key disconfirming conditions |
-| PEG Factor Treatment | Map final-report factors to explicit PEG coefficient impact, scenario admission, year-switching limits, and validation metrics |
+| Status | Record `handoff_status: brokerage_report_passed`, `source_brokerage_report`, source paths, `brokerage_report_gate_status`, generation time |
+| Research Verdict | Compress the brokerage report's investment logic and key disconfirming conditions |
+| PEG Factor Treatment | Map brokerage-report factors to explicit PEG coefficient impact, scenario admission, year-switching limits, and validation metrics |
 | Profit Anchor Discipline | List profit metric discipline, quality discounts, year discipline, scenario admission, and missing fields |
 | Prohibitions | No target price, no target market cap, no buy/sell language, no formal PEG or DCF conclusion |
 
 PEG Factor Treatment must include a coefficient-mechanics table:
 
-| 因子 | 终稿判断 | 证据等级 | 对 PEG 系数的影响 | 机制说明 | 情景准入 | 年份切换影响 | 验证指标 |
+| 因子 | 正式报告判断 | 证据等级 | 对 PEG 系数的影响 | 机制说明 | 情景准入 | 年份切换影响 | 验证指标 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 收入兑现 |  |  | 抬高/压低/封顶/无影响 | 说明为什么影响 PEG 系数 |  |  |  |
 | 利润质量 |  |  | 抬高/压低/封顶/无影响 | 说明为什么影响 PEG 系数 |  |  |  |
@@ -99,4 +107,6 @@ The "对 PEG 系数的影响" column must be specific enough for `$growth-stock-
 
 `Profit Anchor Discipline` only records profit metric discipline, quality discounts, scenario admission, year-switching conditions, and blocking gaps. It must not become an annual profit forecast table or fill missing valuation data for the downstream skill.
 
-Formal valuation remains downstream: PEG is handled by `$growth-stock-valuation`; DCF is handled by `$dcf-valuation-workflow`. Valuation feedback may inform later tracking work, but must not rewrite research facts or flow back into `final_report` as target price, target market cap, buy/sell language, or a formal valuation conclusion.
+Formal valuation remains downstream: PEG is handled by `$growth-stock-valuation`; DCF is handled by `$dcf-valuation-workflow`. Valuation feedback may inform later tracking work, but must not rewrite research facts or flow back into `brokerage_report` as target price, target market cap, buy/sell language, or a formal valuation conclusion.
+
+After writing both handoffs, rerun `workflow_completion_audit.py`. The workflow is complete only when the audit returns `status=COMPLETE`; missing handoffs or handoffs older than `brokerage_report` must be regenerated.

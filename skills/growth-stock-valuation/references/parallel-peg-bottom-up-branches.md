@@ -1,6 +1,6 @@
 # Parallel PEG / Bottom-Up Branches
 
-用于用户明确要求“算小账”“bottom-up”“分板块利润桥”并与 PEG 估值并列对照时。目标是防止估值分支和利润计算分支上下文互相污染。
+用于正式 PEG 估值接力的默认并列小账分支，或用户明确要求“算小账”“bottom-up”“分板块利润桥”并与 PEG 估值并列对照时。只有用户明确说“PEG only / 不算小账 / 跳过 bottom-up”时才跳过。目标是防止估值分支和利润计算分支上下文互相污染。
 
 ## Contents
 
@@ -113,8 +113,10 @@ Shared Catalyst Precheck
 
 并列模块不得改写 PEG 或 bottom-up 结论。
 
-## Re-Run Rules
+## Default / Re-Run Rules
 
+- 正式 PEG 估值接力默认同时跑 PEG 分支和 bottom-up 分支，并由主控输出并列模块。
+- 若用户明确说“PEG only / 不算小账 / 跳过 bottom-up”，只跑 PEG 分支，并在最终回复说明已按用户要求跳过小账。
 - 若用户要求“用小账结果重跑 PEG”，重新启动 PEG 分支，并在输出中说明新输入和重跑原因。
 - 若用户要求“用 PEG 锚校准小账”，重新启动 bottom-up 分支，并标注这是估值锚校准版，不是纯经营小账。
 - 若没有明确重跑要求，两个分支互不回写。

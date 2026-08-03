@@ -1,10 +1,10 @@
 # QA Gates
 
-本文件承接中期结构 QA、终审事实 QA、市场变量覆盖 QA、终稿 QA 和出版清理。QA 的目标是校准和补厚，不是削弱主线气势。
+本文件承接中期结构 QA、终审事实 QA、市场变量覆盖 QA、券商风格交付稿 QA 和出版清理。QA 的目标是校准和补厚，不是削弱主线气势。
 
 ## Midterm Structure Review
 
-`<标的>_midterm_structure_review.md` 在写终稿提纲前执行，必须检查：
+`<标的>_midterm_structure_review.md` 在写正式报告提纲前执行，必须检查：
 
 - 是否缺行业空间、周期位置、供需缺口、价格周期。
 - 是否缺技术路线、产品代际矩阵、价值量、ASP、毛利率和价格与利润传导。
@@ -20,7 +20,7 @@
 
 ## Skeptic Review
 
-`<标的>_skeptic_review.md` 在终稿前执行，必须集中寻找：
+`<标的>_skeptic_review.md` 在正式报告前执行，必须集中寻找：
 
 - 哪些进攻型变量最可能被证伪。
 - 哪些地方把行业景气直接跳成公司壁垒。
@@ -32,42 +32,37 @@
 
 ## Market Variable Coverage QA
 
-终稿前必须在 `<标的>_report_outline.md` 或 `<标的>_skeptic_review.md` 保留市场变量覆盖表：
+正式报告前必须在 `<标的>_report_outline.md` 或 `<标的>_skeptic_review.md` 保留市场变量覆盖表：
 
-| 市场变量 | 中间文件是否覆盖 | 终稿是否保留 | 若删除，原因 |
+| 市场变量 | 中间文件是否覆盖 | 正式报告是否保留 | 若删除，原因 |
 | --- | --- | --- | --- |
 
-凡市场变量属于高重要口径，例如客户份额、产品代际、ASP、毛利率、订单排产、良率、核心客户认证、上游关键材料锁定等，`终稿是否保留` 原则上必须为“保留”。只有当变量与公司相关性弱、已被反证、或与另一个正文变量合并表达时，才允许删除，并必须写明。
+凡市场变量属于高重要口径，例如客户份额、产品代际、ASP、毛利率、订单排产、良率、核心客户认证、上游关键材料锁定等，`正式报告是否保留` 原则上必须为“保留”。只有当变量与公司相关性弱、已被反证、或与另一个正文变量合并表达时，才允许删除，并必须写明。
 
-## Final Report QA
+## Brokerage Report QA
 
-终稿写作必须执行以下检查：
+按 [brokerage-report.md](brokerage-report.md) 写 `<prefix>_brokerage_report.md` 后，必须执行以下检查：
 
-1. 搜索“后续关注、仍需验证、不能写成事实、证据不足、待验证”等词。若这些词出现在核心变量段落，必须检查是否先写清“变量成立时如何抬高天花板或利润斜率”。
-2. 搜索“高端化、国产替代、结构升级、平台型”等抽象词。若这些词没有伴随价格、价值量、毛利率、良率、份额、现金流或客户替换成本解释，必须重写。
-3. 搜索证据台账和提纲中的高重要市场变量名称。若这些词没有进入 final_report 正文，必须补写或在市场变量覆盖 QA 中解释合并/删除原因。
-4. 搜索“估值、目标价、目标市值、PE、PEG、SOTP、隐含利润、赔率、定价”等词。若出现在 final_report，必须删除；若只是模型消费变量，可移至 post-report handoff 待承接清单或后续独立估值产物。
-5. 搜索“行业、竞争、客户、认证、产品代际、利润桥、敏感性、跟踪日历、红色警报”。若缺任一类正文内容，必须补写。
-6. 检查每个核心章节是否至少包含一个数据表或模型表、一个解释性段落、一个变量增强/减弱判断和一个验证指标。
-7. 搜索“市场正在交易、利润斜率、天花板、绿色信号、上行情景、半兑现、兑现”。若终稿缺少这些进攻型表达，或只剩事实边界和风险提示，必须重写核心结论和市场变量章节。
-8. 单独检查标题。若一级或二级标题只表达“有望、关注、仍需验证、分析、概览、梳理”，通常说明标题在缓冲判断，必须改成“变量 + 财务传导 + 结论方向”的标题。
-9. 对照 `final_report_expansion_plan` 的章节素材映射表：若中间文件里的关键客户、竞品、产品代际、原材料、产能、订单、现金流或利润桥素材只在终稿中被一句话概括，必须恢复为完整论证。
-10. 随机抽查 3 个核心章节。若章节少于 5 个实质段落，或主要由表格和短结论承载判断，必须补写事实、机制、利润传导、反证和验证指标。
-11. 执行表格删除测试：删除核心表格后，正文仍应能讲清本章判断；若不能，必须补段落，不得只加表格。
-12. 按 [final-report.md](final-report.md) 的 Anti-Summary Gate 运行 `scripts/final_report_gate.py`；失败补写、复跑和“闸门补写记录”规则以 `final-report.md` 为准。
+1. 是否包含投资摘要/核心结论、公司定位与业务拆分、行业变化与市场交易主线、分业务增长逻辑、盈利传导与利润桥、催化剂与跟踪指标、风险提示/关键假设。
+2. 市场变量是否被保留并翻译成 `基准驱动 / 上行情景 / 质量折扣 / 风险变量 / 催化剂`，而不是被删掉或只留在内部 QA。
+3. 是否包含“盈利预测变量与情景假设表”，并写明变量、当前判断、是否进入基准假设、上行情景条件、对盈利的影响、跟踪指标和风险处理。
+4. 是否大幅减少“不是、不能、反证、证伪、降级、闸门、正式报告、正文必须”等审计式语言，把边界改成研究判断、基准/上行情景、盈利质量折扣或风险触发器。
+5. 是否清除 `Fact-ID`、skill/subagent、gate、自述式写作流程、内部文件名，以及 `handoff/base driver/scenario driver/tracking-only/quality discount/UFCF guardrail/blocking gap/估值接力/接力处理/研报定位/本文的核心/变量权重` 等系统或模型接口语言。
+6. 是否仍不写目标价、目标市值、买卖建议或正式 PE/PEG/DCF 估值结论。
+7. 按 [brokerage-report.md](brokerage-report.md) 运行 `scripts/brokerage_report_gate.py`；失败时改写 `brokerage_report`，不得删除变量来凑通过。
 
 ## Publication Hygiene
 
-参考 `$chassis-growth-agentic-research` 的调用方式：正式导出 PDF/HTML 前，或用户要求正式版、发布版、对外版时，必须运行 `$research-report-publication-editor` 的 publication hygiene gate，清除导出痕迹、skill/subagent/任务名/工具名、终稿自述、提示词残留、内部审稿语言和过度教学化表达。若存在 HIGH 问题，不得声称正式版完成；若存在 MEDIUM 问题，应先改写为报告判断语言；LOW 问题按报告风格和用户偏好处理。
+参考 `$chassis-growth-agentic-research` 的调用方式：正式导出 PDF/HTML 前，或用户要求正式版、发布版、对外版时，必须运行 `$research-report-publication-editor` 的 publication hygiene gate，清除导出痕迹、skill/subagent/任务名/工具名、正式报告自述、提示词残留、内部审稿语言和过度教学化表达。若存在 HIGH 问题，不得声称正式版完成；若存在 MEDIUM 问题，应先改写为报告判断语言；LOW 问题按报告风格和用户偏好处理。
 
 ## Post-Report Handoff QA
 
-Post-report handoff QA 在 `final_report` 完成、`skeptic_review` 存在且 `scripts/final_report_gate.py` PASS 之后执行；两个 handoff 都必须存在。
+Post-report handoff QA 在 `skeptic_review` 存在、`brokerage_report` 完成且 `scripts/brokerage_report_gate.py` PASS 之后执行；两个 handoff 都必须存在。
 
 检查项：
 
-- `<prefix>_dcf_financial_model_handoff.md` 和 `<prefix>_peg_valuation_handoff.md` 必须都存在，且不得早于 `<prefix>_final_report.md`。
-- 两个 handoff 文件必须写明 `handoff_status: final_report_passed`、source paths、gate status 和 generation time。
+- `<prefix>_dcf_financial_model_handoff.md` 和 `<prefix>_peg_valuation_handoff.md` 必须都存在，且不得早于 `<prefix>_brokerage_report.md`。
+- 两个 handoff 文件必须写明 `handoff_status: brokerage_report_passed`、`source_brokerage_report`、source paths、`brokerage_report_gate_status` 和 generation time。
 - `dcf_financial_model_handoff` 只检查 DCF 准入、UFCF guardrails 和阻断缺口；不得重建三表、填正式预测或输出 DCF 结论。
-- `peg_valuation_handoff` 必须把终稿后的研究变量翻译成 PEG 因子消费规则，并逐项说明如何影响 PEG 系数：提高、降低、封顶、仅允许乐观情景、阻止年份切换或暂不影响。
+- `peg_valuation_handoff` 必须把正式报告后的研究变量翻译成 PEG 因子消费规则，并逐项说明如何影响 PEG 系数：提高、降低、封顶、仅允许乐观情景、阻止年份切换或暂不影响。
 - 任一 handoff 写成目标价、目标市值、买卖建议、半份估值报告或正式 PEG/DCF 结论，必须重写。

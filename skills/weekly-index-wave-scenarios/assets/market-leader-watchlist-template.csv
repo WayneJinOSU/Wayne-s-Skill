@@ -1,0 +1,4 @@
+ts_code,name,role,theme,weight,reviewed_at,selection_reason
+600519.SH,示例公司,market_anchor,消费,1.0,2026-07-16,仅作字段示例；使用前替换为当前市场锚定龙头
+000001.SZ,示例公司,style_leader,金融,1.0,2026-07-16,仅作字段示例；使用前替换为当前风格龙头
+300750.SZ,示例公司,narrative_leader,产业主题,1.0,2026-07-16,仅作字段示例；使用前替换为当前叙事龙头

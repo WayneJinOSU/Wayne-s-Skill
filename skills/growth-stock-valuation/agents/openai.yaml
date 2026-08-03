@@ -1,7 +1,7 @@
 interface:
   display_name: "成长股PEG估值"
   short_description: "成长股PEG估值与独立bottom-up小账并列对照"
-  default_prompt: "Use $growth-stock-valuation for PEG/dynamic-PE valuation with a shared catalyst_precheck; when bottom-up 小账 is requested, isolate PEG and bottom-up branches in independent subagents and merge them only through a parallel comparison module without cross-writing."
+  default_prompt: "Use $growth-stock-valuation for PEG/dynamic-PE valuation with a shared catalyst_precheck; by default run both the PEG branch and an independent bottom-up 小账 branch, then merge them only through a parallel comparison module without cross-writing. Skip bottom-up only when the user explicitly says PEG only / 不算小账 / 跳过 bottom-up."
 
 policy:
   allow_implicit_invocation: true

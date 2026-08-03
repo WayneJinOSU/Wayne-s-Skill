@@ -1,0 +1,3 @@
+event_id,published_at,effective_from,effective_to,event_type,title,status,source_level,source_url,market_scope,sector,channel,direction,confidence,expectedness,notes
+example-policy-001,2026-01-01T09:00:00+08:00,2026-01-01,2026-01-31,policy,示例：官方政策发布,confirmed,official,https://example.com,all_market,,risk_appetite,0,0.80,partly_expected,请替换为真实且可复核的事件
+example-ipo-001,2026-01-01T09:00:00+08:00,2026-01-01,2026-03-31,ipo,示例：公司IPO状态更新,filing,official,https://example.com,growth,semiconductor,capital_supply,0,0.70,expected,未到注册或定价阶段不应改变正式情景

@@ -12,6 +12,7 @@ import argparse
 import json
 import math
 import os
+import re
 import time
 from dataclasses import dataclass
 from datetime import datetime
@@ -83,6 +84,19 @@ def infer_target_type(code: str) -> str:
     return "index"
 
 
+def today_yyyymmdd() -> str:
+    return datetime.now().strftime("%Y%m%d")
+
+
+def resolve_end_date(raw: str) -> str:
+    value = raw.strip().lower()
+    if value in {"", "today", "now", "auto"}:
+        return today_yyyymmdd()
+    if not re.fullmatch(r"\d{8}", value):
+        raise ValueError("--end-date must be YYYYMMDD, today, now, or auto")
+    return value
+
+
 def parse_args() -> Config:
     parser = argparse.ArgumentParser(description="核心标的状态扩散对板块/指数/ETF影响复盘")
     parser.add_argument("--stocks", default="", help="逗号分隔: 300308.SZ:中际旭创,300502.SZ:新易盛")
@@ -92,7 +106,7 @@ def parse_args() -> Config:
     parser.add_argument("--target-type", choices=["auto", "index", "fund", "stock"], default="auto")
     parser.add_argument("--analysis-start", default="20250101")
     parser.add_argument("--fetch-start", default="20240101")
-    parser.add_argument("--end-date", default=datetime.today().strftime("%Y%m%d"))
+    parser.add_argument("--end-date", default="today", help="YYYYMMDD；默认 today，运行时取当天日期")
     parser.add_argument("--state-window", type=int, default=5)
     parser.add_argument("--band", type=float, default=0.05)
     parser.add_argument("--horizons", default="5,10,20")
@@ -112,6 +126,7 @@ def parse_args() -> Config:
         raise ValueError("--horizons cannot be empty")
     majority = args.majority_count or (len(stocks) // 2 + 1)
     target_type = infer_target_type(args.target_code) if args.target_type == "auto" else args.target_type
+    end_date = resolve_end_date(args.end_date)
 
     return Config(
         stocks=stocks,
@@ -120,7 +135,7 @@ def parse_args() -> Config:
         target_type=target_type,
         analysis_start=args.analysis_start,
         fetch_start=args.fetch_start,
-        end_date=args.end_date,
+        end_date=end_date,
         state_window=args.state_window,
         band=args.band,
         horizons=horizons,
@@ -157,7 +172,8 @@ def normalize_daily(df: pd.DataFrame, code: str, name: str) -> pd.DataFrame:
 
 def load_stock_daily(code: str, name: str, cfg: Config, cache_dir: Path) -> pd.DataFrame:
     path = cache_path(cache_dir, "stock_qfq", code, cfg.fetch_start, cfg.end_date)
-    if path.exists() and not cfg.force_refresh:
+    refresh_cache = cfg.force_refresh or cfg.end_date == today_yyyymmdd()
+    if path.exists() and not refresh_cache:
         return normalize_daily(pd.read_csv(path), code, name)
     df = ts.pro_bar(ts_code=code, start_date=cfg.fetch_start, end_date=cfg.end_date, adj="qfq", asset="E")
     if df is None or df.empty:
@@ -170,7 +186,8 @@ def load_stock_daily(code: str, name: str, cfg: Config, cache_dir: Path) -> pd.D
 
 def load_target_daily(pro, cfg: Config, cache_dir: Path) -> pd.DataFrame:
     path = cache_path(cache_dir, f"target_{cfg.target_type}", cfg.target_code, cfg.fetch_start, cfg.end_date)
-    if path.exists() and not cfg.force_refresh:
+    refresh_cache = cfg.force_refresh or cfg.end_date == today_yyyymmdd()
+    if path.exists() and not refresh_cache:
         return normalize_daily(pd.read_csv(path), cfg.target_code, cfg.target_name)
     if cfg.target_type == "index":
         df = pro.index_daily(ts_code=cfg.target_code, start_date=cfg.fetch_start, end_date=cfg.end_date)
@@ -323,30 +340,81 @@ def pct_table(df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
-def latest_detail_rows(detail: pd.DataFrame) -> pd.DataFrame:
+def chinese_summary_columns(columns: pd.Index) -> dict[str, str]:
+    labels = {
+        "regime": "扩散状态",
+        "obs": "样本数",
+        "avg_up_count": "平均上行数",
+        "avg_sideways_count": "平均横盘数",
+        "avg_down_count": "平均下跌数",
+    }
+    for col in columns:
+        if col in labels:
+            continue
+        match = re.fullmatch(r"fwd_(\d+)d", col)
+        if match:
+            labels[col] = f"后{match.group(1)}日全样本平均收益(%)"
+            continue
+        match = re.fullmatch(r"fwd_(\d+)d_median", col)
+        if match:
+            labels[col] = f"后{match.group(1)}日收益中位数(%)"
+            continue
+        match = re.fullmatch(r"fwd_(\d+)d_p10", col)
+        if match:
+            labels[col] = f"后{match.group(1)}日收益P10(%)"
+            continue
+        match = re.fullmatch(r"fwd_(\d+)d_worst", col)
+        if match:
+            labels[col] = f"后{match.group(1)}日最差收益(%)"
+            continue
+        match = re.fullmatch(r"avg_fwd_(\d+)d_loss", col)
+        if match:
+            labels[col] = f"后{match.group(1)}日亏损样本平均收益(%)"
+            continue
+        match = re.fullmatch(r"p10_fwd_dd_(\d+)d", col)
+        if match:
+            labels[col] = f"后{match.group(1)}日最大回撤P10(%)"
+            continue
+        match = re.fullmatch(r"worst_fwd_dd_(\d+)d", col)
+        if match:
+            labels[col] = f"后{match.group(1)}日最差最大回撤(%)"
+    return labels
+
+
+def latest_detail_rows(detail: pd.DataFrame, state_window: int) -> pd.DataFrame:
     latest = detail.tail(1)
     rows = []
     for col in detail.columns:
         if col == "trade_date" or col.endswith("|state"):
             continue
         state_col = f"{col}|state"
-        rows.append({"stock": col, "ret": latest[col].iloc[0], "state": latest[state_col].iloc[0]})
+        code, name = col.split("|", 1) if "|" in col else (col, col)
+        rows.append({"标的": f"{name}({code})", f"{state_window}日收益(%)": latest[col].iloc[0], "状态": latest[state_col].iloc[0]})
     return pd.DataFrame(rows)
+
+
+def markdown_table(df: pd.DataFrame, column_labels: dict[str, str] | None = None) -> str:
+    out = pct_table(df)
+    if column_labels:
+        out = out.rename(columns=column_labels)
+    return out.to_markdown(index=False, floatfmt=".2f")
 
 
 def write_report(cfg: Config, panel: pd.DataFrame, detail: pd.DataFrame, target_summary: pd.DataFrame,
                  basket_summary: pd.DataFrame, output_dir: Path) -> Path:
     latest = panel.dropna(subset=["target_close"]).iloc[-1]
+    target_type_labels = {"index": "指数", "fund": "基金", "stock": "股票"}
     lines = [
         "# 核心标的状态扩散影响复盘",
         "",
         "## 口径",
         "",
-        f"- 目标观察标的：`{cfg.target_code}` {cfg.target_name} ({cfg.target_type})",
+        f"- 目标观察标的：`{cfg.target_code}` {cfg.target_name}（{target_type_labels.get(cfg.target_type, cfg.target_type)}）",
         f"- 核心标的池：{', '.join([f'{v}({k})' for k, v in cfg.stocks.items()])}",
         f"- 区间：`{cfg.analysis_start}` 至 `{cfg.end_date}`",
         f"- 状态窗口：`{cfg.state_window}` 个交易日；阈值：`±{cfg.band:.1%}`",
         f"- 多数扩散阈值：`{cfg.majority_count}` / `{len(cfg.stocks)}`",
+        f"- 统计口径：`后N日全样本平均收益`包含全部有效样本；`后N日亏损样本平均收益`只包含后N日收益为负的样本。",
         "",
         "## 最新状态",
         "",
@@ -357,15 +425,15 @@ def write_report(cfg: Config, panel: pd.DataFrame, detail: pd.DataFrame, target_
         "",
         "### 最新核心标的状态",
         "",
-        pct_table(latest_detail_rows(detail)).to_markdown(index=False, floatfmt=".2f"),
+        markdown_table(latest_detail_rows(detail, cfg.state_window)),
         "",
         "## 目标标的：按扩散状态",
         "",
-        pct_table(target_summary).to_markdown(index=False, floatfmt=".2f"),
+        markdown_table(target_summary, chinese_summary_columns(target_summary.columns)),
         "",
         "## 核心等权篮子：按扩散状态",
         "",
-        pct_table(basket_summary).to_markdown(index=False, floatfmt=".2f"),
+        markdown_table(basket_summary, chinese_summary_columns(basket_summary.columns)),
         "",
     ]
     path = output_dir / "core_stock_sector_impact_report.md"

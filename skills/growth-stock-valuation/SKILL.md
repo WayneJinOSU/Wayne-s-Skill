@@ -1,132 +1,130 @@
 ---
 name: growth-stock-valuation
-description: 成长股 PEG/动态 PE 估值 skill；用于成长股、供应链平台股、产业链龙头的 PEG、动态 PE、复合 PEG、目标市值、目标价、一致预期差、当前市值隐含预期、估值年份切换、证伪点分析，以及默认并列 bottom-up/算小账/分业务利润桥复核。目标市值默认使用自有正常/乐观利润锚，一致预期只作市场对照；正式估值接力默认使用共享 catalyst precheck、独立 PEG 分支、独立 bottom-up 小账分支和并列模块，防止估值与利润计算互相污染；只有用户明确说“PEG only / 不算小账 / 跳过 bottom-up”时才跳过小账。
+description: 成长股 PEG / Forward PE 交叉估值；用于动态 PEG、复合 PEG、Forward PE、估值增速裁量、PEG系数选档、正常/乐观目标市值、催化剂裁量估值、目标价、当前市值隐含预期和估值年份切换。必须纳入最近实际年度到预测期的完整增长路径，由模型区分客观增速与可用于估值的持续增速，并解释PEG为何取0.9、1.0、1.1等档位；防止高增速与高PEG双重计价。默认排除 bottom-up/算小账/分业务利润桥。
 ---
 
-# 成长股 PEG / 动态 PE 估值
+# 成长股 PEG / Forward PE 交叉估值
 
-## Core Scope
+## Scope
 
-本 skill 只回答 PEG / 动态 PE 定价问题：
+只回答市场如何给成长定价：
 
 ```text
-当前市值交易到哪一年利润？
-正常/乐观自有利润锚对应多少目标市值？
-一致预期是市场对照还是目标锚？
-是否允许 PEG 上修或估值年份切换？
-哪些证据会触发或证伪？
+动态 PEG、复合 PEG、Forward PE 分别指向什么区间？
+当前市值交易到哪一年、隐含多少利润或增长？
+正常/乐观情景对应多少目标市值？
+什么证据允许从正常迁移到乐观，或切换估值年份？
+后来上涨来自原估值兑现，还是新增盈利上修？
 ```
 
-范围限定为 PEG / 动态 PE 成长定价、当前隐含预期、年份切换、触发条件和证伪点；正常/乐观目标市值来自自有利润锚，一致预期只作为市场对照。
+默认不运行、不读取、不生成 bottom-up、小账或分业务利润桥。若用户另行要求小账，把它作为独立任务和独立文件处理；除非用户明确要求“用小账重设 PEG 利润锚”，否则不得回写本估值。
 
-## Progressive Disclosure
+## References
 
-主文件只保留路由和硬红线。按任务需要读取 references：
+| 场景 | 必读 reference |
+| --- | --- |
+| 正式估值、目标市值、目标价或 scorecard | `references/peg-workflow.md`、`references/output-templates.md` |
+| A 股一致预期缺失或接口异常 | `references/a-share-consensus-preflight.md`、`references/data-source-fallbacks.md` |
+| fallback 后仍无一致预期，但自有利润锚完整 | `references/no-consensus-mode.md` |
 
-| 场景 | 必读 reference | 何时读取 |
-| --- | --- | --- |
-| 正式 PEG / 动态 PE 估值 | `references/peg-workflow.md`、`references/output-templates.md` | 输出目标市值、目标价、动态 PEG 或 scorecard 前 |
-| A 股一致预期缺失或接口异常 | `references/a-share-consensus-preflight.md`、`references/data-source-fallbacks.md` | 主一致预期源失败、字段缺失或数值异常时 |
-| 无一致预期但自有利润锚完整 | `references/no-consensus-mode.md` | fallback 后仍无可用一致预期时 |
-| 正式估值接力默认并列小账，或用户要求算小账 / bottom-up / 分业务利润桥并列对照 | `references/parallel-peg-bottom-up-branches.md` | 除非用户明确说“PEG only / 不算小账 / 跳过 bottom-up”，正式 PEG 输出目标市值、目标价或 scorecard 前都读取 |
+## Hard Rules
 
-不要一次性读取所有 references。先判断任务模式，再读取对应文件。
-
-## Non-Negotiables
-
-1. 正式估值必须先有 `catalyst_precheck` 或近期 `integrated_update`。若没有，生成 `<标的>_catalyst_precheck.md`。
-2. 正常目标市值使用 `own_normal_profit_*`；乐观目标市值使用 `own_bull_profit_*`。一致预期只用于市场对照、隐含预期和一致预期差。
-3. 当前年份为 2026 年时，主估值年份默认 `2027E`。不得跳过 2027E 直接把 2028E 当正常/乐观主锚。
-4. 正常/乐观两档足够。不要输出保守、悲观、下限或 downside 目标市值表；风险用证伪点表达。
-5. 三视角必须并列：`Auditor View` 看财报和现金流底线，`PM View` 看 12-24 个月市场定价，`Catalyst View` 看催化剂是否允许 PEG 上修或年份切换。
-6. 不得让审计口径成为唯一结论，也不得让市场一致预期直接覆盖自有利润锚。
-7. 正式 PEG 估值默认启用 bottom-up 并列小账。只有用户明确说“PEG only / 不算小账 / 跳过 bottom-up”时，才允许只跑 PEG 分支。
-8. 启用 bottom-up 并列小账时，PEG 分支和 bottom-up 分支只能共享 `catalyst_precheck`、事实文件和公开财务数据；不得读取或回写彼此结论。
-9. 若用户要求或授权 subagent/并行分支，PEG 和 bottom-up 必须分别由独立 subagent 完成；主控只生成并列对照模块。
+1. **三锚缺一不可**：正式估值必须同时计算动态 PEG、复合 PEG和 Forward PE；不得用单一方法直接给最终目标市值。
+2. **两档情景**：只给正常、乐观两档。风险写证伪条件，不另造保守/悲观目标价。
+3. **自有利润锚优先**：目标市值使用 `own_normal_profit_*` 与 `own_bull_profit_*`；一致预期仅作市场对照、隐含预期和修订幅度参考。
+4. **最近实际年度不可缺席**：必须展示最近实际年度至未来三年的完整利润序列、逐年增速和跨期CAGR。不得只从当前预测年向后计算，使已经发生的盈利跃迁从判断中消失。
+5. **客观增速不等于估值增速**：模型必须根据兑现程度、低基数、周期性和未来降速，自主给出估值增速及理由。已经兑现的高增长可以提高盈利跃迁可信度，但不得无折扣外推。
+6. **PEG系数必须单独判断**：不得默认PEG=1，也不得先看目标市值再反推PEG。正式估值必须解释0.9、1.0、1.1等档位分别对应的增长质量、持续性、现金流和竞争壁垒。
+7. **双重抬升禁令**：若估值增速已因历史盈利跃迁或催化剂高于纯前瞻增速，PEG系数不得再因同一理由完整上调；PEG超过1需要独立的增长质量证据。
+8. **Forward PE 是独立校验**：PEG推导PE必须与同业、历史和商业质量交叉。Forward PE不应被预设成唯一答案；但PEG结果超出可解释倍数时，必须说明冲突并受绝对倍数约束。
+9. **交叉而非平均**：优先采用三种方法共同支持的重叠区。若不重叠，公开分歧来源并降低结论置信度；不得简单平均掩盖冲突。
+10. **估值年份纪律**：当前年份为2026年时，主估值默认使用2027E；2028E仅作为有明确触发条件的年份切换情景。
+11. **催化剂必须影响当前判断**：模型必须自主判断催化剂的方向、强度、验证阶段、持续性与计价程度，并据此给出“催化剂裁量后的当前合理估值区间”；不得只列触发条件而不进入估值结论。
+12. **保留估值版本**：每次报告固定估值日期、利润锚、客观增速、估值增速、PEG系数、倍数和区间。后续变化不得覆写旧区间。
+13. **禁止后视镜改名**：股价到达乐观区间，不得把原乐观区间事后改称原正常估值。
+14. **排除 bottom-up**：bottom-up结果不得出现在主估值正文、目标市值表或综合结论中。
 
 ## Required Inputs
 
-优先读取当前任务目录：
+优先读取：
 
 ```text
 research_artifacts/<标的>/
+  <标的>_catalyst_precheck.md 或 <标的>_integrated_update.md
+  <标的>_peg_ready_package.md
+  <标的>_peg_valuation_handoff.md（若存在）
 ```
 
-正式 PEG 估值优先输入：
+字段不足时，只按需读取事实、证据、财务和研究报告片段。使用 `rg` 定位；不要为熟悉背景全文读取大型报告。
+
+不得读取以下文件作为 PEG 输入：
 
 ```text
-<标的>_catalyst_precheck.md 或 <标的>_integrated_update.md
-<标的>_peg_ready_package.md
-<标的>_peg_valuation_handoff.md（若存在）
+*bottom_up*
+*profit_bridge_recheck*
+*peg_bottom_up_parallel_module*
 ```
-
-若缺字段，再按片段读取：
-
-```text
-<标的>_facts_core.md（若存在，优先 Fact-ID）
-<标的>_evidence_index.md
-<标的>_profit_bridge.md 或 <标的>_financial_profit_bridge.md
-<标的>_orders_shipments_quality.md
-<标的>_skeptic_review.md
-<标的>_final_report.md
-```
-
-第三层文件只允许 `rg` 定位后读相关片段；不要全文读取大型深研文件来“熟悉背景”。
 
 ## Catalyst Precheck
 
-正式估值前必须生成或复用 catalyst precheck。最低结构：
+正式估值前复用近期催化剂更新；若不存在，生成简洁的 `<标的>_catalyst_precheck.md`。只保留：
 
 ```text
-基准假设：
-最近增量证据：
-Catalyst log：
-Stage scorecard：
-红黄绿灯：
-未来 1-3 个月 watchlist：
-对 PEG 系数的影响：
-对估值年份切换的影响：
-必须锁回 Auditor/PM 基准的证伪条件：
+基准状态
+新增证据
+模型对催化剂方向、强度、阶段、持续性和计价程度的判断
+催化剂裁量后的当前估值状态与合理区间
+正常 -> 乐观的触发条件
+利润锚上修条件
+Forward PE 上修条件
+估值年份切换条件
+证伪条件
 ```
 
-若启用 bottom-up 并列小账，precheck 还必须区分：
+原材料相关证据必须归类：
 
-| Catalyst | Valuation consumption | Profit consumption | 证伪条件 |
-| --- | --- | --- | --- |
-|  | 如何影响 PEG 档位、年份切换、质量折价 | 如何影响收入、ASP、毛利率、产能、原材料、费用、现金流 |  |
+| 路径 | 需要验证的传导 | 估值含义 |
+| --- | --- | --- |
+| 成本挤压 | 原料涨、无法提价、毛利率或现金流下降 | 下调盈利锚或倍数 |
+| 涨价传导 | 客户接受提价、毛利率稳定、回款正常 | 提高乐观情景兑现概率 |
+| 稀缺溢价 | 供给紧张带来 ASP、份额、产品结构或利润率提升 | 有盈利上修后才提高利润锚；有质量验证后才提高倍数 |
 
-同一份 catalyst precheck 是共同上游；不是两个分支各自编一套催化剂。
+不得仅凭原材料价格上涨或股价上涨认定因果链已经验证。
 
-## Formal PEG Branch
+### Model Discretion
 
-读取 `references/peg-workflow.md` 后执行。核心步骤：
+催化剂影响具有模糊性，不设置固定权重、打分公式或线性插值。模型必须综合判断：
 
-1. 确认输出模式：`consensus_mode`、`no_consensus_mode` 或 `preparation_only`。
-2. 取得最新股价、市值、股本、PE/PB 和未来 2-3 年一致预期。
-3. 补齐或读取 PEG-ready 包。
-4. 对比一致预期、自有正常、自有乐观利润锚。
-5. 计算 2027E 动态 PEG、2027E 复合 PEG、当前市值隐含预期。
-6. 只输出正常和乐观目标市值。
-7. 单独列示 2028E 年份切换条件，不把它混入正常主估值。
+- 方向：利多、利空或相互抵消；
+- 强度：是否足以改变盈利锚、市场倍数或估值年份；
+- 阶段：线索、经营验证、财务兑现；
+- 持续性：短期扰动、季度延续或中期结构变化；
+- 独特性：公司特有优势还是全行业共同变化；
+- 计价程度：当前市值尚未计价、部分计价或充分计价。
 
-若一致预期不可用，读取 `references/no-consensus-mode.md`。
+判断完成后，必须明确选择当前估值状态，例如“正常区间”“正常偏上”“向乐观迁移”“乐观区间”或“乐观已充分定价”，并给出对应的当前合理估值区间。这个区间不要求按固定比例位于正常与乐观之间。
 
-## Default Bottom-Up Parallel Branch
+若证据尚未改变利润锚、倍数或估值年份，模型仍可凭领先证据将当前合理估值放在正常与乐观边界之间，但必须说明裁量理由与置信度。若证据足以改变三锚输入，则先建立新版利润锚、倍数或估值年份，再重新计算边界。
 
-正式 PEG 估值接力默认启用，并读取 `references/parallel-peg-bottom-up-branches.md`。只有用户明确说“PEG only / 不算小账 / 跳过 bottom-up”时，才跳过本分支。
+禁止重复计入：同一催化剂已经完整进入利润锚后，不得再次以同一理由完整上调 PEG/Forward PE；只有它同时改善增长持续性、现金流质量或竞争壁垒时，才允许额外影响倍数。
 
-硬边界：
+## Formal Workflow
 
-- Bottom-up 分支使用同一份 `catalyst_precheck`，但只消费其中的 `Profit consumption`。
-- Bottom-up 分支只输出 `<标的>_bottom_up_profit_bridge_recheck.md`。
-- Bottom-up 分支不输出目标市值、目标价、PEG、买卖建议。
-- Bottom-up 分支不使用一致预期或当前市值倒推利润。
-- PEG 分支不读取 bottom-up 输出，除非用户明确要求“用小账结果重跑 PEG”。
-- 主控只输出 `<标的>_peg_bottom_up_parallel_module.md`，不得合并成一个新估值结论。
+读取 `references/peg-workflow.md` 后执行：
 
-## Output Files
+1. 固定估值日期、行情、股本、预测日期和数据源。
+2. 建立最近实际年度、一致预期、自有正常和自有乐观利润锚。
+3. 展示实际年度至未来三年的逐年增速，以及“实际年→主估值年”“当前预测年→远期年”两组CAGR。
+4. 由模型区分客观增速与估值增速，并说明历史跃迁纳入程度和折扣理由。
+5. 为每个情景选择PEG系数区间，至少展示0.9/1.0/1.1敏感性；解释最终选档。
+6. 分别计算动态PEG、复合PEG、Forward PE三套候选区间。
+7. 检查增速与PEG是否重复抬升，并做绝对倍数、利润质量和估值年份检查。
+8. 形成三锚共同支持的正常/乐观区间，并说明分歧。
+9. 反推当前市值隐含的利润、PE、动态PEG和复合PEG。
+10. 由模型对催化剂作定性裁量，给出当前估值状态、合理区间和置信度。
+11. 若为复盘，拆分盈利跃迁、利润锚修订、PEG系数修订、年份切换和催化剂迁移。
 
-正式 PEG 输出：
+## Outputs
 
 ```text
 research_artifacts/<标的>/
@@ -136,34 +134,22 @@ research_artifacts/<标的>/
   <标的>_peg_valuation_scorecard.md
 ```
 
-无一致预期输出：
+不生成 bottom-up 或并列小账文件，不覆盖已有 `<标的>_valuation_scorecard.md`。
 
-```text
-research_artifacts/<标的>/
-  <标的>_peg_ready_package.md
-  <标的>_catalyst_precheck.md
-  <标的>_no_consensus_peg_valuation_deepdive.md
-  <标的>_no_consensus_peg_valuation_scorecard.md
-```
+## Investor-Facing Writing
 
-默认并列小账输出：
-
-```text
-research_artifacts/<标的>/
-  <标的>_bottom_up_profit_bridge_recheck.md
-  <标的>_peg_bottom_up_parallel_module.md
-```
-
-正式 PEG 估值接力默认生成并列小账输出；若用户明确跳过 bottom-up，最终回复必须说明“小账按用户要求跳过”。
-
-不要覆盖已有 `<标的>_valuation_scorecard.md`。本 skill 的正式 scorecard 文件必须带 `peg_` 或 `no_consensus_peg_` 前缀。
+- 开头直接给当前市值所处情景、正常/乐观区间及最关键触发条件。
+- 正文聚焦数字、假设、分歧和验证；删除任务过程、工具、分支、闸门、QA、自我审计等内部话术。
+- 数据源压缩到末尾；只保留会改变结论的数据缺口。
+- 不在最终回复解释“为什么没有跑 bottom-up”，除非用户主动问。
 
 ## Final Response
 
-最终回复必须说明：
+只需概括：
 
-- 使用了哪些前置文件和数据源。
-- 输出模式是 `consensus_mode`、`no_consensus_mode` 还是 `preparation_only`。
-- 正常/乐观目标市值和关键触发条件。
-- 未能验证的数据缺口。
-- 说明 bottom-up 并列小账是否执行；默认应执行。若执行，说明 `catalyst_precheck` 是共同上游，PEG 与 bottom-up 由独立分支完成，主控只做并列对照，双方互不回写；若跳过，说明用户明确要求跳过。
+- 正常/乐观目标市值与当前所处情景；
+- 动态 PEG、复合 PEG、Forward PE 的交叉结果；
+- 客观增速、估值增速及PEG系数的选取理由；
+- 模型裁量后的当前合理估值区间、理由与置信度；
+- 从正常迁移到乐观的关键触发和证伪；
+- 若有历史版本，明确原区间兑现与新增盈利上修的区别。

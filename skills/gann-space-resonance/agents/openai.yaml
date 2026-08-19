@@ -1,0 +1,4 @@
+interface:
+  display_name: "江恩空间与波浪情景"
+  short_description: "日线结构与节奏量价优先，融合江恩空间的波浪研判"
+  default_prompt: "使用 $gann-space-resonance 先审计K线和日线三/五浪结构、节奏量价，再融合无前视江恩空间共振、市场宽度和龙头，判断当前浪及未来4–12周情景，并输出价格图、圆周图和证据边界。"

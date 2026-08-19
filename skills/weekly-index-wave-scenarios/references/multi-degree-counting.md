@@ -11,3 +11,12 @@ For a bullish parent impulse:
 5. State wave 5 explicitly: if wave 4 is incomplete, mark wave 5 `未启动` and give the completion/turning condition for wave 4; if wave 5 is active, give its start, current progress and the condition required before calling its endpoint complete. Check at completion that wave 3 is not the shortest of 1, 3 and 5.
 
 If the presumed wave-3 endpoint is instead the end of parent wave 5, the following A-B-C is the beginning of a larger-degree correction, not wave 4. Keep both possibilities only when the data does not resolve them. In that case, still list 1–5 in the preferred and alternative ledgers, and identify exactly which endpoint changes between them.
+
+## Active parent-wave-4 correction
+
+Do not treat these statements as contradictory:
+
+- `父级4浪按A-B-C候选组织` describes the correction one degree up.
+- `C段正在走C1-C5` describes the motive subdivision one degree down.
+
+When a low followed by a rebound can be either completed C or only C3, keep two local ledgers until price resolves them. The completed-C ledger must exhibit or explicitly mark uncertainty in all five C subwaves. The C3 ledger must state the candidate C4 overlap limit, anticipated C5 zone, parent hard invalidation and the weekly level that would confirm transition into parent wave 5.

@@ -16,6 +16,11 @@ def main() -> int:
     parser.add_argument("--end", required=True, help="YYYY-MM-DD")
     parser.add_argument("--symbol", default="上证指数")
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--projection-end", help="Optional YYYY-MM-DD end for future time-window projection")
+    parser.add_argument("--future-sessions", type=Path, help="Optional exchange-calendar CSV with date/trade_date")
+    parser.add_argument("--breadth", type=Path, help="Optional daily market-breadth CSV")
+    parser.add_argument("--peer-indices", type=Path, help="Optional long CSV with date,symbol,close for broad-index confirmation")
+    parser.add_argument("--wave-segments", type=Path, help="Optional declared wave-segment CSV for duration projections")
     parser.add_argument(
         "--wave-report",
         type=Path,
@@ -41,6 +46,29 @@ def main() -> int:
         ],
         check=True,
     )
+    multiclock_command = [
+        sys.executable,
+        str(here / "build_multiclock_time_ledger.py"),
+        "--db",
+        str(args.db),
+        "--start",
+        args.start,
+        "--end",
+        args.end,
+        "--output",
+        str(args.output),
+    ]
+    if args.projection_end:
+        multiclock_command.extend(["--projection-end", args.projection_end])
+    if args.future_sessions:
+        multiclock_command.extend(["--future-sessions", str(args.future_sessions)])
+    if args.breadth:
+        multiclock_command.extend(["--breadth", str(args.breadth)])
+    if args.peer_indices:
+        multiclock_command.extend(["--peer-indices", str(args.peer_indices)])
+    if args.wave_segments:
+        multiclock_command.extend(["--wave-segments", str(args.wave_segments)])
+    subprocess.run(multiclock_command, check=True)
     render_command = [
             sys.executable,
             str(here / "render_circle_report.py"),

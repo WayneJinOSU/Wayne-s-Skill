@@ -1,6 +1,6 @@
 ---
 name: gann-space-resonance
-description: 对A股指数执行无前视江恩空间共振研究，并以K线/日线结构优先、节奏量价确认、江恩空间参与候选排序和目标校验的方式融合波浪父级1–5账本，输出圆周图与未来4–12周情景。Use when 用户要求江恩理论、江恩空间共振、支撑压力、圆周图、Square-of-9、当前浪、C3/C4/C5或多技术线联合研判；不用于脱离价格结构把几何线直接当交易信号。
+description: 对A股指数执行无前视江恩空间与多时钟共振研究，以K线/日线结构优先，分离极值日和价格/宽度/跨指数确认日，并让江恩参与候选排序和目标校验，融合波浪父级1–5账本，输出圆周图与未来4–12周情景。Use when 用户要求江恩理论、江恩空间/时间共振、变盘日、支撑压力、圆周图、Square-of-9、当前浪、C3/C4/C5或多技术线联合研判；不用于脱离价格结构把几何线直接当交易信号。
 ---
 
 # 江恩空间共振
@@ -11,12 +11,14 @@ description: 对A股指数执行无前视江恩空间共振研究，并以K线/�
 2. 只使用目标日前已确认的锚点。保留 `pivot_date` 与 `confirm_date`，锚点须满足 `confirm_date < target_date`。
 3. 把八分法、历史记忆、角度线、圆周图视为四个独立来源。同一家族多条线靠近只增加成员数，不增加独立来源数。
 4. 将分割位作为主线；角度线作为辅助；圆周图、历史顶底和整数关口用于定位。不得因线多、命中率高而宣称有效。
-5. 默认降级时间周期。用户明确要求时才单独检验，并做多重校正；不得把探索性的120日或720日写成已验证规律。
+5. 默认降级时间周期。用户明确要求时运行因果多时钟账本并做覆盖率、多重校正和日历审计；不得把探索性的120日、720日或单次日期吻合写成已验证规律。
 6. 融合层级固定为：波浪硬规则 → K线/日线内部三五浪结构 → 节奏量价 → 江恩空间共振 → 宽度/龙头/事件。江恩可在两个合规计数间调整排序和目标区，不能修复硬规则违规。
 7. 最终必须同时给出江恩圆周图、父级1–5浪账本、日线结构与节奏量价证据、当前浪、未来4–12周主情景和文字描述。
 
 开始前完整阅读 [references/methodology.md](references/methodology.md)。
 涉及当前浪或未来判断时，同时完整阅读 [references/wave-integration.md](references/wave-integration.md)。
+涉及具体时间点、时间窗口、变盘复盘、波浪等时或C3/C4/C5结束时间时，同时完整阅读 [references/multiclock-time.md](references/multiclock-time.md)。
+涉及静态K线图、父级浪账本图、C3/C4/C5争议图、支撑压力带或交付视觉质量时，同时完整阅读 [references/charting.md](references/charting.md)。
 
 ## 工作流
 
@@ -39,7 +41,21 @@ python scripts/run_gann_space_resonance.py \
   --output /absolute/path/to/output
 ```
 
-脚本生成拐点、空间位、共振簇、触碰事件、随机基线、统计表、Markdown结论和 `gann_circle.html`。始终传绝对路径，不写入技能目录。
+脚本生成拐点、空间位、共振簇、触碰事件、随机基线、统计表、Markdown结论和 `gann_circle.html`。始终传绝对路径，不写入技能目录。时间研究可同时传入交易所日历、日度宽度、宽基指数和人工审定波浪段落：
+
+```bash
+python scripts/run_gann_space_resonance.py \
+  --db /absolute/path/to/security.db \
+  --start 2021-08-16 --end 2026-08-31 \
+  --projection-end 2026-11-30 \
+  --future-sessions /absolute/path/to/trade_calendar.csv \
+  --breadth /absolute/path/to/daily_breadth.csv \
+  --peer-indices /absolute/path/to/peer_indices_long.csv \
+  --wave-segments /absolute/path/to/wave_segments.csv \
+  --symbol 上证指数 --output /absolute/path/to/output
+```
+
+也可单独运行 `scripts/build_multiclock_time_ledger.py`。正式交易日日期必须来自交易所日历；`estimated_weekday`只能作为临时估算并在报告中警告。
 
 ### 3. 审核统计结果
 
@@ -56,7 +72,19 @@ python scripts/run_gann_space_resonance.py \
 - 高命中但基线同样高：无增量，降级。
 - 触碰后不优于匹配基线：不得称为可交易支撑/压力。
 
+时间输出另行审核：
+
+- `major_pivots_5pct.csv`、`local_pivots_2_5pct.csv`：父级与低级别因果拐点及确认日。
+- `multiclock_windows.csv`、`wave_duration_windows.csv`：自然日、交易日和波浪等时窗口。
+- `multiclock_density.csv`：`window_count`是窗口成员，`source_family_count`是时钟种类，`independent_family_count`是保守因果来源数；共享价格拐点的5%/2.5%、自然日/交易日时钟不得重复加权。
+- `daily_confirmation_ledger.csv`：极值候选、价格反转、宽度反转、指数确认、扩散及跨指数确认必须分列。
+- `multiclock_summary.md`：检查日历状态和“时间到而价格未确认”。
+
+不得事后移动锚点、切换自然日/交易日、扩大容差或改波浪段落来保留目标日期。先冻结候选锚点和计数，再看窗口；外部时间观点必须记录原始发布时间、方向、容差和确认定义。
+
 ### 4. 图文交付
+
+先按 [references/charting.md](references/charting.md) 的图表规范设计交付组合：父级结构周线图、调整浪日线审计图、当前局部结构图和独立江恩圆周图。先生成不含江恩线的价格优先图并检查K线、成交额、浪标、支撑/压力带和失效位，再生成圆周图；图表必须经过图像查看器视觉检查，不能只凭脚本成功结束判断完成。
 
 先用不含江恩线的K线图形成初始波浪账本，并完成日线内部形态、速度、重叠、成交额和动能审计。优先调用 `weekly-index-wave-scenarios` 的父级计数、日线结构和龙头验证流程。随后把江恩区间纳入融合矩阵：它可以提高/降低两个合规计数的排序，定位波浪目标簇，或促使显式回查拐点；不得仅因江恩吻合而选择浪型。若融合后修改初始计数，报告必须列出原计数、触发修改的证据和新失效位。
 
@@ -93,6 +121,7 @@ python scripts/render_circle_report.py \
 6. 当前最可能处于哪一浪、确认/重判/硬失效位以及未来4–12周路径。
 7. 日线内部形态和节奏量价为何支持/反对该浪型，以及最强反证。
 8. 江恩区间与波浪比例的联合观察区，并明确江恩增加的是空间信息而非浪型合法性。
+9. 每个时间窗的四时钟来源、因果来源数、交易所日历状态，以及极值/价格/宽度/跨指数/周线确认的实际日期。
 
 若在支持内联可视化的 Codex 应用中工作，优先把圆周图直接呈现在对话中；同时保留 `gann_circle.html` 和 `gann_summary.md`。
 
@@ -107,3 +136,6 @@ python scripts/render_circle_report.py \
 - 禁止在未列出父级1–3浪证据时把调整命名为4浪。
 - 禁止只列斐波那契或江恩比例而不检查日线内部三浪/五浪、速度、重叠与成交性格。
 - 禁止在没有分钟数据时虚构同日高低点顺序；结构工作锚点必须与绝对极值锚点并列审计。
+- 禁止把共享价格拐点生成的多种时钟、多个容差或多个比例写成独立证据。
+- 禁止把极值日、首次反转日、宽度先行日、指数确认日和周线确认日合并成一个“精准变盘日”。
+- 禁止在正式报告中用工作日估算替代交易所日历而不披露。

@@ -63,6 +63,16 @@ This distinction matters: 横盘扩散 may have lower immediate跌概率 but lar
 
 When presenting mixed full-sample and conditional metrics, label the denominator explicitly. Do not write ambiguous phrases like `平均亏损` by itself. Use wording such as `全样本平均收益` for unconditional means and `亏损样本平均收益` / `仅负收益样本均值` for conditional loss means.
 
+## Baseline, Significance, And Stability
+
+Do not treat a regime's raw mean as evidence that the core basket causes target performance. The script must report three layers:
+
+1. **基准比较**：全样本无条件基准；对每个 regime 使用剔除该 regime 的 leave-one-regime-out 基准；再给出目标自身过去 `state_window` 收益正/非正的趋势基准。任何比较都要写清楚分母。
+2. **显著性**：每个 regime、每个 horizon 至少报告样本数、状态均值、基准均值、增量、bootstrap 95% CI、双侧 permutation p 值和正收益比例差异；同时检查最大回撤差异。统计显著不等于经济显著。
+3. **稳定性**：按前半/后半样本和自然年度重复比较，保留每个子样本 regime 数量、增量方向、显著性和最差/最佳阶段。若方向跨阶段反转、样本集中在单一年份或对照为空，应降级为阶段性现象。
+
+主比较优先使用 leave-one-regime-out，避免把当前 regime 包含在全样本基准中造成机械稀释。置换检验和 bootstrap 仅用于描述当前样本不确定性，不能替代样本审计、交易日对齐和经济机制。
+
 ## Script
 
 Use the bundled script for deterministic analysis:
@@ -99,6 +109,9 @@ Outputs:
 - `stock_state_detail.csv`
 - `summary_target_by_regime.csv`
 - `summary_core_basket_by_regime.csv`
+- `baseline_summary.csv`：全样本、leave-one-regime-out、目标过去趋势基准
+- `regime_significance.csv`：收益、最大回撤和正收益率的增量、bootstrap CI、置换 p 值
+- `regime_stability.csv`：前后半样本/年度稳定性、方向一致性和阶段显著性
 - count-level summaries by `up_count`, `sideways_count`, and `down_count`
 
 ## Interpretation Template
@@ -110,7 +123,8 @@ Answer in this order:
 3. Compare forward 5/10 day target behavior by regime.
 4. Include amplitude, not just probability: P10, worst, conditional negative-return average, and drawdown tail. State whether each average is full-sample or conditional.
 5. Mention sample-size caveats for extreme states like all横盘 or all下跌.
-6. Give a monitoring rule in plain language.
+6. Compare against the explicit baseline, report p-value/CI only with sample counts, and say whether the sign survives the half-sample/year stability check.
+7. Give a monitoring rule in plain language.
 
 Example conclusion shape:
 
@@ -129,4 +143,6 @@ Example conclusion shape:
 - Do not use future returns in signal construction; use future returns only for evaluation.
 - Do not rely only on hit probability. Always inspect magnitude and drawdown.
 - Do not mix full-sample averages and conditional-loss averages without naming the sample base. If a table uses both, explain the denominator before interpreting the numbers.
+- Do not call a regime predictive from a raw mean alone; require a stated baseline, uncertainty interval/p-value, and stability check.
+- Do not interpret a significant result with a tiny or concentrated sample as a robust effect; explicitly downgrade it.
 - If the sample is small, state it directly and avoid hard trading rules.
